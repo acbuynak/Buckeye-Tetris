@@ -27,3 +27,8 @@ Longer Official Install Instructions
 Tower Screen:     342 x 1080 px  
 Game Should be:   342 x 1008  
 ** there is a 72 px buffer on the bottom of the screen  
+
+
+-----------------------------------------------  
+### Markdown Cheatsheet
+https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
