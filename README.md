@@ -12,8 +12,8 @@ Dev'd on Python 3.5
 
 ## "Arcade" Library
 [http://arcade.academy/]
-Python library for 2D games.
-Arcade is built on top of Pyglet and OpenGL.
+Python library for 2D games.  
+Arcade is built on top of Pyglet and OpenGL.  
 
 > pip install arcade
 
@@ -24,6 +24,6 @@ Longer Official Install Instructions
 
 ## SYSTEM REQ's
 
-Tower Screen:     342 x 1080 px
-Game Should be:   342 x 1008
-** there is a 72 px buffer on the bottom of the screen
+Tower Screen:     342 x 1080 px  
+Game Should be:   342 x 1008  
+** there is a 72 px buffer on the bottom of the screen  
