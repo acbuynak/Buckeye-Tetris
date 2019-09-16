@@ -5,20 +5,20 @@ Tetris @ Ohio State University
 
 ## Python Setup for Chittens
 Dev'd on Python 3.5
-[https://www.python.org/downloads/] (https://www.python.org/downloads/)
+[https://www.python.org/downloads/]
 
 
 
 
 ## "Arcade" Library
-[http://arcade.academy/](http://arcade.academy/)
+[http://arcade.academy/]
 Python library for 2D games.
 Arcade is built on top of Pyglet and OpenGL.
 
 > pip install arcade
 
 Longer Official Install Instructions
-> [http://arcade.academy/installation.html#installation-instructions] 9http://arcade.academy/installation.html#installation-instructions)
+> [http://arcade.academy/installation.html#installation-instructions]
 
 
 
