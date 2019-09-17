@@ -3,9 +3,27 @@ Tetris @ Ohio State University
 
 *Scott Lab Computers dislike me installing things on them...*
 
-## Python Setup for Chittens
-Dev'd on Python 3.7.4
-[https://www.python.org/downloads/]
+## STRUCTURE THEORY (ACB)
+
+- 3 Main views to bounce between  
+1. "MenuView"  
+2. "LeaderBoardView"  
+3. "GameView"  
+
+Initial Boot will create window and load "MenuView".  
+....Two Options: "Start Game"    --> "GameView"  
+....             "Leader Board"  --> "LeaderBoardView"  
+
+IN GAME VIEW:
+....System waits for user input of any kind.. then begins playing
+....
+....
+....
+
+### File Saving Structure (KM) ??  
+1. Game should pull from external txt/dat file for current leaderboard.  
+2. Game should save to external txt/dat file for leaderboard progression.  
+3. Leaderboard file updated after completion of each game  
 
 
 
