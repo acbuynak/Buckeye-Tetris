@@ -47,7 +47,14 @@ Game Should be:   342 x 1008
 ** there is a 72 px buffer on the bottom of the screen  
 
 
-# ACTIONS
+# X-BOX CONTROLLER
+
+https://www.howtogeek.com/404214/how-to-remap-any-controller-to-keyboard-keys-on-windows-and-macos/
+
+
+
+
+# TO-DO
 Adam = Game Play and Structure
      = Hard Drop Feature
      = Time constant to drive game. speed up play time as the game continues.
