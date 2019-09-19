@@ -41,20 +41,18 @@ Longer Official Install Instructions
 
 
 ## SYSTEM REQ's
-
 Tower Screen:     342 x 1080 px  
 Game Should be:   342 x 1008  
 ** there is a 72 px buffer on the bottom of the screen  
 
-
-# X-BOX CONTROLLER
-
+# SUB-SECTION WORK
+### X-BOX CONTROLLER
 https://www.howtogeek.com/404214/how-to-remap-any-controller-to-keyboard-keys-on-windows-and-macos/
 
+### Speeding Game Up
+http://arcade.academy/arcade.html#arcade.Window.set_update_rate
 
-
-
-# TO-DO
+## TO-DO
 Adam = Game Play and Structure
      = Hard Drop Feature
      = Time constant to drive game. speed up play time as the game continues.
