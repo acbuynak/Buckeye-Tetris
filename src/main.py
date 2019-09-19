@@ -1,58 +1,39 @@
-# ADAM BUYNAK
-# SEPTEMBER 2019
+"""
+Tetris
 
+Tetris clone, with some ideas from silvasur's code:
+https://gist.github.com/silvasur/565419/d9de6a84e7da000797ac681976442073045c74a4
 
-#consider setting up a separate GAME VIEW which has an internal frame which is the game frame
-
-###############################################################################
-# Announcements
-print("\n\n - BUCKEYE TETRIS - ")
-print("  Title: main.py\n Author: Adam Buynak\n       : Developed for & in partnership with OHI/O\n")
-print(" ----> PLEASE WAIT FOR ALL DEPENDENCIES TO LOAD")
-print(" ----> USER WILL BE PROMPTED WHEN PROGRAM IS READY\n\n")
-
-###############################################################################
-# IMPORT ELEMENTS FROM PACKAGES
+If Python and Arcade are installed, this example can be run from the command line with:
+python -m arcade.examples.tetris
+"""
 import arcade
 import random
 import PIL
 
 
-#from view_leaderBoard import LeaderBoardView                                    #import Karl's leaderboard view code
+from game_state import State
+from game_variables import *
 
-# examples
-#from otherScript import function
-#import pandas as pd                                                             # Import 'pandas' for dataframe creation and handling #shorten call name to 'pd'
+##########################################################################################################ADAM STOP POINT
 
-###############################################################################
-# FUNCTIONS
-
-
-
-###############################################################################
-#- Global Constants
-SCREEN_WIDTH = 342
-SCREEN_HEIGHT = 1008
-SCREEN_TITLE = "BUCKEYE TETRIS"
-
-
-# Original Suggested Dimensions Calculator
-# SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN
-# SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
-# SCREEN_TITLE = "Tetris"
-
-# Set how many rows and columns we will have-------
-ROW_COUNT = 20
+# Set how many rows and columns we will have
+ROW_COUNT = 24
 COLUMN_COUNT = 10
 
-# Each Grid Location's... WIDTH and HEIGHT---------
-WIDTH = 25
-HEIGHT = 25
+# This sets the WIDTH and HEIGHT of each grid location
+WIDTH = 30
+HEIGHT = 30
 
-# Marings between cells and screen edges-----------
+# This sets the margin between each cell
+# and on the edges of the screen.
 MARGIN = 5
 
-# Stone Colors-------------------------------------
+# Do the math to figure out our screen dimensions
+SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN
+SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
+SCREEN_TITLE = "Tetris"
+
 colors = [
           (0,   0,   0  ),
           (255, 0,   0  ),
@@ -64,7 +45,7 @@ colors = [
           (0,   220, 220)
           ]
 
-# Define the shapes of the single parts--------------
+# Define the shapes of the single parts
 tetris_shapes = [
     [[1, 1, 1],
      [0, 1, 0]],
@@ -76,7 +57,7 @@ tetris_shapes = [
      [0, 3, 3]],
 
     [[4, 0, 0],
-     [4, 4, 4]],
+     [4, 1, 4]],
 
     [[0, 0, 5],
      [5, 5, 5]],
@@ -86,50 +67,6 @@ tetris_shapes = [
     [[7, 7],
      [7, 7]]
 ]
-
-###############################################################################
-# MASTER BLOCK
-
-
-##--------------------------------------
-#- Welcome & Menu Page
-class MenuView(arcade.View):
-
-    def on_show(self):
-        arcade.set_background_color(arcade.color.WHITE)
-
-    def on_draw(self):
-        arcade.draw_text("~ BUCKEYE TETRIS ~", SCREEN_WIDTH/2, SCREEN_HEIGHT*3/4,
-                        arcade.color.WHITE, font_size=20, anchor_x="center")
-        arcade.draw_text("Click to advance", SCREEN_WIDTH/2, SCREEN_HEIGHT*3/4-75,
-                        arcade.color.GRAY, font_size=15, anchor_x="center")
-
-    def on_mouse_press(self, x, y, button, modifiers):
-        next_view = GameView()
-        self.window.show_view(next_view)
-
-##--------------------------------------
-#- Leader Board
-class LeaderBoardView(arcade.View):
-#    def __init__(self):
-
-    def on_show(self):
-        arcade.set_background_color(arcade.color.BLUE)
-
-    def on_draw(self):
-        arcade.start_render()
-        arcade.draw_text("<<LEADER BOARD>>", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
-                        arcade.color.WHITE, font_size=20, anchor_x="center")
-        arcade.draw_text("TO BE COMPLETED", SCREEN_WIDTH/2, SCREEN_HEIGHT/2-75,
-                        arcade.color.GRAY, font_size=15, anchor_x="center")
-
-    def on_mouse_press(self, x, y, button, modifiers):
-        next_view = MenuView()
-        self.window.show_view(next_view)
-
-
-#################################################################################
-#################################################################################
 
 
 def create_textures():
@@ -186,11 +123,13 @@ def new_board():
     return board
 
 
-class GameView(arcade.View):
+class MyGame(arcade.Window):
     """ Main application class. """
 
-    def on_show(self):
+    def __init__(self, width, height, title):
         """ Set up the application. """
+
+        super().__init__(width, height, title)
 
         arcade.set_background_color(arcade.color.WHITE)
 
@@ -328,22 +267,14 @@ class GameView(arcade.View):
 
         # This command has to happen before we start drawing
         arcade.start_render()
-        #self.board_sprite_list.draw()#-----------------------------------------------------------++++check
-        #self.draw_grid(self.stone, self.stone_x, self.stone_y)
+        self.board_sprite_list.draw()
+        self.draw_grid(self.stone, self.stone_x, self.stone_y)
 
 
 def main():
     """ Create the game window, setup, run """
-    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-
-    next_view = MenuView()
-    window.show_view(next_view)
-
-
-
-    #my_game = GameView(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    #my_game.setup()
-
+    my_game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    my_game.setup()
     arcade.run()
 
 
