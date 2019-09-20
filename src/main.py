@@ -1,11 +1,7 @@
 """
 BUCKEYE TETRIS
-
-Coded by:  Adam Buynak
-Coded For: The Ohio State University's OHI/O
-
+Coded by:  Adam Buynak in collaboration w/ The Ohio State University's OHI/O
 Distributed under the MIT LICENSE.
-
 """
 ################################################################################
 
@@ -80,23 +76,21 @@ def new_board():
     return board
 
 
-class Game(arcade.Window):
+class GameView(arcade.View):
 
-    def __init__(self, width, height, title):
+    def newGame(self): #width, height, title removed
         """ Initial Setup """
+        print("GameView Opened!")
 
-        super().__init__(width, height, title)
-
-        #arcade.set_background_color(arcade.color.BLACK)
-        self.background = None
-
+        #self.background = None
         self.board = None
         self.frame_count = 0                #reset game frame counter
         self.game_over = False              #reset game end state
         self.paused = False
         self.board_sprite_list = None
 
-        self.state = State.PLAYING
+        #self.state = State.PLAYING
+
 
         # initial score
         self.score = None
@@ -109,11 +103,16 @@ class Game(arcade.Window):
                       'play':        arcade.load_texture(PLAY_BUTTON),
                       'leaderboard': arcade.load_texture(LEADERBOARD_BUTTON),
                       'menu':        arcade.load_texture(MENU_BUTTON)}
+    def on_show(self):
+        #arcade.set_background_color(arcade.color.BLACK)
+        #self.background = arcade.load_texture(BACKGROUNDS[0])                   #Set Background
+        texture = arcade.load_texture(BACKGROUNDS[0])
+        arcade.draw_texture_rectangle(self.width // 2, self.height // 2, self.texture.width, self.texture.height, self.texture, 0)
+
+        # Hide mouse cursor
+        self.window.set_mouse_visible(False)
 
     def setup(self):
-
-        #Set Background
-        self.background = arcade.load_texture(BACKGROUNDS[0])
 
         #Initialize Scoring System & Game Components
         self.board = new_board()
@@ -134,15 +133,13 @@ class Game(arcade.Window):
                 self.board_sprite_list.append(sprite)
 
 
-
-
         self.new_stone()
         self.update_board()
 
-    def draw_background(self):
-        """        Draws the background.        """
-        arcade.draw_texture_rectangle(self.width // 2, self.height // 2, self.background.width, self.background.height,
-                                      self.background, 0)
+#    def draw_background(self):
+#        """        Draws the background.        """
+#        arcade.draw_texture_rectangle(self.width // 2, self.height // 2, self.background.width, self.background.height,
+#                                      self.background, 0)
 
     def new_stone(self):
         """
@@ -284,7 +281,7 @@ class Game(arcade.Window):
         # This command has to happen before we start drawing
         arcade.start_render()
 
-        self.draw_background()
+#        self.draw_background()
         self.board_sprite_list.draw()
         self.draw_grid(self.stone, self.stone_x, self.stone_y)
 
@@ -316,12 +313,56 @@ class Game(arcade.Window):
             #texture = self.menus['play']
             #arcade.draw_texture_rectangle(self.width//2, self.height//2 - 100, texture.width, texture.height, texture, 0)
 
+class MenuView(arcade.View):
+
+    def on_show(self):
+        # Set Background. Required. Do not delete def!
+        arcade.set_background_color(arcade.color.GREEN)
+
+    def on_draw(self):
+        arcade.start_render()
+
+        # BACKGROUND
+        self.background = arcade.load_texture(BACKGROUNDS[1])
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, self.background.width-180, self.background.height-555, self.background, 0)
+
+        # TEXT
+        arcade.draw_text("[S] BEGIN GAME", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+                         arcade.color.CADET_GREY, font_size=15, font_name='arial',
+                         align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text("[L] LEADER BOARD", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 30,
+                         arcade.color.CADET_GREY, font_size=15, font_name='arial',
+                         align="center", anchor_x="center", anchor_y="center")
+
+        # BUTTONS
+        ############# ADD STUFF HERE ###############
+        ############# ADD STUFF HERE ###############
+
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        print("toast... clicking doesn't do anything")
+
+    def on_key_press(self, key, modifiers):
+        if key == 115: # S key
+            next_view = GameView()
+            next_view.newGame()
+            next_view.setup()
+            self.window.show_view(next_view)
+        if key == 108: # L key
+            print("CALL TO SWITCH TO LEADER_BOARD VIEW")
+            #next_view = LBView()
+            #next_view.setup()
+            #self.window.show_view(next_view)
 
 
 def main():
-    """ Create the game window, setup, run """
-    my_game = Game(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    my_game.setup()
+    """ Create the game window, setup, run
+        #TO-DO load leaderboard file and send to game (?)
+    """
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window.total_score = 0
+    menu_view = MenuView()   #start game in MenuView()
+    window.show_view(menu_view)
     arcade.run()
 
 

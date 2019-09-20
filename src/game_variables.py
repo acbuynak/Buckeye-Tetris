@@ -7,6 +7,8 @@ import arcade
 
 # Image of the base background
 BACKGROUNDS = ["assets" + os.sep + "bg_greyleaf.png","assets" + os.sep + "background_mainmenu.png"]
+LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
+#LOGO_HACKOHIO =
 
 # Button Textures
 PLAY_BUTTON        = "assets" + os.sep + "button_play.png"
@@ -17,8 +19,7 @@ MENU_BUTTON        = "assets" + os.sep + "button_menu.png"
 # Game over text
 GAME_OVER = "assets" + os.sep +  "gameover.png"
 
-LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
-#LOGO_HACKOHIO =
+
 
 
 
