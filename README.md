@@ -1,4 +1,4 @@
-Buckeye ~~Tetris~~ TETROMINOES
+#Buckeye ~~Tetris~~ TETROMINOES
 Tetris @ The Ohio State University
 
 ## TO-DO
@@ -14,7 +14,7 @@ Dan  = User input method and game to screen connection
 All  = Prizes  
      = Trophys for top places?  
 
-## STRUCTURE THEORY (ACB)  
+### STRUCTURE THEORY (ACB)  
 - 3 Main views.........key to Switch View  
 1. "MenuView"  ........F1  
 2. "LeaderBoardView"...F2  
@@ -30,7 +30,7 @@ IN GAME VIEW:
 ....  
 ....  
 
-### File Saving Structure (ACB) ??  
+### File Saving Structure (ACB)  
 1. Game should pull from external txt/dat file for current leaderboard.  
 2. Game should save to external txt/dat file for leaderboard progression.  
 3. Leaderboard file updated after completion of each game  
@@ -38,7 +38,7 @@ IN GAME VIEW:
 
 
 
-## "Arcade" Library
+### "Arcade" Library
 [http://arcade.academy/]  
 Python library for 2D games.   
 Arcade is built on top of Pyglet and OpenGL.  
@@ -50,13 +50,13 @@ Longer Official Install Instructions
 
 
 
-## SCREEN REQ's
+### SCREEN REQ's
 Tower Screen:     342 x 1080 px  
 Game Should be:   342 x 1008  
 ** there is a 72 px buffer on the bottom of the screen  
 ** QUESTION: Do we build game such that there is a 72 pixel buffer shown on game, but not on screen? or build to 1008 height?  
 
-# SUB-SECTION WORK
+### SUB-SECTION WORK
 X-BOX CONTROLLER:  
 https://www.howtogeek.com/404214/how-to-remap-any-controller-to-keyboard-keys-on-windows-and-macos/
 
