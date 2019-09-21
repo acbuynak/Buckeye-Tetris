@@ -6,19 +6,20 @@ import os
 import arcade
 
 # Image of the base background
-BACKGROUNDS = ["assets" + os.sep + "bg_greyleaf.png","assets" + os.sep + "background_mainmenu.png"]
+BACKGROUNDS = ["assets" + os.sep + "bg_scarletleaf.png","assets" + os.sep + "bg_mainmenu.png", "assets" + os.sep + "bg_leaderboard.png"]
+LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
+#LOGO_HACKOHIO =
 
 # Button Textures
-PLAY_BUTTON        = "assets" + os.sep + "button_play.png"
-LEADERBOARD_BUTTON = "assets" + os.sep + "button_exit.png"
-EXIT_BUTTON        = "assets" + os.sep + "button_leaderboard.png"
-MENU_BUTTON        = "assets" + os.sep + "button_menu.png"
+BUTTONS = [ "assets" + os.sep + "button_play.png",
+            "assets" + os.sep + "button_leaderboard.png",
+            "assets" + os.sep + "button_menu.png",
+            "assets" + os.sep + "button_exit.png" ]
 
 # Game over text
 GAME_OVER = "assets" + os.sep +  "gameover.png"
 
-LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
-#LOGO_HACKOHIO =
+
 
 
 

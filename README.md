@@ -1,26 +1,36 @@
-# Buckeye-Tetris
-Tetris @ Ohio State University
+# Buckeye ~~Tetris~~ TETROMINOES
+Tetris @ The Ohio State University
 
-*Scott Lab Computers dislike me installing things on them...*
+## TO-DO
+Adam = Game Views  
+     = Hard Drop Feature  
+     = File Saving Structure(?)  
+     = Game Play cutoff time out for player(?)  
+Kelly= Hard Drop Feature  
+     = Resolve Error Thrown when piece comes to edge of screen
 
-## STRUCTURE THEORY (ACB)
+Dan  = User input method and game to screen connection  
 
-- 3 Main views to bounce between  
-1. "MenuView"  
-2. "LeaderBoardView"  
-3. "GameView"  
+All  = Prizes  
+     = Trophys for top places?  
+
+### STRUCTURE THEORY (ACB)  
+- 3 Main views.........key to Switch View  
+1. "MenuView"  ........F1  
+2. "LeaderBoardView"...F2  
+3. "GameView"  ........F3  
 
 Initial Boot will create window and load "MenuView".  
 ....Two Options: "Start Game"    --> "GameView"  
 ....             "Leader Board"  --> "LeaderBoardView"  
 
-IN GAME VIEW:
-....System waits for user input of any kind.. then begins playing
-....
-....
-....
+IN GAME VIEW:  
+....System waits for user input of any kind.. then begins playing  
+....  
+....  
+....  
 
-### File Saving Structure (KM) ??  
+### File Saving Structure (ACB)  
 1. Game should pull from external txt/dat file for current leaderboard.  
 2. Game should save to external txt/dat file for leaderboard progression.  
 3. Leaderboard file updated after completion of each game  
@@ -28,44 +38,31 @@ IN GAME VIEW:
 
 
 
-## "Arcade" Library
-[http://arcade.academy/]
-Python library for 2D games.  
+### "Arcade" Library
+[http://arcade.academy/]  
+Python library for 2D games.   
 Arcade is built on top of Pyglet and OpenGL.  
 
 > pip install arcade
 
-Longer Official Install Instructions
+Longer Official Install Instructions  
 > [http://arcade.academy/installation.html#installation-instructions]
 
 
 
-## SYSTEM REQ's
+### SCREEN REQ's
 Tower Screen:     342 x 1080 px  
 Game Should be:   342 x 1008  
 ** there is a 72 px buffer on the bottom of the screen  
+** QUESTION: Do we build game such that there is a 72 pixel buffer shown on game, but not on screen? or build to 1008 height?  
 
-# SUB-SECTION WORK
-### X-BOX CONTROLLER
+### SUB-SECTION WORK
+X-BOX CONTROLLER:  
 https://www.howtogeek.com/404214/how-to-remap-any-controller-to-keyboard-keys-on-windows-and-macos/
 
-### Speeding Game Up
-http://arcade.academy/arcade.html#arcade.Window.set_update_rate
 
-## TO-DO
-Adam = Game Play and Structure
-     = Hard Drop Feature
-     = Time constant to drive game. speed up play time as the game continues.
-     = hard time out for player
-Karl = Scoreboard & leaders, data saving
-Daniel = User input method and game to screen connection
 
-Karl = Defines rule structure
 
-Daniel = Reach out to Kelly and ask for XBOX controller
-       = USB-ethernet connection
-       = test custom wifi network on the NorthQuad. Can we pass reliably pass signal here as a connection?
-       
 -----------------------------------------------  
 ### Markdown Cheatsheet
 https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
