@@ -10,7 +10,6 @@ import random
 import PIL
 
 
-from game_state import State
 from game_variables import *
 
 ################################################################################
