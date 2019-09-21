@@ -1,4 +1,4 @@
-#Buckeye ~~Tetris~~ TETROMINOES
+# Buckeye ~~Tetris~~ TETROMINOES
 Tetris @ The Ohio State University
 
 ## TO-DO
