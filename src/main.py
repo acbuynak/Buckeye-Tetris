@@ -166,7 +166,28 @@ class GameView(arcade.View):
 
 				##-------------------- switch to next stone command for Future stone feature
 
-
+    def hard_drop(self):
+        """
+        Drop the stone until collision
+        Join
+        Check for rows to remove
+        Create new stone
+        """
+        if not self.game_over and not self.paused:
+            while not check_collision(self.board, self.stone, (self.stone_x, self.stone_y)):
+                self.stone_y += 1
+            self.board = join_matrixes(self.board, self.stone, (self.stone_x, self.stone_y))
+            while True:
+                for i, row in enumerate(self.board[:-1]):
+                    if 0 not in row:
+                        self.board = remove_row(self.board, i)
+                        self.score = self.score + 1  # 40*(self.level+1)    ##------------ADD GAME SCORE COUNTER LINE HERE
+                        print(self.score)
+                        break
+                else:
+                    break
+            self.update_board()
+            self.new_stone()
 
     def build_mscb(self):
         """ Draw the mini score board when the player start playing. """
@@ -189,6 +210,9 @@ class GameView(arcade.View):
         """ Rotate the stone, check collision. """
         if not self.game_over and not self.paused:
             new_stone = rotate_clockwise(self.stone)
+            # if rotates off board move back
+            if self.stone_x > COLUMN_COUNT - len(self.stone):
+                self.stone_x = COLUMN_COUNT - len(self.stone)
             if not check_collision(self.board, new_stone, (self.stone_x, self.stone_y)):
                 self.stone = new_stone
 
@@ -278,6 +302,8 @@ class GameView(arcade.View):
             self.rotate_stone()
         elif key == arcade.key.DOWN:
             self.drop()
+        elif key == arcade.key.SPACE:
+            self.hard_drop()
 
         # GAME Central Commands
         elif key == 65470:
