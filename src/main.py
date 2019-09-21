@@ -29,15 +29,11 @@ def create_textures():
         texture_list.append(arcade.Texture(str(color), image=image))
     return texture_list
 
-
 texture_list = create_textures()
-
 
 def rotate_clockwise(shape):
     """ Rotates a matrix clockwise """
     return [[shape[y][x] for y in range(len(shape))] for x in range(len(shape[0]) - 1, -1, -1)]
-
-
 def check_collision(board, shape, offset):
     """
     See if the matrix stored in the shape will intersect anything
@@ -49,15 +45,11 @@ def check_collision(board, shape, offset):
             if cell and board[cy + off_y][cx + off_x]:
                 return True
     return False
-
-
 def remove_row(board, row):
     """ Remove a row from the board, add a blank row on top. """
     del board[row]
 	#print("--[tetris] Deleted Row #",row)
     return [[0 for i in range(COLUMN_COUNT)]] + board
-
-
 def join_matrixes(matrix_1, matrix_2, matrix_2_offset):
     """ Copy matrix 2 onto matrix 1 based on the passed in x, y offset coordinate """
     offset_x, offset_y = matrix_2_offset
@@ -65,8 +57,6 @@ def join_matrixes(matrix_1, matrix_2, matrix_2_offset):
         for cx, val in enumerate(row):
             matrix_1[cy + offset_y - 1][cx + offset_x] += val
     return matrix_1
-
-
 def new_board():
     """ Create a grid of 0's. Add 1's to the bottom for easier collision detection. """
     # Create the main board of 0's
@@ -78,43 +68,27 @@ def new_board():
 
 class GameView(arcade.View):
 
-    def newGame(self): #width, height, title removed
-        """ Initial Setup """
-        print("GameView Opened!")
+    def newGame(self):
+        self.resetGame()
+        self.setup()
+    def resetGame(self): #width, height, title removed
+        """ Reset Last Gameplay and Reset Game Class Variables """
 
-        #self.background = None
         self.board = None
         self.frame_count = 0                #reset game frame counter
         self.game_over = False              #reset game end state
         self.paused = False
         self.board_sprite_list = None
 
-        #self.state = State.PLAYING
-
-
-        # initial score
+        # initialize score
         self.score = None
         self.level = None
         self.GAME_SPEED = None
 
-        # The texture for the start and game over screens.
-        self.menus = {'exit':        arcade.load_texture(EXIT_BUTTON),
-                      'gameover':    arcade.load_texture(GAME_OVER),
-                      'play':        arcade.load_texture(PLAY_BUTTON),
-                      'leaderboard': arcade.load_texture(LEADERBOARD_BUTTON),
-                      'menu':        arcade.load_texture(MENU_BUTTON)}
-    def on_show(self):
-        #arcade.set_background_color(arcade.color.BLACK)
-        #self.background = arcade.load_texture(BACKGROUNDS[0])                   #Set Background
-        texture = arcade.load_texture(BACKGROUNDS[0])
-        arcade.draw_texture_rectangle(self.width // 2, self.height // 2, self.texture.width, self.texture.height, self.texture, 0)
-
-        # Hide mouse cursor
-        self.window.set_mouse_visible(False)
-
+        #Output Announcement
+        print("---- Game Board, Mechanics, Stats == Reset")
     def setup(self):
-
-        #Initialize Scoring System & Game Components
+        """ Initialize Scoring System & Game Components """
         self.board = new_board()
         self.score = 0
         self.level = 0
@@ -132,14 +106,23 @@ class GameView(arcade.View):
 
                 self.board_sprite_list.append(sprite)
 
-
         self.new_stone()
         self.update_board()
 
-#    def draw_background(self):
-#        """        Draws the background.        """
-#        arcade.draw_texture_rectangle(self.width // 2, self.height // 2, self.background.width, self.background.height,
-#                                      self.background, 0)
+        print("---- Game Board, Mechanics, Stats == SETUP Confirm")
+
+    def on_show(self):
+        print("GameView Opened!")
+        arcade.set_background_color(arcade.color.GREEN)                         # Set Background. Required. Do not delete def!
+        self.window.set_mouse_visible(False)                                    # Hide mouse cursor
+
+
+    def draw_background(self):
+        """ Draws the most epic background ever imaginable. """
+        backing = arcade.load_texture(BACKGROUNDS[0])
+        arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
+                                        width    = SCREEN_WIDTH,       height   = SCREEN_HEIGHT,
+                                        texture  = backing )
 
     def new_stone(self):
         """
@@ -175,38 +158,16 @@ class GameView(arcade.View):
                         if 0 not in row:
                             self.board = remove_row(self.board, i)
                             self.score = self.score + 1  # 40*(self.level+1)    ##------------ADD GAME SCORE COUNTER LINE HERE
-                            print(self.score)
+                            print("Score:  " + str(self.score))
                             break
                     else:
                         break
                 self.update_board()
                 self.new_stone()
+
 				##-------------------- switch to next stone command for Future stone feature
 
-    def rotate_stone(self):
-        """ Rotate the stone, check collision. """
-        if not self.game_over and not self.paused:
-            new_stone = rotate_clockwise(self.stone)
-            if not check_collision(self.board, new_stone, (self.stone_x, self.stone_y)):
-                self.stone = new_stone
 
-    def update(self, dt):
-        """ Update, drop stone if warrented
-		------------------------------------ FRAME RATE CONTROLLING """
-        self.frame_count += 1
-        if self.frame_count % self.GAME_SPEED == 0:
-            self.drop()
-
-        self.build_mscb()
-
-        #GAME SPEED UPDATER-----------------------------------------------------SPEED CONTROLLER
-        if self.score >= ((self.level+1) * 2):
-            self.level += 1
-            if self.GAME_SPEED > 0:
-                self.GAME_SPEED -= 1
-
-##      #TEMPORARY HOME UNTIL SCREEN SWITCHING SETUP
-        arcade.draw_texture_rectangle(150, 700, 100, 100, arcade.load_texture(LOGO_TITLE), 0)              #FIXME FIXME FIXME FIXME FIXME FIXME
 
     def build_mscb(self):
         """ Draw the mini score board when the player start playing. """
@@ -220,6 +181,33 @@ class GameView(arcade.View):
         arcade.draw_text(level_text, e_mscb_xposn+90, e_mscb_yposn, arcade.color.BLACK, 30, width=100, align="right", anchor_x="center", anchor_y="center")
 
 
+
+
+
+## gucci below here ------------------------
+
+    def rotate_stone(self):
+        """ Rotate the stone, check collision. """
+        if not self.game_over and not self.paused:
+            new_stone = rotate_clockwise(self.stone)
+            if not check_collision(self.board, new_stone, (self.stone_x, self.stone_y)):
+                self.stone = new_stone
+
+    def update(self, dt):
+        """ Update, drop stone if warrented. Called by Arcade Class every 1/60 sec
+		------------------------------------ FRAME RATE CONTROLLING """
+        self.frame_count += 1
+        if self.frame_count % self.GAME_SPEED == 0:
+            self.drop()
+
+        #GAME LEVEL CONTROLLER & SPEED UPDATER----------------------------------SPEED CONTROLLER
+        if self.score >= ((self.level+1) * 2):
+            self.level += 1
+            print("Level:  " + str(self.level) )
+            if self.GAME_SPEED > 0:
+                self.GAME_SPEED -= 1
+
+
     def move(self, delta_x):
         """ Move the stone back and forth based on delta x. """
         if not self.game_over and not self.paused:
@@ -230,23 +218,6 @@ class GameView(arcade.View):
                 new_x = COLUMN_COUNT - len(self.stone[0])
             if not check_collision(self.board, self.stone, (new_x, self.stone_y)):
                 self.stone_x = new_x
-
-    def on_key_press(self, key, modifiers):
-        """
-        Handle user key presses
-        User goes left, move -1
-        User goes right, move 1
-        Rotate stone,
-        or drop down
-        """
-        if key == arcade.key.LEFT:
-            self.move(-1)
-        elif key == arcade.key.RIGHT:
-            self.move(1)
-        elif key == arcade.key.UP:
-            self.rotate_stone()
-        elif key == arcade.key.DOWN:
-            self.drop()
 
     def draw_grid(self, grid, offset_x, offset_y):
         """
@@ -281,39 +252,109 @@ class GameView(arcade.View):
         # This command has to happen before we start drawing
         arcade.start_render()
 
-#        self.draw_background()
+        self.draw_background()
+        self.build_mscb()
         self.board_sprite_list.draw()
         self.draw_grid(self.stone, self.stone_x, self.stone_y)
 
-        ## MASTER GAME STATE SWITCHER ##----------------------------------------fixme fixme
-        if self.state == State.MAIN_MENU:
-            # Show the main menu
 
-            texture = arcade.load_texture(BACKGROUNDS[0])
-            arcade.draw_texture_rectangle(self.width // 2, self.height // 2, self.texture.width, self.texture.height, self.texture, 0)
+    def on_key_press(self, key, modifiers):
+        """
+        Handle user key presses
+        User goes left, move -1
+        User goes right, move 1
+        Rotate stone,
+        or drop down
 
-            # FIXME FIXME: ADD BUTTONS TO FRONT MENU
+        F1 = MENU
+        F2 = LeaderBoard
+        F3 = Game Reset
+        """
+        # GAME Play Commands
+        if key == arcade.key.LEFT:
+            self.move(-1)
+        elif key == arcade.key.RIGHT:
+            self.move(1)
+        elif key == arcade.key.UP:
+            self.rotate_stone()
+        elif key == arcade.key.DOWN:
+            self.drop()
 
-            #texture = self.menus['start']
-            #arcade.draw_texture_rectangle(self.width//2, self.height//2 + 50, texture.width, texture.height, texture, 0)
+        # GAME Central Commands
+        elif key == 65470:
+            print("---- Switch to MAIN MENU")
+            next_view = MenuView()
+            self.window.show_view(next_view)
+        elif key == 65471:
+            print("---- Switch to LEADER BOARD")
+            next_view = LBView()
+            next_view.setup()
+            self.window.show_view(next_view)
+        elif key == 65472:
+            print("RESET GAME")
+            next_view = GameView()
+            next_view.newGame()
+            self.window.show_view(next_view)
 
-        elif self.state == State.PLAYING:
-            self.build_mscb()
-            #x = 'fixme'
 
 
 
-
-
-
-        elif self.state == State.GAME_OVER:                                     #FIXME FIXME
-            # Draw the game over menu if the player lost + draw the score board.
-            texture = self.menus['gameover']
-            #arcade.draw_texture_rectangle(self.width//2, self.height//2 + 50, texture.width, texture.height, texture, 0)
-            #texture = self.menus['play']
-            #arcade.draw_texture_rectangle(self.width//2, self.height//2 - 100, texture.width, texture.height, texture, 0)
-
+#===============================================================================
 class MenuView(arcade.View):
+
+    def on_show(self):
+        arcade.set_background_color(arcade.color.GREEN)                         # Set Background. Required. Do not delete def!
+
+    def on_draw(self):
+        arcade.start_render()
+
+        # BACKGROUND
+        self.background = arcade.load_texture(BACKGROUNDS[1])
+        arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
+                                        width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
+                                        texture  = self.background )
+        # BUTTON GRAPHICS :D
+        # Buttons are not intended to be clickable
+        button = arcade.load_texture(BUTTONS[0])
+        arcade.draw_texture_rectangle(  center_x=SCREEN_WIDTH // 2, center_y=SCREEN_HEIGHT // 2,
+                                        width=200, height=40, texture=button)
+        button = arcade.load_texture(BUTTONS[1])
+        arcade.draw_texture_rectangle(  center_x=SCREEN_WIDTH // 2, center_y=SCREEN_HEIGHT // 2-50,
+                                        width=200, height=40, texture=button)
+        button = arcade.load_texture(BUTTONS[2])
+        arcade.draw_texture_rectangle(  center_x=SCREEN_WIDTH // 2, center_y=SCREEN_HEIGHT // 2-100,
+                                        width=200, height=40, texture=button)
+
+
+        # TEXT - using graphic/textures for buttons now
+        #arcade.draw_text("[S] BEGIN GAME", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+        #                 arcade.color.CADET_GREY, font_size=15, font_name='arial',
+        #                 align="center", anchor_x="center", anchor_y="center")
+        #arcade.draw_text("[L] LEADER BOARD", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 30,
+        #                 arcade.color.CADET_GREY, font_size=15, font_name='arial',
+        #                 align="center", anchor_x="center", anchor_y="center")
+
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        print("toast... clicking doesn't do anything")
+
+    def on_key_press(self, key, modifiers):
+        if key == 65470:
+            print("RELOAD MAIN MENU")
+            next_view = MenuView()
+            self.window.show_view(next_view)
+        if key == 65471:
+            print("---- Switch to LEADER BOARD")
+            next_view = LBView()
+            next_view.setup()
+            self.window.show_view(next_view)
+        if key == 65472:
+            print("START NEW GAME")
+            next_view = GameView()
+            next_view.newGame()
+            self.window.show_view(next_view)
+#===============================================================================
+class LBView(arcade.View):
 
     def on_show(self):
         # Set Background. Required. Do not delete def!
@@ -323,37 +364,45 @@ class MenuView(arcade.View):
         arcade.start_render()
 
         # BACKGROUND
-        self.background = arcade.load_texture(BACKGROUNDS[1])
-        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, self.background.width-180, self.background.height-555, self.background, 0)
-
+        self.background = arcade.load_texture(BACKGROUNDS[2])
+        arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
+                                        width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
+                                        texture  = self.background )
         # TEXT
-        arcade.draw_text("[S] BEGIN GAME", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
-                         arcade.color.CADET_GREY, font_size=15, font_name='arial',
-                         align="center", anchor_x="center", anchor_y="center")
-        arcade.draw_text("[L] LEADER BOARD", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 30,
-                         arcade.color.CADET_GREY, font_size=15, font_name='arial',
-                         align="center", anchor_x="center", anchor_y="center")
+        #arcade.draw_text("[S] BEGIN GAME", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
+        #                 arcade.color.CADET_GREY, font_size=15, font_name='arial',
+        #                 align="center", anchor_x="center", anchor_y="center")
+        #arcade.draw_text("[L] LEADER BOARD", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 30,
+        #                 arcade.color.CADET_GREY, font_size=15, font_name='arial',
+        #                 align="center", anchor_x="center", anchor_y="center")
 
         # BUTTONS
         ############# ADD STUFF HERE ###############
         ############# ADD STUFF HERE ###############
+
+    def setup(self):
+        print("FIXME - Build 'Setup' in LeaderBoard")
 
 
     def on_mouse_press(self, x, y, button, modifiers):
         print("toast... clicking doesn't do anything")
 
     def on_key_press(self, key, modifiers):
-        if key == 115: # S key
-            next_view = GameView()
-            next_view.newGame()
+        if key == 65470:
+            print("SWITCH TO MAIN MENU")
+            next_view = MenuView()
+            self.window.show_view(next_view)
+        if key == 65471:
+            print("RELOAD LEADER BOARD")
+            next_view = LBView()
             next_view.setup()
             self.window.show_view(next_view)
-        if key == 108: # L key
-            print("CALL TO SWITCH TO LEADER_BOARD VIEW")
-            #next_view = LBView()
-            #next_view.setup()
-            #self.window.show_view(next_view)
-
+        if key == 65472:
+            print("START NEW GAME")
+            next_view = GameView()
+            next_view.newGame()
+            self.window.show_view(next_view)
+#===============================================================================
 
 def main():
     """ Create the game window, setup, run
@@ -361,6 +410,7 @@ def main():
     """
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.total_score = 0
+    window.set_mouse_visible(False)
     menu_view = MenuView()   #start game in MenuView()
     window.show_view(menu_view)
     arcade.run()
