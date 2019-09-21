@@ -3,16 +3,18 @@ Tetris @ The Ohio State University
 
 ## TO-DO
 Adam = Game Views  
-     = Hard Drop Feature  
-     = File Saving Structure(?)  
-     = Game Play cutoff time out for player(?)  
+.... = User Pop-Up for Information before playing
+.... = User Game over Screen  
+.... = File Saving Structure(?)  
+.... = Countdown Clock until HACK OHI/O Signups End & Actual Event
+.... = Game Play cutoff time out for player(?)  
 Kelly= Hard Drop Feature  
-     = Resolve Error Thrown when piece comes to edge of screen
+.... = Resolve Error Thrown when piece comes to edge of screen
 
 Dan  = User input method and game to screen connection  
 
 All  = Prizes  
-     = Trophys for top places?  
+.... = Trophys for top places?  
 
 ### STRUCTURE THEORY (ACB)  
 - 3 Main views.........key to Switch View  
