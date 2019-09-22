@@ -74,12 +74,12 @@ class GameView(arcade.View):
         self.board = None
         self.frame_count = 0                #reset game frame counter
         self.game_over = False              #reset game end state
-        self.paused = False
+        self.paused = True
         self.board_sprite_list = None
         self.background = None
 
         # initialize score & player
-        self.player_name = None
+        self.player_name = ''
         self.score = None
         self.level = None
         self.GAME_SPEED = None
@@ -239,11 +239,10 @@ class GameView(arcade.View):
 
         self.draw_background()
         self.build_mscb()
+        self.write_name()
+
         self.board_sprite_list.draw()
         self.draw_grid(self.stone, self.stone_x, self.stone_y)
-
-        if self.frame_count == 5:
-            self.ask_name()
 
         if self.game_over == True:
             addScore(self.player_name, self.score, self.level)  #calls to function to add player to leaderboard
@@ -259,7 +258,11 @@ class GameView(arcade.View):
         arcade.draw_text(score_text, e_mscb_xposn-90, e_mscb_yposn, arcade.color.BLACK, 30, width=100, align="left", anchor_x="center", anchor_y="center")
 
         arcade.draw_text("LEVEL", e_mscb_xposn+138, e_mscb_yposn-20, arcade.color.BLACK, 12, width=170, align="right", anchor_x="center", anchor_y="center")
-        arcade.draw_text(level_text, e_mscb_xposn+90, e_mscb_yposn, arcade.color.BLACK, 30, width=100, align="right", anchor_x="center", anchor_y="center")
+
+    def write_name(self):
+        """ Draw the mini score board when the player start playing. """
+        player_name = f"{self.player_name}"
+        arcade.draw_text(player_name, 0, SCREEN_HEIGHT-50, arcade.color.CADET_GREY, 30, width=340, align="center")
 
 
 #-- Game Logic
@@ -327,18 +330,21 @@ class GameView(arcade.View):
             next_view = GameView()
             next_view.newGame()
             self.window.show_view(next_view)
+        # For name input
+        if self.paused is True:
+            if key == arcade.key.ENTER:
+                self.paused = False
 
-    def ask_name(self):
-
-        self.paused = True
-
-        self.player_name = ""
-        while len(self.player_name) < 3:
-            self.player_name = input("Player Name? : ")
-            print("Begin Playing! Player: " + str(self.player_name))
-
-        self.paused = False
-
+            elif 96 < key < 123:
+                self.player_name += str(['a', 'b', 'c', 'd', 'e', 'f', 'g',
+                    'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                    's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97])
+            elif 47 < key < 58:
+                self.player_name += str(key-48)
+            elif key == arcade.key.PERIOD:
+                self.player_name += '.'
+            elif key == arcade.key.BACKSPACE:
+                self.player_name = self.player_name[:-1]
 
 #===============================================================================
 class MenuView(arcade.View):
