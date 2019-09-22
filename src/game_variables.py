@@ -6,7 +6,7 @@ import os
 import arcade
 
 # Image of the base background
-BACKGROUNDS = ["assets" + os.sep + "bg_scarletleaf.png","assets" + os.sep + "bg_mainmenu.png", "assets" + os.sep + "bg_leaderboard.png"]
+BACKGROUNDS = ["assets" + os.sep + "bg_scarletleaf.png","assets" + os.sep + "bg_mainmenu.png", "assets" + os.sep + "bg_leaderboard.png", "assets" + os.sep + "bg_askname.png"]
 LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
 #LOGO_HACKOHIO =
 

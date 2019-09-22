@@ -1,6 +1,7 @@
 """
-BUCKEYE TETRIS
+BUCKEYE TETROMINOES
 Coded by:  Adam Buynak in collaboration w/ The Ohio State University's OHI/O
+Game Logic Sourced from Arcade Sample Code library.
 Distributed under the MIT LICENSE.
 """
 ################################################################################
@@ -9,12 +10,10 @@ import arcade
 import random
 import PIL
 
-
 from game_variables import *
+from game_scores import *
 
 ################################################################################
-
-
 
 ################################################################################
 
@@ -64,7 +63,6 @@ def new_board():
     board += [[1 for x in range(COLUMN_COUNT)]]
     return board
 
-
 class GameView(arcade.View):
 
     def newGame(self):
@@ -78,8 +76,10 @@ class GameView(arcade.View):
         self.game_over = False              #reset game end state
         self.paused = False
         self.board_sprite_list = None
+        self.background = None
 
-        # initialize score
+        # initialize score & player
+        self.player_name = None
         self.score = None
         self.level = None
         self.GAME_SPEED = None
@@ -92,6 +92,7 @@ class GameView(arcade.View):
         self.score = 0
         self.level = 0
         self.GAME_SPEED = INITIAL_GAME_SPEED
+        self.background = arcade.load_texture(BACKGROUNDS[0])
 
         self.board_sprite_list = arcade.SpriteList()
         for row in range(len(self.board)):
@@ -108,6 +109,7 @@ class GameView(arcade.View):
         self.new_stone()
         self.update_board()
 
+
         print("---- Game Board, Mechanics, Stats == SETUP Confirm")
 
     def on_show(self):
@@ -116,12 +118,7 @@ class GameView(arcade.View):
         self.window.set_mouse_visible(False)                                    # Hide mouse cursor
 
 
-    def draw_background(self):
-        """ Draws the most epic background ever imaginable. """
-        backing = arcade.load_texture(BACKGROUNDS[0])
-        arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
-                                        width    = SCREEN_WIDTH,       height   = SCREEN_HEIGHT,
-                                        texture  = backing )
+#-- Stone Actions
 
     def new_stone(self):
         """
@@ -135,7 +132,6 @@ class GameView(arcade.View):
         if check_collision(self.board, self.stone, (self.stone_x, self.stone_y)):
             self.game_over = True
 			##--- ADD COMMAND TO SWITCH STATES TO "GAME-OVER" STATE WHEN GAME-ENDS
-
 
 
     def drop(self):
@@ -164,8 +160,6 @@ class GameView(arcade.View):
                 self.update_board()
                 self.new_stone()
 
-				##-------------------- switch to next stone command for Future stone feature
-
     def hard_drop(self):
         """
         Drop the stone until collision
@@ -189,23 +183,6 @@ class GameView(arcade.View):
             self.update_board()
             self.new_stone()
 
-    def build_mscb(self):
-        """ Draw the mini score board when the player start playing. """
-        score_text = f"{self.score}"
-        level_text = f"{self.level}"
-        arcade.draw_rectangle_outline(e_mscb_xposn, e_mscb_yposn, e_mscb_width, e_mscb_height, [0,153,153], 2)
-        arcade.draw_text("SCORE", e_mscb_xposn-138, e_mscb_yposn-20, arcade.color.BLACK, 12, width=170, align="left", anchor_x="center", anchor_y="center")
-        arcade.draw_text(score_text, e_mscb_xposn-90, e_mscb_yposn, arcade.color.BLACK, 30, width=100, align="left", anchor_x="center", anchor_y="center")
-
-        arcade.draw_text("LEVEL", e_mscb_xposn+138, e_mscb_yposn-20, arcade.color.BLACK, 12, width=170, align="right", anchor_x="center", anchor_y="center")
-        arcade.draw_text(level_text, e_mscb_xposn+90, e_mscb_yposn, arcade.color.BLACK, 30, width=100, align="right", anchor_x="center", anchor_y="center")
-
-
-
-
-
-## gucci below here ------------------------
-
     def rotate_stone(self):
         """ Rotate the stone, check collision. """
         if not self.game_over and not self.paused:
@@ -215,21 +192,6 @@ class GameView(arcade.View):
                 self.stone_x = COLUMN_COUNT - len(self.stone)
             if not check_collision(self.board, new_stone, (self.stone_x, self.stone_y)):
                 self.stone = new_stone
-
-    def update(self, dt):
-        """ Update, drop stone if warrented. Called by Arcade Class every 1/60 sec
-		------------------------------------ FRAME RATE CONTROLLING """
-        self.frame_count += 1
-        if self.frame_count % self.GAME_SPEED == 0:
-            self.drop()
-
-        #GAME LEVEL CONTROLLER & SPEED UPDATER----------------------------------SPEED CONTROLLER
-        if self.score >= ((self.level+1) * 2):
-            self.level += 1
-            print("Level:  " + str(self.level) )
-            if self.GAME_SPEED > 0:
-                self.GAME_SPEED -= 1
-
 
     def move(self, delta_x):
         """ Move the stone back and forth based on delta x. """
@@ -241,6 +203,16 @@ class GameView(arcade.View):
                 new_x = COLUMN_COUNT - len(self.stone[0])
             if not check_collision(self.board, self.stone, (new_x, self.stone_y)):
                 self.stone_x = new_x
+
+
+#-- Screen Elements
+
+    def draw_background(self):
+        """ Draws the most epic background ever imaginable. """
+        #backing = arcade.load_texture(BACKGROUNDS[0])
+        arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
+                                        width    = SCREEN_WIDTH,       height   = SCREEN_HEIGHT,
+                                        texture  = self.background )
 
     def draw_grid(self, grid, offset_x, offset_y):
         """
@@ -259,16 +231,6 @@ class GameView(arcade.View):
                     # Draw the box
                     arcade.draw_rectangle_filled(x, y, WIDTH, HEIGHT, color)
 
-    def update_board(self):
-        """
-        Update the sprite list to reflect the contents of the 2d grid
-        """
-        for row in range(len(self.board)):
-            for column in range(len(self.board[0])):
-                v = self.board[row][column]
-                i = row * COLUMN_COUNT + column
-                self.board_sprite_list[i].set_texture(v)
-
     def on_draw(self):
         """ Render the screen. """
 
@@ -280,6 +242,51 @@ class GameView(arcade.View):
         self.board_sprite_list.draw()
         self.draw_grid(self.stone, self.stone_x, self.stone_y)
 
+        if self.frame_count == 5:
+            self.ask_name()
+
+        if self.game_over == True:
+            addScore(self.player_name, self.score, self.level)  #calls to function to add player to leaderboard
+            print("added score")
+
+
+    def build_mscb(self):
+        """ Draw the mini score board when the player start playing. """
+        score_text = f"{self.score}"
+        level_text = f"{self.level}"
+        arcade.draw_rectangle_outline(e_mscb_xposn, e_mscb_yposn, e_mscb_width, e_mscb_height, [0,153,153], 2)
+        arcade.draw_text("SCORE", e_mscb_xposn-138, e_mscb_yposn-20, arcade.color.BLACK, 12, width=170, align="left", anchor_x="center", anchor_y="center")
+        arcade.draw_text(score_text, e_mscb_xposn-90, e_mscb_yposn, arcade.color.BLACK, 30, width=100, align="left", anchor_x="center", anchor_y="center")
+
+        arcade.draw_text("LEVEL", e_mscb_xposn+138, e_mscb_yposn-20, arcade.color.BLACK, 12, width=170, align="right", anchor_x="center", anchor_y="center")
+        arcade.draw_text(level_text, e_mscb_xposn+90, e_mscb_yposn, arcade.color.BLACK, 30, width=100, align="right", anchor_x="center", anchor_y="center")
+
+
+#-- Game Logic
+
+    def update(self, dt):
+        """ Update, drop stone if warrented. Called by Arcade Class every 1/60 sec
+		------------------------------------ FRAME RATE CONTROLLING """
+        self.frame_count += 1
+        if self.frame_count % self.GAME_SPEED == 0:
+            self.drop()
+
+        #GAME LEVEL CONTROLLER & SPEED UPDATER----------------------------------SPEED CONTROLLER
+        if self.score >= ((self.level+1) * 2):
+            self.level += 1
+            print("Level:  " + str(self.level) )
+            if self.GAME_SPEED > 0:
+                self.GAME_SPEED -= 1
+
+    def update_board(self):
+        """
+        Update the sprite list to reflect the contents of the 2d grid
+        """
+        for row in range(len(self.board)):
+            for column in range(len(self.board[0])):
+                v = self.board[row][column]
+                i = row * COLUMN_COUNT + column
+                self.board_sprite_list[i].set_texture(v)
 
     def on_key_press(self, key, modifiers):
         """
@@ -321,7 +328,16 @@ class GameView(arcade.View):
             next_view.newGame()
             self.window.show_view(next_view)
 
+    def ask_name(self):
 
+        self.paused = True
+
+        self.player_name = ""
+        while len(self.player_name) < 3:
+            self.player_name = input("Player Name? : ")
+            print("Begin Playing! Player: " + str(self.player_name))
+
+        self.paused = False
 
 
 #===============================================================================
@@ -433,11 +449,21 @@ def main():
     """ Create the game window, setup, run
         #TO-DO load leaderboard file and send to game (?)
     """
+    # Import Old Scoreboard
+    askScores = input("Import Scores? (y/n): ")
+    if askScores == "y":
+        ALL_SCORES = importScores()
+    else:
+        ALL_SCORES = [[0,"Brutus",0]]
+    print(ALL_SCORES)
+
+    # Game launch
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.total_score = 0
     window.set_mouse_visible(False)
     menu_view = MenuView()   #start game in MenuView()
     window.show_view(menu_view)
+
     arcade.run()
 
 
