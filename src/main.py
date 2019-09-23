@@ -478,7 +478,7 @@ class PNameView(arcade.View):
         arcade.start_render()
 
         # BACKGROUND
-        self.background = arcade.load_texture(BACKGROUNDS[4])
+        self.background = arcade.load_texture(BACKGROUNDS[3])
         arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
                                         width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
                                         texture  = self.background )
