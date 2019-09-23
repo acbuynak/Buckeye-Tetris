@@ -1,23 +1,31 @@
 """
 This module contains the back-end of the scoring system for the game.
+
+SCORE SAVE FILE STRUCTURED AS csv...
+SCORE NAME LEVEL
+
+
 """
 
 import csv
 
-def addScore(player_name, score, level):
-    ALL_SCORES.append([score, player_name, level])
 
 def importScores():
-    ALL_SCORES = [[0,"Brutus",0]]
+    ALL_SCORES = []
     with open('tetris_scores.csv', newline='') as csvfile:
         currentLine = csv.reader(csvfile, delimiter=' ')
         i=0
         for row in currentLine:
-            ALL_SCORES.append([ row[0], row[1], row[2] ])
+            ALL_SCORES.append([ int(row[0]), str(row[1]), int(row[2]) ])
             i+=1
     return ALL_SCORES
-    #print(ALL_SCORES[1][1])
 
 
-#SCORE SAVE FILE STRUCTURED AS csv...
-# SCORE NAME LEVEL
+
+
+def saveScores(SCORES):
+    with open('tetris_scores.csv', 'w', newline='') as csvfile:
+        currentLine = csv.writer(csvfile, delimiter=' ')
+        i=0
+        for row in SCORES:
+            currentLine.writerow( [ row[0], row[1], row[2] ] )

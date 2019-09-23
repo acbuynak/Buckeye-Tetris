@@ -19,10 +19,8 @@ BUTTONS = [ "assets" + os.sep + "button_play.png",
 # Game over text
 GAME_OVER = "assets" + os.sep +  "gameover.png"
 
-
-
-
-
+#pixel multiplier
+#pm = 0.0178571429
 
 
 ############-- MISC GLOBAL VARIABLES --##################
@@ -33,33 +31,37 @@ GAME_OVER = "assets" + os.sep +  "gameover.png"
 INITIAL_GAME_SPEED = 10
 
 #- TETRIS BOARD SIZE
-ROW_COUNT = 20
+ROW_COUNT = 22
 COLUMN_COUNT = 10
 
-#- Stone Components
-WIDTH = 30      # brick & cell WIDTH
-HEIGHT = 30     # brick & cell HEIGHT
-MARGIN = 2   # This sets the margin between each cell
-
-# TETRIS BOARD dimensions
-TETRIS_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN
-TETRIS_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
-
 # WINDOW DIMENSIONS
-
+#SCREEN_WIDTH  = 513
+#SCREEN_HEIGHT = 1512
 SCREEN_WIDTH  = 342
 SCREEN_HEIGHT = 1008
 SCREEN_TITLE  = "Tetris"
 
+#- Stone Components
+WIDTH  = int(0.0877193 * SCREEN_WIDTH)               # og: 30  brick & cell WIDTH
+HEIGHT = WIDTH                                       # og: 30  brick & cell HEIGHT
+MARGIN = int(0.0666666 * 0.0877193 * SCREEN_WIDTH)   # og:  2  This sets the margin between each cell
+
 HIDE_BOTTOM   = HEIGHT+MARGIN
 SCREEN_MARGIN = (1/2) * (SCREEN_WIDTH - COLUMN_COUNT*( WIDTH+MARGIN ))
 
+# TETRIS BOARD dimensions
+#TETRIS_WIDTH = ((WIDTH + MARGIN) * COLUMN_COUNT + MARGIN)
+TETRIS_WIDTH = SCREEN_WIDTH * 0.95
+TETRIS_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
+
+
+
 ############-- GAME VIEW ITEM PLACEMENT --##################
 
-e_mscb_height = 60
+e_mscb_height = 80
 e_mscb_width = SCREEN_WIDTH - (2*SCREEN_MARGIN)
 e_mscb_xposn  = SCREEN_WIDTH / 2
-e_mscb_yposn  = TETRIS_HEIGHT + 20 + e_mscb_height/2
+e_mscb_yposn  = TETRIS_HEIGHT + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
 
 ################################################################################
 
