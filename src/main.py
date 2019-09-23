@@ -66,22 +66,24 @@ def new_board():
 class GameView(arcade.View):
     global ALL_SCORES
 
-    def newGame(self):
-        self.resetGame()
+    def newGame(self, player_name):
+        self.resetGame(player_name)
         self.setup()
-    def resetGame(self): #width, height, title removed
+    def resetGame(self, player_name): #width, height, title removed
         """ Reset Last Gameplay and Reset Game Class Variables """
 
         self.board = None
         self.frame_count = 0                #reset game frame counter
         self.game_over = False              #reset game end state
-        self.paused = True
+
+        self.paused = False
         self.addedScore = False
+
         self.board_sprite_list = None
         self.background = None
 
         # initialize score & player
-        self.player_name = ''
+        self.player_name = player_name
         self.score = None
         self.level = None
         self.GAME_SPEED = None
@@ -253,6 +255,12 @@ class GameView(arcade.View):
             print("Added score & Sorted Scoreboard")
             print(ALL_SCORES)
 
+    def write_name(self):
+        """ Draw the mini score board when the player start playing. """
+        player_name = f"{self.player_name}"
+        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2, SCREEN_HEIGHT*0.94, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text(player_name, SCREEN_WIDTH/2, SCREEN_HEIGHT*0.90, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
+
 
     def build_mscb(self):
         """ Draw the mini score board when the player start playing. """
@@ -263,12 +271,6 @@ class GameView(arcade.View):
         arcade.draw_text(score_text, e_mscb_xposn-int(0.22*SCREEN_WIDTH),   e_mscb_yposn - e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_x="center", anchor_y="center")
         arcade.draw_text("LEVEL",    e_mscb_xposn-int(0.35*SCREEN_WIDTH),  e_mscb_yposn + e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="right", anchor_x="center", anchor_y="center")
         arcade.draw_text(level_text, e_mscb_xposn-int(0.22*SCREEN_WIDTH),   e_mscb_yposn + e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_x="center", anchor_y="center")
-
-    def write_name(self):
-        """ Draw the player name on active game screen """
-        player_name = f"{self.player_name}"
-        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2, SCREEN_HEIGHT*0.94, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
-        arcade.draw_text(player_name, SCREEN_WIDTH/2, SCREEN_HEIGHT*0.90, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
 
 
 #-- Game Logic
@@ -334,27 +336,14 @@ class GameView(arcade.View):
         elif key == 65472:
             print("RESET GAME")
             next_view = GameView()
-            next_view.newGame()
+            next_view.newGame('')
             self.window.show_view(next_view)
-        # For name input
-        if self.paused is True:
-            if key == arcade.key.ENTER:
-                self.paused = False
+        elif key == 65473:
+            print("ENTER NAME")
+            next_view = PNameView()
+            next_view.setup()
+            self.window.show_view(next_view)
 
-            elif 96 < key < 123:
-                self.player_name += str(['a', 'b', 'c', 'd', 'e', 'f', 'g',
-                    'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-                    's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97])
-            elif 47 < key < 58:
-                self.player_name += str(key-48)
-            elif 65455 < key <65466:
-                self.player_name += str(key-65456)
-            elif key == arcade.key.PERIOD:
-                self.player_name += '.'
-            elif key == 65454:
-                self.player_name += '.'
-            elif key == arcade.key.BACKSPACE:
-                self.player_name = self.player_name[:-1]
 
 #===============================================================================
 class MenuView(arcade.View):
@@ -408,10 +397,15 @@ class MenuView(arcade.View):
         if key == 65472:
             print("START NEW GAME")
             next_view = GameView()
-            next_view.newGame()
+            next_view.newGame('')
             self.window.show_view(next_view)
-
+        if key == 65473:
+            print("ENTER NAME")
+            next_view = PNameView()
+            next_view.setup()
+            self.window.show_view(next_view)
         if key == 65307: arcade.close_window()
+
 #===============================================================================
 class LBView(arcade.View):
 
@@ -425,7 +419,7 @@ class LBView(arcade.View):
         # BACKGROUND
         self.background = arcade.load_texture(BACKGROUNDS[2])
         arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
-                                        width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
+                                        width    = SCREEN_WIDTH,       height   = SCREEN_HEIGHT,
                                         texture  = self.background )
 
         # Populate Leaderboard
@@ -450,7 +444,6 @@ class LBView(arcade.View):
     def setup(self):
         print("FIXME - Build 'Setup' in LeaderBoard")
 
-
     def on_mouse_press(self, x, y, button, modifiers):
         print("toast... clicking doesn't do anything")
 
@@ -467,8 +460,83 @@ class LBView(arcade.View):
         if key == 65472:
             print("START NEW GAME")
             next_view = GameView()
-            next_view.newGame()
+            next_view.newGame('')
             self.window.show_view(next_view)
+        if key == 65473:
+            print("ENTER NAME")
+            next_view = PNameView()
+            next_view.setup()
+            self.window.show_view(next_view)
+#===============================================================================
+class PNameView(arcade.View):
+
+    def on_show(self):
+        # Set Background. Required. Do not delete def!
+        arcade.set_background_color(arcade.color.GREEN)
+
+    def on_draw(self):
+        arcade.start_render()
+
+        # BACKGROUND
+        self.background = arcade.load_texture(BACKGROUNDS[4])
+        arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
+                                        width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
+                                        texture  = self.background )
+        self.write_name()
+
+    def setup(self):
+        self.player_name = ''
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        print("toast... clicking doesn't do anything")
+
+    def on_key_press(self, key, modifiers):
+        if key == 65470:
+            print("SWITCH TO MAIN MENU")
+            next_view = MenuView()
+            self.window.show_view(next_view)
+        if key == 65471:
+            print("LEADER BOARD")
+            next_view = LBView()
+            next_view.setup()
+            self.window.show_view(next_view)
+        if key == 65472 or key==65293 or key==65421:
+            print("START NEW GAME")
+            next_view = GameView()
+            next_view.newGame(self.player_name)
+            self.window.show_view(next_view)
+        if key == 65473:
+            print("RELOAD ENTER NAME")
+            next_view = PNameView()
+            next_view.setup()
+            self.window.show_view(next_view)
+        # For name input
+        if 96 < key < 123:
+            self.player_name += str(['a', 'b', 'c', 'd', 'e', 'f', 'g',
+                'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97])
+        elif 47 < key < 58:
+            self.player_name += str(key-48)
+        elif 65455 < key <65466:
+            self.player_name += str(key-65456)
+        elif key == 65454:
+            self.player_name += '.'
+        elif key == arcade.key.PERIOD:
+            self.player_name += '.'
+        elif key == arcade.key.BACKSPACE:
+            self.player_name = self.player_name[:-1]
+  
+
+    def write_name(self):
+        """ Draw the mini score board when the player start playing. """
+        player_name = f"{self.player_name}"
+        arcade.draw_text(player_name, 46, 530, arcade.color.BLACK, 20, width=250, align="center")
+        
+        # ADAM REVIEW
+        #arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2, SCREEN_HEIGHT*0.94, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
+        #arcade.draw_text(player_name, SCREEN_WIDTH/2, SCREEN_HEIGHT*0.90, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
+
+
 #===============================================================================
 
 
