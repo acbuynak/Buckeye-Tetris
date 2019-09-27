@@ -76,6 +76,9 @@ class GameView(arcade.View):
         self.frame_count = 0                #reset game frame counter
         self.game_over = False              #reset game end state
 
+        self.hdrop_wait = False             #Hard Drop Frequency Limiter
+        self.hdrop_last_frame = 0
+
         self.paused = False
         self.addedScore = False
 
@@ -110,6 +113,17 @@ class GameView(arcade.View):
 
                 self.board_sprite_list.append(sprite)
 
+        #- JOYSTICK
+        # Check for System Installed Joysticks. Make instance of it.
+        joysticks = arcade.get_joysticks()
+        if joysticks:
+            self.joystick = joysticks[0]
+            self.joystick.open()
+        else:
+            print("----NO JOYSTICK CONTROLLER WAS FOUND.")
+            self.joystick = None
+
+        #- Initial Stone
         self.new_stone()
         self.update_board()
 
@@ -170,7 +184,8 @@ class GameView(arcade.View):
         Check for rows to remove
         Create new stone
         """
-        if not self.game_over and not self.paused:
+
+        if not self.game_over and not self.paused and ( self.hdrop_last_frame + 10 < self.frame_count):
             while not check_collision(self.board, self.stone, (self.stone_x, self.stone_y)):
                 self.stone_y += 1
             self.board = join_matrixes(self.board, self.stone, (self.stone_x, self.stone_y))
@@ -178,10 +193,11 @@ class GameView(arcade.View):
                 for i, row in enumerate(self.board[:-1]):
                     if 0 not in row:
                         self.board = remove_row(self.board, i)
-                        self.score = self.score + 1  # 40*(self.level+1)    ##------------ADD GAME SCORE COUNTER LINE HERE
+                        self.score = self.score + 1  # 40*(self.level+1)        ##------------ADD GAME SCORE COUNTER LINE HERE
                         print(self.score)
                         break
                 else:
+                    self.hdrop_last_frame = self.frame_count
                     break
             self.update_board()
             self.new_stone()
@@ -276,13 +292,23 @@ class GameView(arcade.View):
 #-- Game Logic
 
     def update(self, dt):
-        """ Update, drop stone if warrented. Called by Arcade Class every 1/60 sec
-		------------------------------------ FRAME RATE CONTROLLING """
+        """ Update, drop stone if warrented. Called by Arcade Class every 1/60 sec"""
+
+		#------------------------------------ FRAME RATE CONTROL
         self.frame_count += 1
         if self.frame_count % self.GAME_SPEED == 0:
+            if self.joystick and (self.joystick.y > 0.6):   self.drop()  # DOWN (vertical is flipped on input)
             self.drop()
 
-        #GAME LEVEL CONTROLLER & SPEED UPDATER----------------------------------SPEED CONTROLLER
+        if self.joystick and (self.frame_count % 3 == 0):
+            """JoyStick Control Input"""
+            if self.joystick.x < -0.6:   self.move(-1)        # LEFT
+            if self.joystick.x > 0.6:   self.move(1)          # RIGHT
+            if self.joystick.y < -0.6:   self.hard_drop()     # UP
+
+
+
+        #GAME LEVEL CONTROLLER & SPEED UPDATER----------------------------------SCORE CONTROLLER
         if self.score >= ((self.level+1) * 2):
             self.level += 1
             print("Level:  " + str(self.level) )
@@ -525,13 +551,13 @@ class PNameView(arcade.View):
             self.player_name += '.'
         elif key == arcade.key.BACKSPACE:
             self.player_name = self.player_name[:-1]
-  
+
 
     def write_name(self):
         """ Draw the mini score board when the player start playing. """
         player_name = f"{self.player_name}"
         arcade.draw_text(player_name, 46, 530, arcade.color.BLACK, 20, width=250, align="center")
-        
+
         # ADAM REVIEW
         #arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2, SCREEN_HEIGHT*0.94, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
         #arcade.draw_text(player_name, SCREEN_WIDTH/2, SCREEN_HEIGHT*0.90, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
