@@ -15,7 +15,6 @@ from game_scores import *
 
 ################################################################################
 
-################################################################################
 
 
 def create_textures():
@@ -31,7 +30,7 @@ texture_list = create_textures()
 
 def rotate_clockwise(shape):
     """ Rotates a matrix clockwise """
-    return [[shape[y][x] for y in range(len(shape))] for x in range(len(shape[0]) - 1, -1, -1)]
+    return [[shape[len(shape)-y-1][x] for y in range(len(shape))] for x in range(len(shape[0]))]
 def check_collision(board, shape, offset):
     """
     See if the matrix stored in the shape will intersect anything
@@ -88,6 +87,13 @@ class GameView(arcade.View):
         self.level = None
         self.GAME_SPEED = None
 
+        self.left_pressed = False
+        self.right_pressed = False
+        self.down_pressed = False
+        self.pos = 0
+        self.new_stones = tetris_shapes.copy()
+        random.shuffle(self.new_stones)
+
         #Output Announcement
         print("---- Game Board, Mechanics, Stats == Reset")
     def setup(self):
@@ -127,12 +133,15 @@ class GameView(arcade.View):
     def new_stone(self):
         """
         Randomly grab a new stone and set the stone location to the top.
-        If we immediately collide, then game-over.
+        If we immediately collide, then game-over.        self.new_stone()
         """
-        self.stone = random.choice(tetris_shapes)
+        self.stone = self.new_stones.pop()
+        if len(self.new_stones) is 0:
+            self.new_stones = tetris_shapes.copy()
+            random.shuffle(self.new_stones)
         self.stone_x = int(COLUMN_COUNT / 2 - len(self.stone[0]) / 2)
         self.stone_y = 0
-
+        self.pos = 0
         if check_collision(self.board, self.stone, (self.stone_x, self.stone_y)):
             self.game_over = True
 			##--- ADD COMMAND TO SWITCH STATES TO "GAME-OVER" STATE WHEN GAME-ENDS
@@ -190,11 +199,67 @@ class GameView(arcade.View):
         """ Rotate the stone, check collision. """
         if not self.game_over and not self.paused:
             new_stone = rotate_clockwise(self.stone)
+            new_pos = (self.pos+1)%4
+            new_x = self.stone_x
+            new_y = self.stone_y
+
+            d = abs(len(self.stone)-len(self.stone[0]))
+            if d is 3:
+                x=0
+                if new_pos is 1:
+                    new_x += 2
+                    new_y -= 1
+                elif new_pos is 2:
+                    new_x -= 2
+                    new_y += 2
+                elif new_pos is 3:
+                    new_x += 1
+                    new_y -= 2
+                else:
+                    new_x -= 1
+                    new_y += 1
+            else:
+                if new_pos is 1:
+                    new_x += d
+                elif new_pos is 2:
+                    new_x -= d
+                    new_y += d
+                elif new_pos is 3:
+                    new_y -= d
+
             # if rotates off board move back
-            if self.stone_x > COLUMN_COUNT - len(self.stone):
-                self.stone_x = COLUMN_COUNT - len(self.stone)
-            if not check_collision(self.board, new_stone, (self.stone_x, self.stone_y)):
+            if new_x < 0:
+                new_x = 0
+            if new_x > COLUMN_COUNT - len(self.stone):
+                new_x = COLUMN_COUNT - len(self.stone)
+            if not check_collision(self.board, new_stone, (new_x, new_y)):
                 self.stone = new_stone
+                self.stone_x = new_x
+                self.stone_y = new_y
+                self.pos = new_pos
+
+    def update(self, dt):
+        """ Update, drop stone if warrented. Called by Arcade Class every 1/60 sec
+		------------------------------------ FRAME RATE CONTROLLING """
+        self.frame_count += 1
+        if self.frame_count % self.GAME_SPEED == 0:
+            self.drop()
+
+        if self.frame_count % 3 == 0:
+            if self.down_pressed and self.frame_count - self.down_pressed > 10:
+                self.drop()
+            if not self.right_pressed and self.left_pressed and self.frame_count - self.left_pressed > 10:
+                self.move(-1)
+            elif not self.left_pressed and self.right_pressed and self.frame_count - self.right_pressed > 10:
+                self.move(1)
+
+        #GAME LEVEL CONTROLLER & SPEED UPDATER----------------------------------SPEED CONTROLLER
+        if self.score >= ((self.level+1) * 2):
+            self.level += 1
+            print("Level:  " + str(self.level) )
+            if self.GAME_SPEED > 0:
+                self.GAME_SPEED -= 1
+
 
     def move(self, delta_x):
         """ Move the stone back and forth based on delta x. """
@@ -216,6 +281,28 @@ class GameView(arcade.View):
         arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
                                         width    = SCREEN_WIDTH,       height   = SCREEN_HEIGHT,
                                         texture  = self.background )
+
+    def draw_next_stone(self):
+        next_stone = self.new_stones[-1]
+        color = max(next_stone[0])
+
+        arcade.draw_rectangle_outline(next_xposn, next_yposn, next_width, next_height, [0,153,153], 2)
+
+        if color is 6:
+            arcade.draw_rectangle_filled(next_xposn+WIDTH/2+MARGIN, next_yposn, WIDTH, HEIGHT, colors[6])
+            arcade.draw_rectangle_filled(next_xposn-WIDTH/2, next_yposn, WIDTH, HEIGHT, colors[6])
+            arcade.draw_rectangle_filled(next_xposn+1.5*WIDTH+2*MARGIN, next_yposn, WIDTH, HEIGHT, colors[6])
+            arcade.draw_rectangle_filled(next_xposn-1.5*WIDTH-MARGIN, next_yposn, WIDTH, HEIGHT, colors[6])
+        elif color is 7:
+            arcade.draw_rectangle_filled(next_xposn+WIDTH/2+MARGIN, next_yposn-HEIGHT/2, WIDTH, HEIGHT, colors[7])
+            arcade.draw_rectangle_filled(next_xposn-WIDTH/2, next_yposn-HEIGHT/2, WIDTH, HEIGHT, colors[7])
+            arcade.draw_rectangle_filled(next_xposn+WIDTH/2+MARGIN, next_yposn+HEIGHT/2+MARGIN, WIDTH, HEIGHT, colors[7])
+            arcade.draw_rectangle_filled(next_xposn-WIDTH/2, next_yposn+HEIGHT/2+MARGIN, WIDTH, HEIGHT, colors[7])
+        else:
+            for x in range(3):
+                for y in range(2):
+                    if next_stone[y][x] is not 0:
+                        arcade.draw_rectangle_filled(next_xposn+(x-1)*(WIDTH+MARGIN), next_yposn+(y*-2+1)*(HEIGHT/2+MARGIN), WIDTH, HEIGHT, colors[color])
 
     def draw_grid(self, grid, offset_x, offset_y):
         """
@@ -242,6 +329,7 @@ class GameView(arcade.View):
 
         self.draw_background()
         self.build_mscb()
+        self.draw_next_stone()
         self.write_name()
 
         self.board_sprite_list.draw()
@@ -267,28 +355,13 @@ class GameView(arcade.View):
         score_text = f"{self.score}"
         level_text = f"{self.level}"
         arcade.draw_rectangle_outline(e_mscb_xposn, e_mscb_yposn, e_mscb_width, e_mscb_height, [0,153,153], 2)
-        arcade.draw_text("SCORE",    e_mscb_xposn-int(0.35*SCREEN_WIDTH),  e_mscb_yposn - e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="left", anchor_x="center", anchor_y="center")
-        arcade.draw_text(score_text, e_mscb_xposn-int(0.22*SCREEN_WIDTH),   e_mscb_yposn - e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_x="center", anchor_y="center")
-        arcade.draw_text("LEVEL",    e_mscb_xposn-int(0.35*SCREEN_WIDTH),  e_mscb_yposn + e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="right", anchor_x="center", anchor_y="center")
-        arcade.draw_text(level_text, e_mscb_xposn-int(0.22*SCREEN_WIDTH),   e_mscb_yposn + e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_x="center", anchor_y="center")
+        arcade.draw_text("SCORE",    e_mscb_xposn-int(0.12*SCREEN_WIDTH),  e_mscb_yposn - e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="left", anchor_x="center", anchor_y="center")
+        arcade.draw_text(score_text, e_mscb_xposn-int(0.01*SCREEN_WIDTH),   e_mscb_yposn - e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_x="center", anchor_y="center")
+        arcade.draw_text("LEVEL",    e_mscb_xposn-int(0.12*SCREEN_WIDTH),  e_mscb_yposn + e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="right", anchor_x="center", anchor_y="center")
+        arcade.draw_text(level_text, e_mscb_xposn-int(0.01*SCREEN_WIDTH),   e_mscb_yposn + e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_x="center", anchor_y="center")
 
 
 #-- Game Logic
-
-    def update(self, dt):
-        """ Update, drop stone if warrented. Called by Arcade Class every 1/60 sec
-		------------------------------------ FRAME RATE CONTROLLING """
-        self.frame_count += 1
-        if self.frame_count % self.GAME_SPEED == 0:
-            self.drop()
-
-        #GAME LEVEL CONTROLLER & SPEED UPDATER----------------------------------SPEED CONTROLLER
-        if self.score >= ((self.level+1) * 2):
-            self.level += 1
-            print("Level:  " + str(self.level) )
-            if self.GAME_SPEED > 0:
-                self.GAME_SPEED -= 1
-
     def update_board(self):
         """
         Update the sprite list to reflect the contents of the 2d grid
@@ -313,12 +386,15 @@ class GameView(arcade.View):
         """
         # GAME Play Commands
         if key == arcade.key.LEFT:
+            self.left_pressed = self.frame_count
             self.move(-1)
         elif key == arcade.key.RIGHT:
+            self.right_pressed = self.frame_count
             self.move(1)
         elif key == arcade.key.UP:
             self.rotate_stone()
         elif key == arcade.key.DOWN:
+            self.down_pressed = self.frame_count
             self.drop()
         elif key == arcade.key.SPACE:
             self.hard_drop()
@@ -343,6 +419,26 @@ class GameView(arcade.View):
             next_view = PNameView()
             next_view.setup()
             self.window.show_view(next_view)
+
+    def on_key_release(self, key, modifiers):
+        """
+        Handle user key presses
+        User goes left, move -1
+        User goes right, move 1
+        Rotate stone,
+        or drop down
+
+        F1 = MENU
+        F2 = LeaderBoard
+        F3 = Game Reset
+        """
+        # GAME Play Commands
+        if key == arcade.key.LEFT:
+            self.left_pressed = False
+        elif key == arcade.key.RIGHT:
+            self.right_pressed = False
+        elif key == arcade.key.DOWN:
+            self.down_pressed = False
 
 
 #===============================================================================
@@ -525,13 +621,13 @@ class PNameView(arcade.View):
             self.player_name += '.'
         elif key == arcade.key.BACKSPACE:
             self.player_name = self.player_name[:-1]
-  
+
 
     def write_name(self):
         """ Draw the mini score board when the player start playing. """
         player_name = f"{self.player_name}"
         arcade.draw_text(player_name, 46, 530, arcade.color.BLACK, 20, width=250, align="center")
-        
+
         # ADAM REVIEW
         #arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2, SCREEN_HEIGHT*0.94, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
         #arcade.draw_text(player_name, SCREEN_WIDTH/2, SCREEN_HEIGHT*0.90, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
