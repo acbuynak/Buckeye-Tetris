@@ -75,6 +75,9 @@ class GameView(arcade.View):
         self.frame_count = 0                #reset game frame counter
         self.game_over = False              #reset game end state
 
+        self.hdrop_wait = False             #Hard Drop Frequency Limiter
+        self.hdrop_last_frame = 0
+
         self.paused = False
         self.addedScore = False
 
@@ -116,6 +119,17 @@ class GameView(arcade.View):
 
                 self.board_sprite_list.append(sprite)
 
+        #- JOYSTICK
+        # Check for System Installed Joysticks. Make instance of it.
+        joysticks = arcade.get_joysticks()
+        if joysticks:
+            self.joystick = joysticks[0]
+            self.joystick.open()
+        else:
+            print("----NO JOYSTICK CONTROLLER WAS FOUND.")
+            self.joystick = None
+
+        #- Initial Stone
         self.new_stone()
         self.update_board()
 
@@ -179,7 +193,8 @@ class GameView(arcade.View):
         Check for rows to remove
         Create new stone
         """
-        if not self.game_over and not self.paused:
+
+        if not self.game_over and not self.paused and ( self.hdrop_last_frame + 10 < self.frame_count):
             while not check_collision(self.board, self.stone, (self.stone_x, self.stone_y)):
                 self.stone_y += 1
             self.board = join_matrixes(self.board, self.stone, (self.stone_x, self.stone_y))
@@ -187,10 +202,11 @@ class GameView(arcade.View):
                 for i, row in enumerate(self.board[:-1]):
                     if 0 not in row:
                         self.board = remove_row(self.board, i)
-                        self.score = self.score + 1  # 40*(self.level+1)    ##------------ADD GAME SCORE COUNTER LINE HERE
+                        self.score = self.score + 1  # 40*(self.level+1)        ##------------ADD GAME SCORE COUNTER LINE HERE
                         print(self.score)
                         break
                 else:
+                    self.hdrop_last_frame = self.frame_count
                     break
             self.update_board()
             self.new_stone()
@@ -362,6 +378,39 @@ class GameView(arcade.View):
 
 
 #-- Game Logic
+
+    def update(self, dt):
+        """ Update, drop stone if warrented. Called by Arcade Class every 1/60 sec"""
+
+		#------------------------------------ FRAME RATE CONTROL
+        self.frame_count += 1
+        if self.frame_count % self.GAME_SPEED == 0:
+            if self.joystick and (self.joystick.y > 0.6):   self.drop()  # DOWN (vertical is flipped on input)
+            self.drop()
+    #- JOYSTICK
+        if self.joystick and (self.frame_count % 3 == 0):
+            """JoyStick Control Input"""
+            if self.joystick.x < -0.6:   self.move(-1)        # LEFT
+            if self.joystick.x > 0.6:   self.move(1)          # RIGHT
+            if self.joystick.y < -0.6:   self.hard_drop()     # UP
+              
+    #- KEYBOARD
+        if self.frame_count % 3 == 0:
+            if self.down_pressed and self.frame_count - self.down_pressed > 10:
+                self.drop()
+            if not self.right_pressed and self.left_pressed and self.frame_count - self.left_pressed > 10:
+                self.move(-1)
+            elif not self.left_pressed and self.right_pressed and self.frame_count - self.right_pressed > 10:
+                self.move(1)
+
+        #GAME LEVEL CONTROLLER & SPEED UPDATER----------------------------------SCORE CONTROLLER
+        if self.score >= ((self.level+1) * 2):
+            self.level += 1
+            print("Level:  " + str(self.level) )
+            if self.GAME_SPEED > 0:
+                self.GAME_SPEED -= 1
+
+
     def update_board(self):
         """
         Update the sprite list to reflect the contents of the 2d grid

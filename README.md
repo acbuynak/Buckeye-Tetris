@@ -2,6 +2,19 @@
 Tetris @ The Ohio State University
 
 ## TO-DO
+Adam - Use pyglet to get input from physical arcade buttons for controls  
+Adam - Countdown Clock until HACK OHI/O Signups End & Actual Event
+Kelly - Holding Keys for left,right,drop  
+Kelly - Cycle through all 7 pieces befor showing  
+   
+Unassigned - Show 'next' piece on top of screen  
+Unassigned - Scoring Rules need decided  
+
+Idea - Game Play cutoff time out for player(?)  
+Idea - User Game over Screen (?)  
+Idea - ReOrder F1,F2,F3,F4 keys (?)  
+
+## FINISHED FEATURES
 Adam = Game Views  
 .... = User Pop-Up for Information before playing
 .... = User Game over Screen  
