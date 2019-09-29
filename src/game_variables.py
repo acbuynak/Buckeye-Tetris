@@ -28,7 +28,7 @@ GAME_OVER = "assets" + os.sep +  "gameover.png"
 # GAME SPEED
 # Use this to control how fast the game starts at and increments faster from
 # value = update every (n) frames
-INITIAL_GAME_SPEED = 10
+INITIAL_GAME_SPEED = 15
 
 #- TETRIS BOARD SIZE
 ROW_COUNT = 22
@@ -58,28 +58,36 @@ TETRIS_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 
 ############-- GAME VIEW ITEM PLACEMENT --##################
 
-e_mscb_height = 80
-e_mscb_width = SCREEN_WIDTH - (2*SCREEN_MARGIN)
-e_mscb_xposn  = SCREEN_WIDTH / 2
+e_mscb_height = 100
+e_mscb_width = 150
+e_mscb_xposn  = 92
 e_mscb_yposn  = TETRIS_HEIGHT + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
+
+
+############-- NEXT STONE BOX --##################
+
+next_height = 100
+next_width = 150
+next_xposn  = 250
+next_yposn  = TETRIS_HEIGHT + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
 
 ################################################################################
 
 colors = [
           (0,   0,   0  ),
-          (255, 0,   0  ),
-          (0,   150, 0  ),
-          (0,   0,   255),
-          (255, 120, 0  ),
-          (255, 255, 0  ),
-          (180, 0,   255),
-          (0,   220, 220)
+          (160, 1, 240),
+          (68, 240, 0),
+          (240, 9, 0),
+          (38, 3, 242),
+          (239, 160, 1),
+          (79, 240, 241),
+          (240, 240, 0)
           ]
 
 # Define the shapes of the single parts
 tetris_shapes = [
-    [[1, 1, 1],
-     [0, 1, 0]],
+    [[0, 1, 0],
+     [1, 1, 1]],
 
     [[0, 2, 2],
      [2, 2, 0]],
