@@ -64,6 +64,7 @@ def new_board():
 
 class GameView(arcade.View):
     global ALL_SCORES
+    global GAME_SPEED_FLOOR
 
     def newGame(self, player_name):
         self.resetGame(player_name)
@@ -178,7 +179,7 @@ class GameView(arcade.View):
                     for i, row in enumerate(self.board[:-1]):
                         if 0 not in row:
                             self.board = remove_row(self.board, i)
-                            self.score = self.score + 1  # 40*(self.level+1)    ##------------ADD GAME SCORE COUNTER LINE HERE
+                            self.score = 40*(self.level+1)         #self.score + 1   ##------------ADD GAME SCORE COUNTER LINE HERE
                             print("Score:  " + str(self.score))
                             break
                     else:
@@ -202,7 +203,7 @@ class GameView(arcade.View):
                 for i, row in enumerate(self.board[:-1]):
                     if 0 not in row:
                         self.board = remove_row(self.board, i)
-                        self.score = self.score + 1  # 40*(self.level+1)        ##------------ADD GAME SCORE COUNTER LINE HERE
+                        self.score = 40*(self.level+1)         #self.score + 1  ##------------ADD GAME SCORE COUNTER LINE HERE
                         print(self.score)
                         break
                 else:
@@ -268,14 +269,6 @@ class GameView(arcade.View):
                 self.move(-1)
             elif not self.left_pressed and self.right_pressed and self.frame_count - self.right_pressed > 10:
                 self.move(1)
-
-        #GAME LEVEL CONTROLLER & SPEED UPDATER----------------------------------SPEED CONTROLLER
-        if self.score >= ((self.level+1) * 2):
-            self.level += 1
-            print("Level:  " + str(self.level) )
-            if self.GAME_SPEED > 0:
-                self.GAME_SPEED -= 1
-
 
     def move(self, delta_x):
         """ Move the stone back and forth based on delta x. """
@@ -387,14 +380,19 @@ class GameView(arcade.View):
         if self.frame_count % self.GAME_SPEED == 0:
             if self.joystick and (self.joystick.y > 0.6):   self.drop()  # DOWN (vertical is flipped on input)
             self.drop()
-    #- JOYSTICK
+
+            #- Update Game Speed
+            self.level_up()
+            #print( "                    GAME SPEED: " + str(self.GAME_SPEED) )
+
+        #- JOYSTICK
         if self.joystick and (self.frame_count % 3 == 0):
             """JoyStick Control Input"""
             if self.joystick.x < -0.6:   self.move(-1)        # LEFT
             if self.joystick.x > 0.6:   self.move(1)          # RIGHT
             if self.joystick.y < -0.6:   self.hard_drop()     # UP
-              
-    #- KEYBOARD
+
+        #- KEYBOARD
         if self.frame_count % 3 == 0:
             if self.down_pressed and self.frame_count - self.down_pressed > 10:
                 self.drop()
@@ -403,13 +401,19 @@ class GameView(arcade.View):
             elif not self.left_pressed and self.right_pressed and self.frame_count - self.right_pressed > 10:
                 self.move(1)
 
-        #GAME LEVEL CONTROLLER & SPEED UPDATER----------------------------------SCORE CONTROLLER
-        if self.score >= ((self.level+1) * 2):
-            self.level += 1
-            print("Level:  " + str(self.level) )
-            if self.GAME_SPEED > 0:
-                self.GAME_SPEED -= 1
 
+    def level_up(self):
+        """ increase game speed as game progresses. ie. Get's faster the longer you play"""
+
+        self.GAME_LEVEL_FRAMES = [ 0,300,700,1000,1500,2000,2600,3050,3500,5000,6000 ]
+
+        idx = len(self.GAME_LEVEL_FRAMES) - 1
+        while idx >= 0:
+            if self.GAME_LEVEL_FRAMES[idx] < self.frame_count:
+                self.level = idx
+                self.GAME_SPEED = len(self.GAME_LEVEL_FRAMES)-idx + GAME_SPEED_FLOOR
+                break
+            idx -= 1
 
     def update_board(self):
         """
@@ -433,6 +437,8 @@ class GameView(arcade.View):
         F2 = LeaderBoard
         F3 = Game Reset
         """
+        global GAME_SPEED_FLOOR
+
         # GAME Play Commands
         if key == arcade.key.LEFT:
             self.left_pressed = self.frame_count
@@ -450,24 +456,26 @@ class GameView(arcade.View):
 
         # GAME Central Commands
         elif key == 65470:
-            print("---- Switch to MAIN MENU")
+            print("---- MAIN MENU")
             next_view = MenuView()
             self.window.show_view(next_view)
-        elif key == 65471:
-            print("---- Switch to LEADER BOARD")
+        elif key == 65471 or key == 65474:
+            print("---- LEADER BOARD")
             next_view = LBView()
             next_view.setup()
             self.window.show_view(next_view)
         elif key == 65472:
-            print("RESET GAME")
-            next_view = GameView()
-            next_view.newGame('')
-            self.window.show_view(next_view)
-        elif key == 65473:
-            print("ENTER NAME")
+            print("---- NEW PLAYER")
             next_view = PNameView()
             next_view.setup()
             self.window.show_view(next_view)
+
+        elif key == 65365:
+            GAME_SPEED_FLOOR+=1
+            print("---- GAME_SPEED_FLOOR = " + str(GAME_SPEED_FLOOR))
+        elif key == 65366:
+            if GAME_SPEED_FLOOR > 0: GAME_SPEED_FLOOR-=1
+            print("---- GAME_SPEED_FLOOR = " + str(GAME_SPEED_FLOOR))
 
     def on_key_release(self, key, modifiers):
         """
@@ -527,28 +535,30 @@ class MenuView(arcade.View):
 
 
     def on_mouse_press(self, x, y, button, modifiers):
-        print("toast... clicking doesn't do anything")
+        print("Clicking doesn't do anything")
 
     def on_key_press(self, key, modifiers):
         if key == 65470:
-            print("RELOAD MAIN MENU")
+            print("---- RELOAD MAIN MENU")
             next_view = MenuView()
             self.window.show_view(next_view)
-        if key == 65471:
-            print("---- Switch to LEADER BOARD")
+        if key == 65471 or key == 65474:
+            print("---- LEADER BOARD")
             next_view = LBView()
             next_view.setup()
             self.window.show_view(next_view)
         if key == 65472:
-            print("START NEW GAME")
-            next_view = GameView()
-            next_view.newGame('')
-            self.window.show_view(next_view)
-        if key == 65473:
-            print("ENTER NAME")
+            print("---- NEW PLAYER")
             next_view = PNameView()
             next_view.setup()
             self.window.show_view(next_view)
+
+        if key == 65473:
+            print("---- TESTING ONLY: START NEW GAME w/o PLAYER NAME")
+            next_view = GameView()
+            next_view.newGame('')
+            self.window.show_view(next_view)
+
         if key == 65307: arcade.close_window()
 
 #===============================================================================
@@ -587,28 +597,23 @@ class LBView(arcade.View):
 
 
     def setup(self):
-        print("FIXME - Build 'Setup' in LeaderBoard")
+        print("Setup Leaderboard")
 
     def on_mouse_press(self, x, y, button, modifiers):
-        print("toast... clicking doesn't do anything")
+        print("Clicking doesn't do anything")
 
     def on_key_press(self, key, modifiers):
         if key == 65470:
-            print("SWITCH TO MAIN MENU")
+            print("---- MAIN MENU")
             next_view = MenuView()
             self.window.show_view(next_view)
-        if key == 65471:
-            print("RELOAD LEADER BOARD")
+        if key == 65471 or key == 65474:
+            print("---- RELOAD LEADER BOARD")
             next_view = LBView()
             next_view.setup()
             self.window.show_view(next_view)
         if key == 65472:
-            print("START NEW GAME")
-            next_view = GameView()
-            next_view.newGame('')
-            self.window.show_view(next_view)
-        if key == 65473:
-            print("ENTER NAME")
+            print("---- NEW PLAYER")
             next_view = PNameView()
             next_view.setup()
             self.window.show_view(next_view)
@@ -637,24 +642,27 @@ class PNameView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == 65470:
-            print("SWITCH TO MAIN MENU")
+            print("---- MAIN MENU")
             next_view = MenuView()
             self.window.show_view(next_view)
-        if key == 65471:
-            print("LEADER BOARD")
+
+        if key == 65471:                     #exclude Console Control Button F5
+            print("---- LEADER BOARD")
             next_view = LBView()
             next_view.setup()
             self.window.show_view(next_view)
-        if key == 65472 or key==65293 or key==65421:
-            print("START NEW GAME")
-            next_view = GameView()
-            next_view.newGame(self.player_name)
-            self.window.show_view(next_view)
-        if key == 65473:
-            print("RELOAD ENTER NAME")
+
+        if key == 65472:
+            print("---- RELOAD NEW PLAYER")
             next_view = PNameView()
             next_view.setup()
             self.window.show_view(next_view)
+        if key == 65473 or key==65293 or key==65421:   #USES ENTER KEYS OR F4
+            print("---- LAUNCH GAME")
+            next_view = GameView()
+            next_view.newGame(self.player_name)
+            self.window.show_view(next_view)
+
         # For name input
         if 96 < key < 123:
             self.player_name += str(['a', 'b', 'c', 'd', 'e', 'f', 'g',
@@ -670,6 +678,8 @@ class PNameView(arcade.View):
             self.player_name += '.'
         elif key == arcade.key.BACKSPACE:
             self.player_name = self.player_name[:-1]
+        elif key == 45 or key == 65453:
+            self.player_name += '-'
 
 
     def write_name(self):
@@ -692,8 +702,11 @@ def main():
 
     # Initialize
     global ALL_SCORES
+    global GAME_SPEED_FLOOR
+
     ALL_SCORES = [   [0,"Brutus",   0],
                      [1,"TomWDavis",0]  ]
+    GAME_SPEED_FLOOR = 5
     FULL_SCREEN = False
 
     # Setup Questions

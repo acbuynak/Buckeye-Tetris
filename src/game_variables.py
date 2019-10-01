@@ -72,7 +72,7 @@ next_xposn  = 250
 next_yposn  = TETRIS_HEIGHT + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
 
 ################################################################################
-
+# Define Tetris colors
 colors = [
           (0,   0,   0  ),
           (160, 1, 240),
