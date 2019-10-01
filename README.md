@@ -17,7 +17,7 @@ Arcade is built on top of Pyglet and OpenGL.
 
 
 ### STRUCTURE THEORY  
-- 3 Main views.........key to Switch View  
+- 4 Main views.........key to Switch View  
 1. "MenuView"  ........F1  
 2. "LeaderBoardView"...F2  
 3. "NewPlayer"  .......F3
