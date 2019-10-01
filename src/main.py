@@ -8,6 +8,7 @@ Distributed under the MIT LICENSE.
 
 import arcade
 import random
+import time
 import PIL
 
 from game_variables import *
@@ -59,7 +60,7 @@ def new_board():
     # Create the main board of 0's
     board = [[0 for x in range(COLUMN_COUNT)] for y in range(ROW_COUNT)]
     # Add a bottom border of 1's
-    board += [[1 for x in range(COLUMN_COUNT)]]
+    board += [[8 for x in range(COLUMN_COUNT)]]
     return board
 
 class GameView(arcade.View):
@@ -295,8 +296,6 @@ class GameView(arcade.View):
         next_stone = self.new_stones[-1]
         color = max(next_stone[0])
 
-        arcade.draw_rectangle_outline(next_xposn, next_yposn, next_width, next_height, [0,153,153], 2)
-
         if color is 6:
             arcade.draw_rectangle_filled(next_xposn+WIDTH/2+MARGIN, next_yposn, WIDTH, HEIGHT, colors[6])
             arcade.draw_rectangle_filled(next_xposn-WIDTH/2, next_yposn, WIDTH, HEIGHT, colors[6])
@@ -352,6 +351,33 @@ class GameView(arcade.View):
             print("Added score & Sorted Scoreboard")
             print(ALL_SCORES)
 
+        if self.game_over == True:
+            self.game_over_cover()
+
+    def game_over_cover(self):
+        time.sleep(.2)
+        arcade.draw_rectangle_filled(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT, (0,0,0,200))
+
+        gameover = arcade.load_texture(BUTTONS[4])
+        arcade.draw_texture_rectangle(  center_x=SCREEN_WIDTH // 2, center_y=SCREEN_HEIGHT * 5/6,
+                                        width= SCREEN_WIDTH*0.7, height= SCREEN_WIDTH*0.4, texture=gameover)
+
+        # player and score
+        name = self.player_name
+        score = str(self.score)
+        arcade.draw_text("CHALLENGER", SCREEN_WIDTH/2, SCREEN_HEIGHT*7/12, arcade.color.WHITE,  30, bold=True, align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text(name, SCREEN_WIDTH/2, SCREEN_HEIGHT*7/12-80, arcade.color.WHITE, 40, bold=True, align="center", anchor_x="center")
+        arcade.draw_text("SCORE", SCREEN_WIDTH/2, SCREEN_HEIGHT*5/12, arcade.color.WHITE,  30, bold=True, align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text(score, SCREEN_WIDTH/2, SCREEN_HEIGHT*5/12-60, arcade.color.WHITE,  40, bold=True, align="center", anchor_x="center", anchor_y="center")
+
+
+    def switch_to_leaderboard(self):
+        time.sleep(4)
+        next_view = LBView()
+        next_view.setup()
+        self.window.show_view(next_view)
+
+
     def write_name(self):
         """ Draw the mini score board when the player start playing. """
         player_name = f"{self.player_name}"
@@ -369,6 +395,7 @@ class GameView(arcade.View):
         arcade.draw_text("LEVEL",    e_mscb_xposn-int(0.12*SCREEN_WIDTH),  e_mscb_yposn + e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="right", anchor_x="center", anchor_y="center")
         arcade.draw_text(level_text, e_mscb_xposn-int(0.01*SCREEN_WIDTH),   e_mscb_yposn + e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_x="center", anchor_y="center")
 
+        arcade.draw_rectangle_outline(next_xposn, next_yposn, next_width, next_height, [0,153,153], 2)
 
 #-- Game Logic
 
@@ -377,6 +404,10 @@ class GameView(arcade.View):
 
 		#------------------------------------ FRAME RATE CONTROL
         self.frame_count += 1
+
+        if self.game_over == True:
+            self.switch_to_leaderboard()
+
         if self.frame_count % self.GAME_SPEED == 0:
             if self.joystick and (self.joystick.y > 0.6):   self.drop()  # DOWN (vertical is flipped on input)
             self.drop()
@@ -547,7 +578,7 @@ class MenuView(arcade.View):
             next_view = LBView()
             next_view.setup()
             self.window.show_view(next_view)
-        if key == 65472:
+        if key == 65472 or key==65293 or key==65421:
             print("---- NEW PLAYER")
             next_view = PNameView()
             next_view.setup()
@@ -612,7 +643,7 @@ class LBView(arcade.View):
             next_view = LBView()
             next_view.setup()
             self.window.show_view(next_view)
-        if key == 65472:
+        if key == 65472 or key==65293 or key==65421:
             print("---- NEW PLAYER")
             next_view = PNameView()
             next_view.setup()
@@ -655,19 +686,23 @@ class PNameView(arcade.View):
         if key == 65472:
             print("---- RELOAD NEW PLAYER")
             next_view = PNameView()
+
+            
             next_view.setup()
             self.window.show_view(next_view)
         if key == 65473 or key==65293 or key==65421:   #USES ENTER KEYS OR F4
-            print("---- LAUNCH GAME")
-            next_view = GameView()
-            next_view.newGame(self.player_name)
-            self.window.show_view(next_view)
+            if len(self.player_name) is not 0:
+                print("---- LAUNCH GAME")
+                next_view = GameView()
+                next_view.newGame(self.player_name)
+                self.window.show_view(next_view)
+            print("---- NEED A NAME")
 
         # For name input
         if 96 < key < 123:
             self.player_name += str(['a', 'b', 'c', 'd', 'e', 'f', 'g',
                 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-                's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97])
+                's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97]).upper()
         elif 47 < key < 58:
             self.player_name += str(key-48)
         elif 65455 < key <65466:

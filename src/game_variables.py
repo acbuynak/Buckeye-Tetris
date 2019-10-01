@@ -6,7 +6,7 @@ import os
 import arcade
 
 # Image of the base background
-BACKGROUNDS = ["assets" + os.sep + "bg_scarletleaf.png","assets" + os.sep + "bg_mainmenu.png", "assets" + os.sep + "bg_leaderboard.png", "assets" + os.sep + "bg_askname.png"]
+BACKGROUNDS = ["assets" + os.sep + "bg_greyleaf.png","assets" + os.sep + "bg_mainmenu.png", "assets" + os.sep + "bg_leaderboard.png", "assets" + os.sep + "bg_askname.png"]
 LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
 #LOGO_HACKOHIO =
 
@@ -14,7 +14,8 @@ LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
 BUTTONS = [ "assets" + os.sep + "button_play.png",
             "assets" + os.sep + "button_leaderboard.png",
             "assets" + os.sep + "button_menu.png",
-            "assets" + os.sep + "button_exit.png" ]
+            "assets" + os.sep + "button_exit.png" ,
+            "assets" + os.sep + "game_over.png" ]
 
 # Game over text
 GAME_OVER = "assets" + os.sep +  "gameover.png"
@@ -81,7 +82,8 @@ colors = [
           (38, 3, 242),
           (239, 160, 1),
           (79, 240, 241),
-          (240, 240, 0)
+          (240, 240, 0),
+          (102, 102, 102)
           ]
 
 # Define the shapes of the single parts
