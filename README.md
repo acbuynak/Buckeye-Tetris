@@ -2,10 +2,9 @@
 Tetris @ The Ohio State University
 
 ## TO-DO
-Adam - Use pyglet to get input from physical arcade buttons for controls  
 Adam - Countdown Clock until HACK OHI/O Signups End & Actual Event
-Kelly - Holding Keys for left,right,drop  
-Kelly - Cycle through all 7 pieces befor showing  
+Adam - Only increase game level and therefore game speed after a collision
+
    
 Unassigned - Show 'next' piece on top of screen  
 Unassigned - Scoring Rules need decided  
