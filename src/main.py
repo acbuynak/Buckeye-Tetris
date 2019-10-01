@@ -358,7 +358,7 @@ class GameView(arcade.View):
         time.sleep(.2)
         arcade.draw_rectangle_filled(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT, (0,0,0,200))
 
-        gameover = arcade.load_texture(BUTTONS[4])
+        gameover = arcade.load_texture(GAME_OVER)
         arcade.draw_texture_rectangle(  center_x=SCREEN_WIDTH // 2, center_y=SCREEN_HEIGHT * 5/6,
                                         width= SCREEN_WIDTH*0.7, height= SCREEN_WIDTH*0.4, texture=gameover)
 
@@ -687,7 +687,7 @@ class PNameView(arcade.View):
             print("---- RELOAD NEW PLAYER")
             next_view = PNameView()
 
-            
+
             next_view.setup()
             self.window.show_view(next_view)
         if key == 65473 or key==65293 or key==65421:   #USES ENTER KEYS OR F4

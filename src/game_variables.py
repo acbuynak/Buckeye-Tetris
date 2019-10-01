@@ -14,11 +14,10 @@ LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
 BUTTONS = [ "assets" + os.sep + "button_play.png",
             "assets" + os.sep + "button_leaderboard.png",
             "assets" + os.sep + "button_menu.png",
-            "assets" + os.sep + "button_exit.png" ,
-            "assets" + os.sep + "game_over.png" ]
+            "assets" + os.sep + "button_exit.png"]
 
 # Game over text
-GAME_OVER = "assets" + os.sep +  "gameover.png"
+GAME_OVER = "assets" + os.sep +  "game_over.png"
 
 #pixel multiplier
 #pm = 0.0178571429
