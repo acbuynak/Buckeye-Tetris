@@ -13,14 +13,11 @@ LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
 # Button Textures
 BUTTONS = [ "assets" + os.sep + "button_play.png",
             "assets" + os.sep + "button_leaderboard.png",
-            "assets" + os.sep + "button_menu.png",
-            "assets" + os.sep + "button_exit.png" ]
+            "assets" + os.sep + "button_exit.png",
+            "assets" + os.sep + "button_menu.png" ]
 
 # Game over text
 GAME_OVER = "assets" + os.sep +  "gameover.png"
-
-#pixel multiplier
-#pm = 0.0178571429
 
 
 ############-- MISC GLOBAL VARIABLES --##################
@@ -38,15 +35,17 @@ COLUMN_COUNT = 10
 #SCREEN_WIDTH  = 513
 #SCREEN_HEIGHT = 1512
 SCREEN_WIDTH  = 342
-SCREEN_HEIGHT = 1008
-SCREEN_TITLE  = "Tetris"
+SCREEN_HEIGHT = 1080
+SCREEN_TITLE  = "BLOCK OHI/O"
+
+TOWER_BUFFER = SCREEN_HEIGHT*0.066666666
 
 #- Stone Components
 WIDTH  = int(0.0877193 * SCREEN_WIDTH)               # og: 30  brick & cell WIDTH
 HEIGHT = WIDTH                                       # og: 30  brick & cell HEIGHT
 MARGIN = int(0.0666666 * 0.0877193 * SCREEN_WIDTH)   # og:  2  This sets the margin between each cell
 
-HIDE_BOTTOM   = HEIGHT+MARGIN
+HIDE_BOTTOM   = HEIGHT+MARGIN - TOWER_BUFFER
 SCREEN_MARGIN = (1/2) * (SCREEN_WIDTH - COLUMN_COUNT*( WIDTH+MARGIN ))
 
 # TETRIS BOARD dimensions
@@ -55,21 +54,17 @@ TETRIS_WIDTH = SCREEN_WIDTH * 0.95
 TETRIS_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 
 
-
 ############-- GAME VIEW ITEM PLACEMENT --##################
-
 e_mscb_height = 100
 e_mscb_width = 150
 e_mscb_xposn  = 92
-e_mscb_yposn  = TETRIS_HEIGHT + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
-
+e_mscb_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
 
 ############-- NEXT STONE BOX --##################
-
 next_height = 100
 next_width = 150
 next_xposn  = 250
-next_yposn  = TETRIS_HEIGHT + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
+next_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
 
 ################################################################################
 # Define Tetris colors
