@@ -6,7 +6,7 @@ import os
 import arcade
 
 # Image of the base background
-BACKGROUNDS = ["assets" + os.sep + "bg_scarletleaf.png","assets" + os.sep + "bg_mainmenu.png", "assets" + os.sep + "bg_leaderboard.png", "assets" + os.sep + "bg_askname.png"]
+BACKGROUNDS = ["assets" + os.sep + "bg_greyleaf.png","assets" + os.sep + "bg_mainmenu.png", "assets" + os.sep + "bg_leaderboard.png", "assets" + os.sep + "bg_askname.png"]
 LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
 #LOGO_HACKOHIO =
 
@@ -17,7 +17,10 @@ BUTTONS = [ "assets" + os.sep + "button_play.png",
             "assets" + os.sep + "button_menu.png" ]
 
 # Game over text
-GAME_OVER = "assets" + os.sep +  "gameover.png"
+GAME_OVER = "assets" + os.sep +  "game_over.png"
+
+#pixel multiplier
+#pm = 0.0178571429
 
 
 ############-- MISC GLOBAL VARIABLES --##################
@@ -57,13 +60,13 @@ TETRIS_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 
 
 ############-- GAME VIEW ITEM PLACEMENT --##################
-e_mscb_height = 100
+e_mscb_height = 120
 e_mscb_width = 150
 e_mscb_xposn  = 877
 e_mscb_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
 
 ############-- NEXT STONE BOX --##################
-next_height = 100
+next_height = 120
 next_width = 150
 next_xposn  = 1040
 next_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
@@ -78,7 +81,8 @@ colors = [
           (38, 3, 242),
           (239, 160, 1),
           (79, 240, 241),
-          (240, 240, 0)
+          (240, 240, 0),
+          (102, 102, 102)
           ]
 
 # Define the shapes of the single parts

@@ -8,6 +8,7 @@ Distributed under the MIT LICENSE.
 
 import arcade
 import random
+import time
 import PIL
 
 from game_variables import *
@@ -59,7 +60,7 @@ def new_board():
     # Create the main board of 0's
     board = [[0 for x in range(COLUMN_COUNT)] for y in range(ROW_COUNT)]
     # Add a bottom border of 1's
-    board += [[1 for x in range(COLUMN_COUNT)]]
+    board += [[8 for x in range(COLUMN_COUNT)]]
     return board
 
 class GameView(arcade.View):
@@ -115,7 +116,7 @@ class GameView(arcade.View):
                 for texture in texture_list:
                     sprite.append_texture(texture)
                 sprite.set_texture(0)
-                sprite.center_x = (MARGIN + WIDTH) * column + SCREEN_MARGIN + WIDTH // 2  + WINDOW_MARGIN                              # MAY NEED FIXED WITH NEW SCREEN SIZE
+                sprite.center_x = (MARGIN + WIDTH) * column + SCREEN_MARGIN + WIDTH // 2 + WINDOW_MARGIN                              # MAY NEED FIXED WITH NEW SCREEN SIZE
                 sprite.center_y = TETRIS_HEIGHT - HIDE_BOTTOM - (MARGIN + HEIGHT) * row + SCREEN_MARGIN + HEIGHT // 2   # MAY NEED FIXED WITH NEW SCREEN SIZE
 
                 self.board_sprite_list.append(sprite)
@@ -139,7 +140,7 @@ class GameView(arcade.View):
 
     def on_show(self):
         print("GameView Opened!")
-        arcade.set_background_color([0,187,0])                         # Set Background. Required. Do not delete def!
+        arcade.set_background_color([187,0,0])                         # Set Background. Required. Do not delete def!
         self.window.set_mouse_visible(False)                                    # Hide mouse cursor
 
 
@@ -179,7 +180,7 @@ class GameView(arcade.View):
                     for i, row in enumerate(self.board[:-1]):
                         if 0 not in row:
                             self.board = remove_row(self.board, i)
-                            self.score = 40*(self.level+1)         #self.score + 1   ##------------ADD GAME SCORE COUNTER LINE HERE
+                            self.score += 40*(self.level+1)         #self.score + 1   ##------------ADD GAME SCORE COUNTER LINE HERE
                             print("Score:  " + str(self.score))
                             break
                     else:
@@ -203,7 +204,7 @@ class GameView(arcade.View):
                 for i, row in enumerate(self.board[:-1]):
                     if 0 not in row:
                         self.board = remove_row(self.board, i)
-                        self.score = 40*(self.level+1)         #self.score + 1  ##------------ADD GAME SCORE COUNTER LINE HERE
+                        self.score += 40*(self.level+1)         #self.score + 1  ##------------ADD GAME SCORE COUNTER LINE HERE
                         print(self.score)
                         break
                 else:
@@ -294,8 +295,6 @@ class GameView(arcade.View):
         next_stone = self.new_stones[-1]
         color = max(next_stone[0])
 
-        arcade.draw_rectangle_outline(next_xposn, next_yposn, next_width, next_height, [0,153,153], 2)
-
         if color is 6:
             arcade.draw_rectangle_filled(next_xposn+WIDTH/2+MARGIN, next_yposn, WIDTH, HEIGHT, colors[6])
             arcade.draw_rectangle_filled(next_xposn-WIDTH/2, next_yposn, WIDTH, HEIGHT, colors[6])
@@ -346,14 +345,41 @@ class GameView(arcade.View):
             self.addedScore = True
             ALL_SCORES.sort(reverse = True )
             saveScores(ALL_SCORES)
-            #print("Added score & Sorted Scoreboard")
-            #print(ALL_SCORES)
+            print("Added score & Sorted Scoreboard")
+            print(ALL_SCORES)
+
+        if self.game_over == True:
+            self.game_over_cover()
+
+    def game_over_cover(self):
+        time.sleep(.2)
+        arcade.draw_rectangle_filled(WINDOW_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT, (0,0,0,200))
+
+        gameover = arcade.load_texture(GAME_OVER)
+        arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT * 5/6,
+                                        width= SCREEN_WIDTH*0.7, height= SCREEN_WIDTH*0.4, texture=gameover)
+
+        # player and score
+        name = self.player_name
+        score = str(self.score)
+        arcade.draw_text("CHALLENGER", WINDOW_WIDTH/2, SCREEN_HEIGHT*7/12, arcade.color.WHITE,  30, bold=True, align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text(name, WINDOW_WIDTH/2, SCREEN_HEIGHT*7/12-80, arcade.color.WHITE, 40, bold=True, align="center", anchor_x="center")
+        arcade.draw_text("SCORE", WINDOW_WIDTH/2, SCREEN_HEIGHT*5/12, arcade.color.WHITE,  30, bold=True, align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text(score, WINDOW_WIDTH/2, SCREEN_HEIGHT*5/12-60, arcade.color.WHITE,  40, bold=True, align="center", anchor_x="center", anchor_y="center")
+
+
+    def switch_to_leaderboard(self):
+        time.sleep(4)
+        next_view = LBView()
+        next_view.setup()
+        self.window.show_view(next_view)
+
 
     def write_name(self):
         """ Draw the mini score board when the player start playing. """
         player_name = f"{self.player_name}"
-        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.94, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
-        arcade.draw_text(player_name, SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.90, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.94, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text(player_name, SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.90, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
 
 
     def build_mscb(self):
@@ -361,11 +387,12 @@ class GameView(arcade.View):
         score_text = f"{self.score}"
         level_text = f"{self.level}"
         arcade.draw_rectangle_outline(e_mscb_xposn, e_mscb_yposn, e_mscb_width, e_mscb_height, [0,153,153], 2)
-        arcade.draw_text("SCORE",    e_mscb_xposn-int(0.12*SCREEN_WIDTH),  e_mscb_yposn - e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="left", anchor_x="center", anchor_y="center")
-        arcade.draw_text(score_text, e_mscb_xposn-int(0.01*SCREEN_WIDTH),   e_mscb_yposn - e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_x="center", anchor_y="center")
-        arcade.draw_text("LEVEL",    e_mscb_xposn-int(0.12*SCREEN_WIDTH),  e_mscb_yposn + e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="right", anchor_x="center", anchor_y="center")
-        arcade.draw_text(level_text, e_mscb_xposn-int(0.01*SCREEN_WIDTH),   e_mscb_yposn + e_mscb_height*0.25, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_x="center", anchor_y="center")
+        arcade.draw_text("SCORE",    e_mscb_xposn-65,  e_mscb_yposn - e_mscb_height*0.1, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="left", anchor_y="center")
+        arcade.draw_text(score_text, e_mscb_xposn-65,   e_mscb_yposn - e_mscb_height*0.3, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_y="center")
+        arcade.draw_text("LEVEL",    e_mscb_xposn-65,  e_mscb_yposn + e_mscb_height*0.3, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="left", anchor_y="center")
+        arcade.draw_text(level_text, e_mscb_xposn-65,   e_mscb_yposn + e_mscb_height*0.1, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_y="center")
 
+        arcade.draw_rectangle_outline(next_xposn, next_yposn, next_width, next_height, [0,153,153], 2)
 
 #-- Game Logic
 
@@ -374,6 +401,10 @@ class GameView(arcade.View):
 
 		#------------------------------------ FRAME RATE CONTROL
         self.frame_count += 1
+
+        if self.game_over == True:
+            self.switch_to_leaderboard()
+
         if self.frame_count % self.GAME_SPEED == 0:
             if self.joystick and (self.joystick.y > 0.6):   self.drop()  # DOWN (vertical is flipped on input)
             self.drop()
@@ -664,7 +695,7 @@ class PNameView(arcade.View):
         if 96 < key < 123:
             self.player_name += str(['a', 'b', 'c', 'd', 'e', 'f', 'g',
                 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-                's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97])
+                's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97]).upper()
         elif 47 < key < 58:
             self.player_name += str(key-48)
         elif 65455 < key <65466:
