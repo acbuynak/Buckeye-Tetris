@@ -115,7 +115,7 @@ class GameView(arcade.View):
                 for texture in texture_list:
                     sprite.append_texture(texture)
                 sprite.set_texture(0)
-                sprite.center_x = (MARGIN + WIDTH) * column + SCREEN_MARGIN + WIDTH // 2                                # MAY NEED FIXED WITH NEW SCREEN SIZE
+                sprite.center_x = (MARGIN + WIDTH) * column + SCREEN_MARGIN + WIDTH // 2  + WINDOW_MARGIN                              # MAY NEED FIXED WITH NEW SCREEN SIZE
                 sprite.center_y = TETRIS_HEIGHT - HIDE_BOTTOM - (MARGIN + HEIGHT) * row + SCREEN_MARGIN + HEIGHT // 2   # MAY NEED FIXED WITH NEW SCREEN SIZE
 
                 self.board_sprite_list.append(sprite)
@@ -139,7 +139,7 @@ class GameView(arcade.View):
 
     def on_show(self):
         print("GameView Opened!")
-        arcade.set_background_color([187,0,0])                         # Set Background. Required. Do not delete def!
+        arcade.set_background_color([0,187,0])                         # Set Background. Required. Do not delete def!
         self.window.set_mouse_visible(False)                                    # Hide mouse cursor
 
 
@@ -286,7 +286,7 @@ class GameView(arcade.View):
 
     def draw_background(self):
         """ Draws the most epic background ever imaginable. """
-        arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
+        arcade.draw_texture_rectangle(  center_x = WINDOW_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
                                         width    = SCREEN_WIDTH,       height   = SCREEN_HEIGHT,
                                         texture  = self.background )
 
@@ -321,7 +321,7 @@ class GameView(arcade.View):
                 if grid[row][column]:
                     color = colors[grid[row][column]]
                     # Do the math to figure out where the box is
-                    x = (MARGIN + WIDTH) * (column + offset_x) + SCREEN_MARGIN + WIDTH // 2                                  #MAY NEED FIXED WITH NEW SCREEN SIZE
+                    x = (MARGIN + WIDTH) * (column + offset_x) + SCREEN_MARGIN + WIDTH // 2 + WINDOW_MARGIN                                 #MAY NEED FIXED WITH NEW SCREEN SIZE
                     y = TETRIS_HEIGHT - HIDE_BOTTOM - (MARGIN + HEIGHT) * (row + offset_y) + SCREEN_MARGIN + HEIGHT // 2     #MAY NEED FIXED WITH NEW SCREEN SIZE
 
                     # Draw the box
@@ -352,8 +352,8 @@ class GameView(arcade.View):
     def write_name(self):
         """ Draw the mini score board when the player start playing. """
         player_name = f"{self.player_name}"
-        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2, SCREEN_HEIGHT*0.94, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
-        arcade.draw_text(player_name, SCREEN_WIDTH/2, SCREEN_HEIGHT*0.90, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.94, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text(player_name, SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.90, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
 
 
     def build_mscb(self):
@@ -506,19 +506,19 @@ class MenuView(arcade.View):
 
         # BACKGROUND
         self.background = arcade.load_texture(BACKGROUNDS[1])
-        arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
+        arcade.draw_texture_rectangle(  center_x = WINDOW_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
                                         width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
                                         texture  = self.background )
         # BUTTON GRAPHICS :D
         # Buttons are not intended to be clickable
         button = arcade.load_texture(BUTTONS[0])
-        arcade.draw_texture_rectangle(  center_x=SCREEN_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 + TOWER_BUFFER,
+        arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 + TOWER_BUFFER,
                                         width= SCREEN_WIDTH*0.58, height= SCREEN_HEIGHT*0.04, texture=button)
         button = arcade.load_texture(BUTTONS[1])
-        arcade.draw_texture_rectangle(  center_x=SCREEN_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 - (SCREEN_HEIGHT*0.05) + TOWER_BUFFER,
+        arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 - (SCREEN_HEIGHT*0.05) + TOWER_BUFFER,
                                         width= SCREEN_WIDTH*0.58, height= SCREEN_HEIGHT*0.04, texture=button)
         button = arcade.load_texture(BUTTONS[2])
-        arcade.draw_texture_rectangle(  center_x=SCREEN_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 - (SCREEN_HEIGHT*0.1) + TOWER_BUFFER,
+        arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 - (SCREEN_HEIGHT*0.1) + TOWER_BUFFER,
                                         width= SCREEN_WIDTH*0.58, height= SCREEN_HEIGHT*0.04, texture=button)
 
 
@@ -570,20 +570,20 @@ class LBView(arcade.View):
 
         # BACKGROUND
         self.background = arcade.load_texture(BACKGROUNDS[2])
-        arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
+        arcade.draw_texture_rectangle(  center_x = WINDOW_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
                                         width    = SCREEN_WIDTH,       height   = SCREEN_HEIGHT,
                                         texture  = self.background )
 
         # Populate Leaderboard
         currentRowHeight = SCREEN_HEIGHT * 0.813
         for row in ALL_SCORES[0:34]:
-            arcade.draw_text( str(row[0]), start_x= SCREEN_WIDTH * 0.353, start_y= currentRowHeight,
+            arcade.draw_text( str(row[0]), start_x= WINDOW_WIDTH//2 - 50, start_y= currentRowHeight,
                               anchor_x = "center", anchor_y = "center",
                               color= arcade.color.WHITE,
                               font_size=float(SCREEN_HEIGHT*0.013),
                               font_name='arial',
                               align= "center", bold = True)
-            arcade.draw_text( str(row[1]), start_x= SCREEN_WIDTH * 0.718, start_y= currentRowHeight,
+            arcade.draw_text( str(row[1]), start_x= WINDOW_WIDTH//2 + 70, start_y= currentRowHeight,
                               anchor_x = "center", anchor_y = "center",
                               color= arcade.color.WHITE,
                               font_size=float(SCREEN_HEIGHT*0.013),
@@ -626,7 +626,7 @@ class PNameView(arcade.View):
 
         # BACKGROUND
         self.background = arcade.load_texture(BACKGROUNDS[3])
-        arcade.draw_texture_rectangle(  center_x = SCREEN_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
+        arcade.draw_texture_rectangle(  center_x = WINDOW_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
                                         width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
                                         texture  = self.background )
         self.write_name()
@@ -682,7 +682,7 @@ class PNameView(arcade.View):
     def write_name(self):
         """ Draw and update the current players name as entered. """
         player_name = f"{self.player_name}"
-        arcade.draw_text(player_name, 46, SCREEN_HEIGHT*0.54, arcade.color.BLACK, 20, width=int(SCREEN_WIDTH*0.731), align="center")
+        arcade.draw_text(player_name, WINDOW_WIDTH//2-127, SCREEN_HEIGHT*0.54, arcade.color.BLACK, 20, width=int(SCREEN_WIDTH*0.731), align="center")
 
         # ADAM REVIEW
         #arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2, SCREEN_HEIGHT*0.94, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")

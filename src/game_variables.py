@@ -45,6 +45,8 @@ WIDTH  = int(0.0877193 * SCREEN_WIDTH)               # og: 30  brick & cell WIDT
 HEIGHT = WIDTH                                       # og: 30  brick & cell HEIGHT
 MARGIN = int(0.0666666 * 0.0877193 * SCREEN_WIDTH)   # og:  2  This sets the margin between each cell
 
+WINDOW_WIDTH = 1920
+WINDOW_MARGIN = 790
 HIDE_BOTTOM   = HEIGHT+MARGIN - TOWER_BUFFER
 SCREEN_MARGIN = (1/2) * (SCREEN_WIDTH - COLUMN_COUNT*( WIDTH+MARGIN ))
 
@@ -57,13 +59,13 @@ TETRIS_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 ############-- GAME VIEW ITEM PLACEMENT --##################
 e_mscb_height = 100
 e_mscb_width = 150
-e_mscb_xposn  = 92
+e_mscb_xposn  = 877
 e_mscb_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
 
 ############-- NEXT STONE BOX --##################
 next_height = 100
 next_width = 150
-next_xposn  = 250
+next_xposn  = 1040
 next_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
 
 ################################################################################
