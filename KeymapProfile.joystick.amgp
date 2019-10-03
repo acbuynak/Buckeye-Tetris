@@ -7,7 +7,6 @@
     <sets>
         <set index="1">
             <axis index="1">
-                <maxZone>32100</maxZone>
                 <throttle>normal</throttle>
                 <axisbutton index="1">
                     <slots>
@@ -27,7 +26,6 @@
                 </axisbutton>
             </axis>
             <axis index="2">
-                <maxZone>32100</maxZone>
                 <throttle>normal</throttle>
                 <axisbutton index="1">
                     <slots>
@@ -55,8 +53,7 @@
             <axis index="5">
                 <throttle>normal</throttle>
             </axis>
-            <button index="1">
-                <toggle>true</toggle>
+            <button index="2">
                 <slots>
                     <slot>
                         <code>0x20</code>
