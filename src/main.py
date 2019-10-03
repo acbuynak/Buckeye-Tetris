@@ -378,8 +378,8 @@ class GameView(arcade.View):
     def write_name(self):
         """ Draw the mini score board when the player start playing. """
         player_name = f"{self.player_name}"
-        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.94, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
-        arcade.draw_text(player_name, SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.90, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.9, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text(player_name, SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.87, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
 
 
     def build_mscb(self):
@@ -387,10 +387,10 @@ class GameView(arcade.View):
         score_text = f"{self.score}"
         level_text = f"{self.level}"
         arcade.draw_rectangle_outline(e_mscb_xposn, e_mscb_yposn, e_mscb_width, e_mscb_height, [0,153,153], 2)
-        arcade.draw_text("SCORE",    e_mscb_xposn-65,  e_mscb_yposn - e_mscb_height*0.1, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="left", anchor_y="center")
-        arcade.draw_text(score_text, e_mscb_xposn-65,   e_mscb_yposn - e_mscb_height*0.3, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_y="center")
-        arcade.draw_text("LEVEL",    e_mscb_xposn-65,  e_mscb_yposn + e_mscb_height*0.3, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013),  bold = True, align="left", anchor_y="center")
-        arcade.draw_text(level_text, e_mscb_xposn-65,   e_mscb_yposn + e_mscb_height*0.1, arcade.color.BLACK, float(SCREEN_HEIGHT*0.015), bold = True, align="left", anchor_y="center")
+        arcade.draw_text("SCORE",    e_mscb_xposn-65,  e_mscb_yposn - e_mscb_height*0.2, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013), bold = True, align="left",   anchor_y="center")
+        arcade.draw_text(score_text, e_mscb_xposn+00,  e_mscb_yposn - e_mscb_height*0.2, arcade.color.BLACK, float(SCREEN_HEIGHT*0.030), bold = True, align="left", anchor_y="center")
+        arcade.draw_text("LEVEL",    e_mscb_xposn-65,  e_mscb_yposn + e_mscb_height*0.2, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013), bold = True, align="left",   anchor_y="center")
+        arcade.draw_text(level_text, e_mscb_xposn+00,  e_mscb_yposn + e_mscb_height*0.2, arcade.color.BLACK, float(SCREEN_HEIGHT*0.030), bold = True, align="left", anchor_y="center")
 
         arcade.draw_rectangle_outline(next_xposn, next_yposn, next_width, next_height, [0,153,153], 2)
 
@@ -411,7 +411,6 @@ class GameView(arcade.View):
 
             #- Update Game Speed
             self.level_up()
-            #print( "                    GAME SPEED: " + str(self.GAME_SPEED) )
 
         #- JOYSTICK
         if self.joystick and (self.frame_count % 3 == 0):
@@ -660,15 +659,20 @@ class PNameView(arcade.View):
         arcade.draw_texture_rectangle(  center_x = WINDOW_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
                                         width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
                                         texture  = self.background )
+        if self.READY_TO_PLAY == True:
+            arcade.draw_text("READY TO PLAY", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.482, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
+
         self.write_name()
 
     def setup(self):
         self.player_name = ''
+        self.READY_TO_PLAY = False
 
     def on_mouse_press(self, x, y, button, modifiers):
         print("Clicking doesn't do anything")
 
     def on_key_press(self, key, modifiers):
+
         if key == 65470:
             print("---- MAIN MENU")
             next_view = MenuView()
@@ -685,30 +689,35 @@ class PNameView(arcade.View):
             next_view = PNameView()
             next_view.setup()
             self.window.show_view(next_view)
-        if key == 65473 or key==65293 or key==65421:   #USES ENTER KEYS OR F4
-            print("---- LAUNCH GAME")
-            next_view = GameView()
-            next_view.newGame(self.player_name)
-            self.window.show_view(next_view)
+        if key==65293 or key==65421:   #USES ENTER KEYS OR F4
+            self.READY_TO_PLAY = True
 
-        # For name input
-        if 96 < key < 123:
-            self.player_name += str(['a', 'b', 'c', 'd', 'e', 'f', 'g',
-                'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-                's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97]).upper()
-        elif 47 < key < 58:
-            self.player_name += str(key-48)
-        elif 65455 < key <65466:
-            self.player_name += str(key-65456)
-        elif key == 65454:
-            self.player_name += '.'
-        elif key == arcade.key.PERIOD:
-            self.player_name += '.'
-        elif key == arcade.key.BACKSPACE:
-            self.player_name = self.player_name[:-1]
-        elif key == 45 or key == 65453:
-            self.player_name += '-'
+        if self.READY_TO_PLAY == False:
+            # For name input
+            if 96 < key < 123:
+                self.player_name += str(['a', 'b', 'c', 'd', 'e', 'f', 'g',
+                    'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                    's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97]).upper()
+            elif 47 < key < 58:
+                self.player_name += str(key-48)
+            elif 65455 < key <65466:
+                self.player_name += str(key-65456)
+            elif key == 65454:
+                self.player_name += '.'
+            elif key == arcade.key.PERIOD:
+                self.player_name += '.'
+            elif key == arcade.key.BACKSPACE:
+                self.player_name = self.player_name[:-1]
+            elif key == 45 or key == 65453:
+                self.player_name += '-'
 
+
+        elif self.READY_TO_PLAY == True:
+            if key == 65361 or key == 65362 or key == 65363 or key == 65364 or key==32 or key==65473: #uses any keyboard motion key or F4
+                print("---- LAUNCH GAME")
+                next_view = GameView()
+                next_view.newGame(self.player_name)
+                self.window.show_view(next_view)
 
     def write_name(self):
         """ Draw and update the current players name as entered. """
@@ -739,7 +748,7 @@ def main():
 
     # Setup Questions
     askScores = input("Import Scores? (n/null): ")
-    if input("Full Screen?   (y/null): ") == 'y': FULL_SCREEN = True
+    if input("Full Screen?   (y/null): ") != 'n': FULL_SCREEN = True
 
     # Import Old Scoreboard
     if askScores != "n" or askScores != "N": ALL_SCORES = importScores()
