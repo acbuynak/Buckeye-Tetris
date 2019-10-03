@@ -433,7 +433,7 @@ class GameView(arcade.View):
     def level_up(self):
         """ increase game speed as game progresses. ie. Get's faster the longer you play"""
 
-        self.GAME_LEVEL_FRAMES = [ 0,300,700,1000,1500,2000,2600,3050,3500,5000,6000 ]
+        self.GAME_LEVEL_FRAMES = [ 0,1080,2160,3240,4320,5400,6480,7560,8280,9000,9720]
 
         idx = len(self.GAME_LEVEL_FRAMES) - 1
         while idx >= 0:
