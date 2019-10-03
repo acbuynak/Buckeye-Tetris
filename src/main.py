@@ -183,7 +183,7 @@ class GameView(arcade.View):
                         rows_cleared += 1
                     if i is 21:
                         self.score += [0, 40, 100, 300, 1200][rows_cleared]*(self.level+1)         #self.score + 1   ##------------ADD GAME SCORE COUNTER LINE HERE
-                        print("Score:  " + str(self.score))
+                print("Score:  " + str(self.score))
                 self.update_board()
                 self.new_stone()
 
@@ -207,10 +207,10 @@ class GameView(arcade.View):
                         rows_cleared += 1
                     if i is 21:
                         self.score += [0, 40, 100, 300, 1200][rows_cleared]*(self.level+1)         #self.score + 1   ##------------ADD GAME SCORE COUNTER LINE HERE
-                        print("Score:  " + str(self.score))
                 else:
                     self.hdrop_last_frame = self.frame_count
                     break
+                print("Score:  " + str(self.score))
             self.update_board()
             self.new_stone()
 
@@ -370,17 +370,17 @@ class GameView(arcade.View):
 
 
     def switch_to_leaderboard(self):
-        time.sleep(4)
+        time.sleep(3)
         next_view = LBView()
-        next_view.setup()
+        next_view.setup(self.score, self.player_name)
         self.window.show_view(next_view)
 
 
     def write_name(self):
         """ Draw the mini score board when the player start playing. """
         player_name = f"{self.player_name}"
-        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.94, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
-        arcade.draw_text(player_name, SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.90, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.91, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text(player_name, SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.87, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
 
 
     def build_mscb(self):
@@ -609,6 +609,9 @@ class LBView(arcade.View):
         # Populate Leaderboard
         currentRowHeight = SCREEN_HEIGHT * 0.813
         for row in ALL_SCORES[0:34]:
+            if row[0] is self.score and str(row[1]) is self.name:
+                arcade.draw_rectangle_filled(WINDOW_WIDTH//2 - 48, currentRowHeight+1, 84, 15, [49,142,203])
+                arcade.draw_rectangle_filled(WINDOW_WIDTH//2 + 70, currentRowHeight+1, 150, 15, [49,142,203])
             arcade.draw_text( str(row[0]), start_x= WINDOW_WIDTH//2 - 50, start_y= currentRowHeight,
                               anchor_x = "center", anchor_y = "center",
                               color= arcade.color.WHITE,
@@ -625,8 +628,10 @@ class LBView(arcade.View):
 
 
 
-    def setup(self):
+    def setup(self, score = None, name = None):
         print("Setup Leaderboard")
+        self.score = score
+        self.name = name
 
     def on_mouse_press(self, x, y, button, modifiers):
         print("Clicking doesn't do anything")
