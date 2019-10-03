@@ -388,9 +388,9 @@ class GameView(arcade.View):
         score_text = f"{self.score}"
         level_text = f"{self.level}"
         arcade.draw_rectangle_outline(e_mscb_xposn, e_mscb_yposn, e_mscb_width, e_mscb_height, [0,153,153], 2)
-        arcade.draw_text("SCORE",    e_mscb_xposn-65,  e_mscb_yposn - e_mscb_height*0.2, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013), bold = True, align="left",   anchor_y="center")
-        arcade.draw_text(score_text, e_mscb_xposn+00,  e_mscb_yposn - e_mscb_height*0.2, arcade.color.BLACK, float(SCREEN_HEIGHT*0.030), bold = True, align="left", anchor_y="center")
-        arcade.draw_text("LEVEL",    e_mscb_xposn-65,  e_mscb_yposn + e_mscb_height*0.2, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013), bold = True, align="left",   anchor_y="center")
+        arcade.draw_text("SCORE",    e_mscb_xposn-65,  e_mscb_yposn - e_mscb_height*0, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013), bold = True, align="left",   anchor_y="center")
+        arcade.draw_text(score_text, e_mscb_xposn-50,  e_mscb_yposn - e_mscb_height*0.3, arcade.color.BLACK, float(SCREEN_HEIGHT*0.030), bold = True, align="left", anchor_y="center")
+        arcade.draw_text("LEVEL",    e_mscb_xposn-65,  e_mscb_yposn + e_mscb_height*0.4, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013), bold = True, align="left",   anchor_y="center")
         arcade.draw_text(level_text, e_mscb_xposn+00,  e_mscb_yposn + e_mscb_height*0.2, arcade.color.BLACK, float(SCREEN_HEIGHT*0.030), bold = True, align="left", anchor_y="center")
 
         arcade.draw_rectangle_outline(next_xposn, next_yposn, next_width, next_height, [0,153,153], 2)
