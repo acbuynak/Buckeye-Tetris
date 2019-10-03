@@ -379,7 +379,7 @@ class GameView(arcade.View):
     def write_name(self):
         """ Draw the mini score board when the player start playing. """
         player_name = f"{self.player_name}"
-        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.9, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")\
+        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.9, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
         arcade.draw_text(player_name, SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.87, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
 
 
