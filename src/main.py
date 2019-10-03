@@ -434,7 +434,8 @@ class GameView(arcade.View):
         """ increase game speed as game progresses. ie. Get's faster the longer you play"""
 
         #self.GAME_LEVEL_FRAMES = [ 0,1080,2160,3240,4320,5400,6480,7560,8280,9000,9720 ]
-        self.GAME_LEVEL_FRAMES = [ 0,500,1000,1450,1900,2300,2700,3050,3400,3700,4000 ]
+        #self.GAME_LEVEL_FRAMES = [ 0,500,1000,1450,1900,2300,2700,3050,3400,3700,4000 ]
+	self.GAME_LEVEL_FRAMES = [ 0, 300,600,950,1300,1650,2050,2450,2900,3400,3950]
 
         idx = len(self.GAME_LEVEL_FRAMES) - 1
         while idx >= 0:
