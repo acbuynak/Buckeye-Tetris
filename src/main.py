@@ -582,12 +582,6 @@ class MenuView(arcade.View):
             next_view.setup()
             self.window.show_view(next_view)
 
-        if key == 65473:
-            print("---- TESTING ONLY: START NEW GAME w/o PLAYER NAME")
-            next_view = GameView()
-            next_view.newGame('')
-            self.window.show_view(next_view)
-
         if key == 65307: arcade.close_window()
 
 #===============================================================================
@@ -692,6 +686,9 @@ class PNameView(arcade.View):
             next_view.setup()
             self.window.show_view(next_view)
         if key == 65473 or key==65293 or key==65421:   #USES ENTER KEYS OR F4
+            if len(self.player_name) is 0:
+                print("Name can't be empty")
+                return
             print("---- LAUNCH GAME")
             next_view = GameView()
             next_view.newGame(self.player_name)
