@@ -176,15 +176,14 @@ class GameView(arcade.View):
             self.stone_y += 1
             if check_collision(self.board, self.stone, (self.stone_x, self.stone_y)):
                 self.board = join_matrixes(self.board, self.stone, (self.stone_x, self.stone_y))
-                while True:
-                    for i, row in enumerate(self.board[:-1]):
-                        if 0 not in row:
-                            self.board = remove_row(self.board, i)
-                            self.score += 40*(self.level+1)         #self.score + 1   ##------------ADD GAME SCORE COUNTER LINE HERE
-                            print("Score:  " + str(self.score))
-                            break
-                    else:
-                        break
+                rows_cleared = 0
+                for i, row in enumerate(self.board[:-1]):
+                    if 0 not in row:
+                        self.board = remove_row(self.board, i)
+                        rows_cleared += 1
+                    if i is 21:
+                        self.score += [0, 40, 100, 300, 1200][rows_cleared]*(self.level+1)         #self.score + 1   ##------------ADD GAME SCORE COUNTER LINE HERE
+                        print("Score:  " + str(self.score))
                 self.update_board()
                 self.new_stone()
 
@@ -201,12 +200,14 @@ class GameView(arcade.View):
                 self.stone_y += 1
             self.board = join_matrixes(self.board, self.stone, (self.stone_x, self.stone_y))
             while True:
+                rows_cleared = 0
                 for i, row in enumerate(self.board[:-1]):
                     if 0 not in row:
                         self.board = remove_row(self.board, i)
-                        self.score += 40*(self.level+1)         #self.score + 1  ##------------ADD GAME SCORE COUNTER LINE HERE
-                        print(self.score)
-                        break
+                        rows_cleared += 1
+                    if i is 21:
+                        self.score += [0, 40, 100, 300, 1200][rows_cleared]*(self.level+1)         #self.score + 1   ##------------ADD GAME SCORE COUNTER LINE HERE
+                        print("Score:  " + str(self.score))
                 else:
                     self.hdrop_last_frame = self.frame_count
                     break
