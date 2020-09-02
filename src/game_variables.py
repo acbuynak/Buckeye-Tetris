@@ -28,7 +28,7 @@ GAME_OVER = "assets" + os.sep +  "game_over.png"
 # GAME SPEED
 # Use this to control how fast the game starts at and increments faster from
 # value = update every (n) frames
-INITIAL_GAME_SPEED = 15
+INITIAL_GAME_SPEED = 10
 
 #- TETRIS BOARD SIZE
 ROW_COUNT = 22
