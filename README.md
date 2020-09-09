@@ -5,17 +5,17 @@ Tetrominoes @ The Ohio State University
 ### DEPENDENCIES  
 These programs are necessary to run program.
 
-##### Python3  
+**Python3**  
 Arcade Library requires Python 3.6 or newer.
 Runs on Windows, Mac OS X, and Linux.
 
-##### "Arcade" Library  
+**"Arcade" Library**  
 GUI Library and Game Support Structure  
 [http://arcade.academy/]  
 Python library for 2D games.   
 Arcade is built on top of Pyglet and OpenGL. 
 
-##### AntiMicro  
+**AntiMicro**  
 Gamepad Input Converted to Keystrokes for Teamviewer. 
 Required only when using the physical arcade console.
 https://github.com/AntiMicro/antimicro/releases  
@@ -25,10 +25,12 @@ https://github.com/AntiMicro/antimicro/releases
 
 #### Output Screen
 
-|-----------------|---------------|
-|Tower Screen     |342 x 1080 px  |  
-|Game Area        |342 x 1008 px  |
-|Program Display  |1920 x 1080 px |
+|Screen           | Pixels (px)|
+|-----------------|------------|
+|Tower            |342 x 1080  |  
+|Game Area        |342 x 1008  |
+|Program Display  |1920 x 1080 |
+
 ** there is a 72 px buffer on the bottom of the screen  
 
 
