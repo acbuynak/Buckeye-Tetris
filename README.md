@@ -1,54 +1,51 @@
-# Buckeye ~~Tetris~~ TETROMINOES
-Tetris @ The Ohio State University
+# Buckeye Tetris
+Tetrominoes @ The Ohio State University
 
 
-## DEPENDENCIES
+## DEPENDENCIES  
 These programs are necessary to run program.
 
-###### AntiMicro
-Gamepad Input Converted to Keystrokes for Teamviewer  
-https://github.com/AntiMicro/antimicro/releases  
+###### Python3  
+Arcade Library requires Python 3.6 or newer.
+Runs on Windows, Mac OS X, and Linux.
 
-###### "Arcade" Library
+###### "Arcade" Library  
 GUI Library and Game Support Structure  
 [http://arcade.academy/]  
 Python library for 2D games.   
-Arcade is built on top of Pyglet and OpenGL.  
+Arcade is built on top of Pyglet and OpenGL. 
+
+###### AntiMicro  
+Gamepad Input Converted to Keystrokes for Teamviewer. 
+Required only when using the physical arcade console.
+https://github.com/AntiMicro/antimicro/releases  
+
 
 
 ### STRUCTURE THEORY  
-- 4 Main views.........key to Switch View  
-1. "MenuView"  ........F1  
-2. "LeaderBoardView"...F2  
-3. "NewPlayer"  .......F3
-4. "GameView"  ........F4
+
+| 4 Main views    | Key to Switch View |  
+|-----------------|--------------------|
+|"MenuView"       |`F1`|
+|"LeaderBoardView"|`F2`|
+|"NewPlayer"      |`F3`|
+|"GameView"       | *Auto progression from* "NewPlayer"|
 
 
-## TO-DO
-Adam - Countdown Clock until HACK OHI/O Signups End & Actual Event
-Adam - Only increase game level and therefore game speed after a collision
-   
-Unassigned - Show 'next' piece on top of screen  
-Unassigned - Scoring Rules need decided  
-
-Idea - Game Play cutoff time out for player(?)  
-Idea - User Game over Screen (?)  
-Idea - ReOrder F1,F2,F3,F4 keys (?)  
-
-
-#### File Saving Structure (ACB)  
+#### Leaderboard/Score Saving Structure  
 1. Game should pull from external txt/dat file for current leaderboard.  
 2. Game should save to external txt/dat file for leaderboard progression.  
 3. Leaderboard file updated after completion of each game  
+4. File must be saved in `src` file and named: `tetris_scores.csv`
 
+### OUTPUT SCREEN REQ'Ts
 
-### SCREEN REQ's
-Tower Screen:     342 x 1080 px  
-Game Should be:   342 x 1008  
+|Tower Screen     |342 x 1080 px  |  
+|Game Area        |342 x 1008 px  |
+|Program Display  |1920 x 1080 px |
 ** there is a 72 px buffer on the bottom of the screen  
-** QUESTION: Do we build game such that there is a 72 pixel buffer shown on game, but not on screen? or build to 1008 height?  
 
 
------------------------------------------------  
-### Markdown Cheatsheet
-https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+### GAME SPEED / SYSTEM HARDWARE REQ'TS
+The structure of the game relies on a small number of sprite tiles (ie the falling blocks). Their location is updated every loop progression of the script and thus puts a greater draw on the system. See some discussion at the below link.  
+[Arcade Performance/Moving-Sprites](https://arcade.academy/arcade_vs_pygame_performance.html#moving-sprites)
