@@ -321,8 +321,8 @@ class GameView(arcade.View):
                 if grid[row][column]:
                     color = colors[grid[row][column]]
                     # Do the math to figure out where the box is
-                    x = (MARGIN + WIDTH) * (column + offset_x) + SCREEN_MARGIN + WIDTH // 2 + WINDOW_MARGIN                                 #MAY NEED FIXED WITH NEW SCREEN SIZE
-                    y = TETRIS_HEIGHT - HIDE_BOTTOM - (MARGIN + HEIGHT) * (row + offset_y) + SCREEN_MARGIN + HEIGHT // 2     #MAY NEED FIXED WITH NEW SCREEN SIZE
+                    x = (MARGIN + WIDTH) * (column + offset_x) + SCREEN_MARGIN + WIDTH // 2 + WINDOW_MARGIN                  #MAY NEED MODIFIED FOR NEW SCREEN SIZES
+                    y = TETRIS_HEIGHT - HIDE_BOTTOM - (MARGIN + HEIGHT) * (row + offset_y) + SCREEN_MARGIN + HEIGHT // 2     #MAY NEED MODIFIED FOR NEW SCREEN SIZES
 
                     # Draw the box
                     arcade.draw_rectangle_filled(x, y, WIDTH, HEIGHT, color)
@@ -370,7 +370,7 @@ class GameView(arcade.View):
 
 
     def switch_to_leaderboard(self):
-        time.sleep(3)
+        time.sleep(5)                                   # Time to pause on the leaderboard!
         next_view = LBView()
         next_view.setup(self.score, self.player_name)
         self.window.show_view(next_view)
@@ -447,6 +447,8 @@ class GameView(arcade.View):
         """
         Update the sprite list to reflect the contents of the 2d grid
         """
+
+
         for row in range(len(self.board)):
             for column in range(len(self.board[0])):
                 v = self.board[row][column]
@@ -529,6 +531,7 @@ class GameView(arcade.View):
 #===============================================================================
 class MenuView(arcade.View):
 
+
     def on_show(self):
         arcade.set_background_color([187,0,0])                                  # Set Background. Required. Do not delete def!
 
@@ -540,16 +543,19 @@ class MenuView(arcade.View):
         arcade.draw_texture_rectangle(  center_x = WINDOW_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
                                         width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
                                         texture  = self.background )
+
+        # GRAPHICS: Twitch Plays Logo
+        graphic = arcade.load_texture(GRAPHICS[0])
+        arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 + (SCREEN_HEIGHT*0.05) + TOWER_BUFFER,
+                                                width= SCREEN_WIDTH*0.8, height= SCREEN_HEIGHT*0.18, texture=graphic)
+
         # BUTTON GRAPHICS :D
         # Buttons are not intended to be clickable
-        button = arcade.load_texture(BUTTONS[0])
-        arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 + TOWER_BUFFER,
-                                        width= SCREEN_WIDTH*0.58, height= SCREEN_HEIGHT*0.04, texture=button)
-        button = arcade.load_texture(BUTTONS[1])
+        button = arcade.load_texture(BUTTONS[4])
         arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 - (SCREEN_HEIGHT*0.05) + TOWER_BUFFER,
                                         width= SCREEN_WIDTH*0.58, height= SCREEN_HEIGHT*0.04, texture=button)
-        button = arcade.load_texture(BUTTONS[2])
-        arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 - (SCREEN_HEIGHT*0.1) + TOWER_BUFFER,
+        button = arcade.load_texture(BUTTONS[1])
+        arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 - (SCREEN_HEIGHT*0.10) + TOWER_BUFFER,
                                         width= SCREEN_WIDTH*0.58, height= SCREEN_HEIGHT*0.04, texture=button)
 
 
@@ -566,6 +572,8 @@ class MenuView(arcade.View):
         print("Clicking doesn't do anything")
 
     def on_key_press(self, key, modifiers):
+        global AUTO_MODE
+
         if key == 65470:
             print("---- RELOAD MAIN MENU")
             next_view = MenuView()
@@ -577,9 +585,15 @@ class MenuView(arcade.View):
             self.window.show_view(next_view)
         if key == 65472:
             print("---- NEW PLAYER")
+            AUTO_MODE = True                                                    #TwitchPlays Addition
+            print(AUTO_MODE)
             next_view = PNameView()
             next_view.setup()
             self.window.show_view(next_view)
+
+
+
+
 
         if key == 65307: arcade.close_window()
 
@@ -590,7 +604,11 @@ class LBView(arcade.View):
         # Set Background. Required. Do not delete def!
         arcade.set_background_color([187,0,0])
 
+
     def on_draw(self):
+        global AUTO_MODE
+        print(AUTO_MODE)
+
         arcade.start_render()
 
         # BACKGROUND
@@ -619,12 +637,18 @@ class LBView(arcade.View):
                               align= "center", bold = True)
             currentRowHeight -= SCREEN_HEIGHT * 0.01685
 
+            self.frames +=1
+            if (AUTO_MODE == True) and (self.frames > 600):
+                next_view = PNameView()
+                next_view.setup()
+                self.window.show_view(next_view)
 
 
     def setup(self, score = None, name = None):
         print("Setup Leaderboard")
         self.score = score
         self.name = name
+        self.frames = 0
 
     def on_mouse_press(self, x, y, button, modifiers):
         print("Clicking doesn't do anything")
@@ -644,6 +668,7 @@ class LBView(arcade.View):
             next_view = PNameView()
             next_view.setup()
             self.window.show_view(next_view)
+
 #===============================================================================
 class PNameView(arcade.View):
 
@@ -659,17 +684,27 @@ class PNameView(arcade.View):
         arcade.draw_texture_rectangle(  center_x = WINDOW_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
                                         width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
                                         texture  = self.background )
-        if self.READY_TO_PLAY == True:
-            arcade.draw_text("READY TO PLAY", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.482, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
 
-        self.write_name()
+        self.write_name()                                                       # Removed for Twitch Plays version of game
+        self.launch_game()
+
 
     def setup(self):
         self.player_name = ''
         self.READY_TO_PLAY = False
 
+        #Variables Reset Each time
+        self.frame_count = 0                #reset game frame counter
+        self.lastFrame_nameUpdate = 0
+
+    def update(self, dt):
+        #Frame Counter
+        self.frame_count += 1
+
+
     def on_mouse_press(self, x, y, button, modifiers):
         print("Clicking doesn't do anything")
+
 
     def on_key_press(self, key, modifiers):
 
@@ -692,24 +727,27 @@ class PNameView(arcade.View):
         if key==65293 or key==65421:   #USES ENTER KEYS OR F4
             self.READY_TO_PLAY = True
 
-        if self.READY_TO_PLAY == False:
-            # For name input
-            if 96 < key < 123:
-                self.player_name += str(['a', 'b', 'c', 'd', 'e', 'f', 'g',
-                    'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-                    's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97]).upper()
-            elif 47 < key < 58:
-                self.player_name += str(key-48)
-            elif 65455 < key <65466:
-                self.player_name += str(key-65456)
-            elif key == 65454:
-                self.player_name += '.'
-            elif key == arcade.key.PERIOD:
-                self.player_name += '.'
-            elif key == arcade.key.BACKSPACE:
-                self.player_name = self.player_name[:-1]
-            elif key == 45 or key == 65453:
-                self.player_name += '-'
+
+##### Removed for TwitchPlays Style Gameplay ###################################
+#        if self.READY_TO_PLAY == False:
+#            # For name input
+#            if 96 < key < 123:
+#                self.player_name += str(['a', 'b', 'c', 'd', 'e', 'f', 'g',
+#                    'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+#                    's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97]).upper()
+#            elif 47 < key < 58:
+#                self.player_name += str(key-48)
+#            elif 65455 < key <65466:
+#                self.player_name += str(key-65456)
+#            elif key == 65454:
+#                self.player_name += '.'
+#            elif key == arcade.key.PERIOD:
+#                self.player_name += '.'
+#            elif key == arcade.key.BACKSPACE:
+#                self.player_name = self.player_name[:-1]
+#            elif key == 45 or key == 65453:
+#                self.player_name += '-'
+##### Removed for TwitchPlays Style Gameplay ###################################
 
 
         elif self.READY_TO_PLAY == True:
@@ -724,12 +762,33 @@ class PNameView(arcade.View):
 
     def write_name(self):
         """ Draw and update the current players name as entered. """
-        player_name = f"{self.player_name}"
+
+        #Randomly Generate Player Name
+        if self.lastFrame_nameUpdate + 40 < self.frame_count:
+            self.player_name = AUTO_FILL_NAMES[random.randrange(len(AUTO_FILL_NAMES)-1)]
+            self.player_name += " #"
+            self.player_name += str(random.randrange(999))
+            self.lastFrame_nameUpdate = self.frame_count
+
+        #Draw Player Name
+        player_name = self.player_name
         arcade.draw_text(player_name, WINDOW_WIDTH//2-127, SCREEN_HEIGHT*0.54, arcade.color.BLACK, 20, width=int(SCREEN_WIDTH*0.731), align="center")
 
-        # ADAM REVIEW
-        #arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2, SCREEN_HEIGHT*0.94, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
-        #arcade.draw_text(player_name, SCREEN_WIDTH/2, SCREEN_HEIGHT*0.90, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
+    def launch_game(self):
+        launch_frame = 500
+
+        if (self.READY_TO_PLAY) and (len(self.player_name) > 0) == True:
+            time.sleep(3)
+            next_view = GameView()
+            next_view.newGame(self.player_name)
+            self.window.show_view(next_view)
+
+        elif (self.frame_count > launch_frame):
+            self.READY_TO_PLAY = True
+            arcade.draw_text("LOADING GAME..", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.482, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
+
+
+
 
 
 #===============================================================================
@@ -739,6 +798,10 @@ def main():
     """ Create the game window, setup, run
         #TO-DO load leaderboard file and send to game (?)
     """
+
+    #Twitch-Plays version
+    global AUTO_MODE
+    AUTO_MODE = True
 
     # Initialize
     global ALL_SCORES

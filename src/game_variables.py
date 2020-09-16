@@ -6,15 +6,21 @@ import os
 import arcade
 
 # Image of the base background
-BACKGROUNDS = ["assets" + os.sep + "bg_greyleaf.png","assets" + os.sep + "bg_mainmenu.png", "assets" + os.sep + "bg_leaderboard.png", "assets" + os.sep + "bg_askname.png"]
-LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
-#LOGO_HACKOHIO =
+BACKGROUNDS = [ "assets" + os.sep + "bg_greyleaf.png",
+                "assets" + os.sep + "bg_mainmenu_2020.png",                     # Update for new year w/ new annual PNG file
+                "assets" + os.sep + "bg_leaderboard.png",
+                "assets" + os.sep + "bg_askname.png"]
 
 # Button Textures
-BUTTONS = [ "assets" + os.sep + "button_play.png",
-            "assets" + os.sep + "button_leaderboard.png",
-            "assets" + os.sep + "button_exit.png",
-            "assets" + os.sep + "button_menu.png" ]
+BUTTONS = [ "assets" + os.sep + "button_play.png",                              # 0
+            "assets" + os.sep + "button_leaderboard.png",                       # 1
+            "assets" + os.sep + "button_exit.png",                              # 2
+            "assets" + os.sep + "button_menu.png",                              # 3
+            "assets" + os.sep + "button_launchGame.png" ]
+
+# Graphics
+GRAPHICS = [ "assets" + os.sep + "twitchLogo.png" ]
+
 
 # Game over text
 GAME_OVER = "assets" + os.sep +  "game_over.png"
@@ -23,12 +29,20 @@ GAME_OVER = "assets" + os.sep +  "game_over.png"
 #pm = 0.0178571429
 
 
-############-- MISC GLOBAL VARIABLES --##################
+############-- TWITCH-PLAYS SPECIFIC VARIABLES --###############################
+
+AUTO_FILL_NAMES = [ "Brutus", "Buckeye", "Carmen", "Ohio", "TBDBITL",
+                    "JavaScript", "Java", "C#", "C++", "R", "Swift", "Python", "PHP",
+                    "Manjaro", "Linux Mint", "Ubuntu", "Debian", "Solus", "Fedora", "Deepin" ]
+
+
+
+############-- MISC GLOBAL VARIABLES --#########################################
 
 # GAME SPEED
 # Use this to control how fast the game starts at and increments faster from
 # value = update every (n) frames
-INITIAL_GAME_SPEED = 10
+INITIAL_GAME_SPEED = 15
 
 #- TETRIS BOARD SIZE
 ROW_COUNT = 22
