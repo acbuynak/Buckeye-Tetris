@@ -478,10 +478,10 @@ class GameView(arcade.View):
             self.move(1)
         elif key == arcade.key.UP:
             self.rotate_stone()
-        elif key == arcade.key.DOWN:
+        elif key == arcade.key.DOWN or key==101:
             self.down_pressed = self.frame_count
             self.drop()
-        elif key == arcade.key.SPACE:
+        elif key == arcade.key.SPACE or key == 113:
             self.hard_drop()
 
         # GAME Central Commands
