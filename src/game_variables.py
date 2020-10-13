@@ -32,8 +32,13 @@ GAME_OVER = "assets" + os.sep +  "game_over.png"
 ############-- TWITCH-PLAYS SPECIFIC VARIABLES --###############################
 
 AUTO_FILL_NAMES = [ "Brutus", "Buckeye", "Carmen", "Ohio", "TBDBITL",
-                    "JavaScript", "Java", "C#", "C++", "R", "Swift", "Python", "PHP",
-                    "Manjaro", "Linux Mint", "Ubuntu", "Debian", "Solus", "Fedora", "Deepin" ]
+                    "JavaScript", "Java", "C#", "C++", "R", "Swift", "Python", "PHP","Diego","Arduino", "ROS","CSS","HTTP","HTML","Json", "Ruby","XML",
+                    "Manjaro", "Linux Mint", "Ubuntu", "Debian", "Solus", "Fedora", "Deepin",
+                    "Segfault", "Nullpointer","//TODO", "Error","404","DeadPixel","C you later","xterm","OutofBounds","TCP","UCS","IP","BFS","DFS",
+                    "Atom","Pycharm","Byteme","Eclipse","Visual Studio", "NetBeans","Xcode","PhpStorm","Idle","PyDev","Geany","BlueJ","QT Creator","Spyder", "Cloud9",
+                    "NodeJS","CupOfJava",
+                    "Agile","Boolean","Char","ASCII","API","AJAX","GIT","NodeJS","MySQL","Server","Local","Unicorn"
+                    ]
 
 
 
