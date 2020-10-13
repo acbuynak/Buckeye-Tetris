@@ -291,11 +291,22 @@ class GameView(arcade.View):
         arcade.draw_texture_rectangle(  center_x = WINDOW_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
                                         width    = SCREEN_WIDTH,       height   = SCREEN_HEIGHT,
                                         texture  = self.background )
+        # GRAPHICS: Twitch Plays Logo
+        graphic = arcade.load_texture(GRAPHICS[0])
+        arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2 - SCREEN_WIDTH // 4, center_y=next_yposn,
+                                        width= SCREEN_WIDTH*0.48, height= SCREEN_HEIGHT*0.10, texture=graphic)
 
     def draw_next_stone(self):
         next_stone = self.new_stones[-1]
         color = max(next_stone[0])
 
+        #Next Stone Surrounding Box
+        arcade.draw_rectangle_filled(next_xposn, next_yposn, next_width, next_height, [150,150,150])
+        arcade.draw_rectangle_outline(next_xposn, next_yposn, next_width, next_height, [38,38,38], 2)
+        arcade.draw_rectangle_filled(next_xposn-3, next_yposn+3, next_width, next_height, [150,150,150])
+        arcade.draw_rectangle_outline(next_xposn-3, next_yposn+3, next_width, next_height, [38,38,38], 2)
+
+        #Draw Stone
         if color is 6:
             arcade.draw_rectangle_filled(next_xposn+WIDTH/2+MARGIN, next_yposn, WIDTH, HEIGHT, colors[6])
             arcade.draw_rectangle_filled(next_xposn-WIDTH/2, next_yposn, WIDTH, HEIGHT, colors[6])
@@ -334,12 +345,13 @@ class GameView(arcade.View):
         arcade.start_render()
 
         self.draw_background()
-        self.build_mscb()
         self.draw_next_stone()
         self.write_name()
 
         self.board_sprite_list.draw()
         self.draw_grid(self.stone, self.stone_x, self.stone_y)
+
+        self.build_mscb()                                                       # Moved below draw board call to allow score to be seen on bottom for tetris-plays version
 
         if self.game_over == True and self.addedScore == False :
             ALL_SCORES.append( [ self.score, self.player_name, self.level ] )       #calls to function to add player to leaderboard
@@ -385,15 +397,20 @@ class GameView(arcade.View):
 
     def build_mscb(self):
         """ Draw the mini score board when the player start playing. """
+
+        #Scoring Info
         score_text = f"{self.score}"
         level_text = f"{self.level}"
-        arcade.draw_rectangle_outline(e_mscb_xposn, e_mscb_yposn, e_mscb_width, e_mscb_height, [0,153,153], 2)
-        arcade.draw_text("SCORE",    e_mscb_xposn-65,  e_mscb_yposn - e_mscb_height*0, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013), bold = True, align="left",   anchor_y="center")
-        arcade.draw_text(score_text, e_mscb_xposn-50,  e_mscb_yposn - e_mscb_height*0.3, arcade.color.BLACK, float(SCREEN_HEIGHT*0.030), bold = True, align="left", anchor_y="center")
-        arcade.draw_text("LEVEL",    e_mscb_xposn-65,  e_mscb_yposn + e_mscb_height*0.4, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013), bold = True, align="left",   anchor_y="center")
-        arcade.draw_text(level_text, e_mscb_xposn+00,  e_mscb_yposn + e_mscb_height*0.2, arcade.color.BLACK, float(SCREEN_HEIGHT*0.030), bold = True, align="left", anchor_y="center")
+        arcade.draw_rectangle_filled(e_mscb_xposn+3, e_mscb_yposn-3, e_mscb_width, e_mscb_height, [150,150,150])
+        arcade.draw_rectangle_outline(e_mscb_xposn+3, e_mscb_yposn-3, e_mscb_width, e_mscb_height, [38,38,38], 2)
 
-        arcade.draw_rectangle_outline(next_xposn, next_yposn, next_width, next_height, [0,153,153], 2)
+        arcade.draw_rectangle_filled(e_mscb_xposn-3, e_mscb_yposn+3, e_mscb_width, e_mscb_height, [191,191,191])
+        arcade.draw_rectangle_outline(e_mscb_xposn-3, e_mscb_yposn+3, e_mscb_width, e_mscb_height, [38,38,38], 2)
+
+        arcade.draw_text("SCORE",    e_mscb_xposn-120,  e_mscb_yposn + e_mscb_height*0.3, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013), bold = True, align="left",   anchor_y="center")
+        arcade.draw_text(score_text, e_mscb_xposn-100,  e_mscb_yposn - e_mscb_height*0.1, arcade.color.BLACK, float(SCREEN_HEIGHT*0.030), bold = True, align="left", anchor_y="center")
+        arcade.draw_text("LEVEL",    e_mscb_xposn+60,  e_mscb_yposn + e_mscb_height*0.3, arcade.color.BLACK, float(SCREEN_HEIGHT*0.013), bold = True, align="left",   anchor_y="center")
+        arcade.draw_text(level_text, e_mscb_xposn+80,  e_mscb_yposn - e_mscb_height*0.1, arcade.color.BLACK, float(SCREEN_HEIGHT*0.030), bold = True, align="left", anchor_y="center")
 
 #-- Game Logic
 

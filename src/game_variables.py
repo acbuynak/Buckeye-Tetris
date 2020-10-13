@@ -79,16 +79,16 @@ TETRIS_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 
 
 ############-- GAME VIEW ITEM PLACEMENT --##################
-e_mscb_height = 120
-e_mscb_width = 150
-e_mscb_xposn  = 877
-e_mscb_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
+e_mscb_height = 60
+e_mscb_width = 298
+e_mscb_xposn  = 960
+e_mscb_yposn  = TOWER_BUFFER/2 + 10
 
 ############-- NEXT STONE BOX --##################
 next_height = 120
 next_width = 150
 next_xposn  = 1040
-next_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
+next_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + next_height/2
 
 ################################################################################
 # Define Tetris colors
