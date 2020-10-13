@@ -600,15 +600,13 @@ class MenuView(arcade.View):
 #===============================================================================
 class LBView(arcade.View):
 
+
     def on_show(self):
         # Set Background. Required. Do not delete def!
         arcade.set_background_color([187,0,0])
 
 
     def on_draw(self):
-        global AUTO_MODE
-        print(AUTO_MODE)
-
         arcade.start_render()
 
         # BACKGROUND
@@ -637,14 +635,18 @@ class LBView(arcade.View):
                               align= "center", bold = True)
             currentRowHeight -= SCREEN_HEIGHT * 0.01685
 
+    def update(self, dt):
             self.frames +=1
-            if (AUTO_MODE == True) and (self.frames > 600):
+            print(str(self.frames))
+            if (AUTO_MODE == True) and (self.frames > 4):
+                time.sleep(12)
                 next_view = PNameView()
                 next_view.setup()
                 self.window.show_view(next_view)
 
 
     def setup(self, score = None, name = None):
+        global AUTO_MODE
         print("Setup Leaderboard")
         self.score = score
         self.name = name
@@ -685,7 +687,7 @@ class PNameView(arcade.View):
                                         width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
                                         texture  = self.background )
 
-        self.write_name()                                                       # Removed for Twitch Plays version of game
+        self.write_name()                                                       # Modified for Twitch Plays version of game
         self.launch_game()
 
 
