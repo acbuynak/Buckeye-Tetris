@@ -296,6 +296,10 @@ class GameView(arcade.View):
         arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2 - SCREEN_WIDTH // 4, center_y=next_yposn,
                                         width= SCREEN_WIDTH*0.48, height= SCREEN_HEIGHT*0.10, texture=graphic)
 
+        graphic = arcade.load_texture(GRAPHICS[1])
+        arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT-50,
+                                        width= SCREEN_WIDTH, height=68, texture=graphic)
+
     def draw_next_stone(self):
         next_stone = self.new_stones[-1]
         color = max(next_stone[0])

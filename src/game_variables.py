@@ -19,7 +19,8 @@ BUTTONS = [ "assets" + os.sep + "button_play.png",                              
             "assets" + os.sep + "button_launchGame.png" ]
 
 # Graphics
-GRAPHICS = [ "assets" + os.sep + "twitchLogo.png" ]
+GRAPHICS = [ "assets" + os.sep + "twitchLogo.png" ,
+             "assets" + os.sep + "red_bar.png"]
 
 
 # Game over text
