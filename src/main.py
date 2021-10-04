@@ -414,11 +414,11 @@ class GameView(arcade.View):
             self.level_up()
 
         #- JOYSTICK
-        if self.joystick and (self.frame_count % 3 == 0):
-            """JoyStick Control Input"""
-            if self.joystick.x < -0.6:   self.move(-1)        # LEFT
-            if self.joystick.x > 0.6:   self.move(1)          # RIGHT
-            if self.joystick.y < -0.6:   self.hard_drop()     # UP
+       # if self.joystick and (self.frame_count % 3 == 0):
+       #     """JoyStick Control Input"""
+       #     if self.joystick.x < -0.6:   self.move(-1)        # LEFT
+       #     if self.joystick.x > 0.6:   self.move(1)          # RIGHT
+       #     if self.joystick.y < -0.6:   self.hard_drop()     # UP
 
         #- KEYBOARD
         if self.frame_count % 3 == 0:
