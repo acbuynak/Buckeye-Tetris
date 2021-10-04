@@ -1,4 +1,4 @@
-# Buckeye Tetris :video_game:
+# BlockOHI/O :video_game:
 Tetrominoes @ The Ohio State University
 
 ---
@@ -19,7 +19,7 @@ http://arcade.academy/
 
 **AntiMicro**  
 Gamepad Input Converted to Keystrokes for Teamviewer.  
-Required only when using the physical arcade console.
+Required only when using the physical arcade console. Configuration file is provided in `/support` directory for the game console.
 https://github.com/AntiMicro/antimicro/releases  
 
 ---
@@ -49,7 +49,7 @@ The structure of the game relies on a small number of sprite tiles (ie the falli
 |"MenuView"       |`F1`|
 |"LeaderBoardView"|`F2`|
 |"NewPlayer"      |`F3`|
-|"GameView"       | *Auto progression from* "NewPlayer"|
+|"GameView"       | *Natural progression from* "NewPlayer"|
 
 
 **Leaderboard/Score Saving Structure**    
