@@ -10,6 +10,7 @@ import arcade
 import random
 import time
 import PIL
+import timeit
 
 from game_variables import *
 from game_scores import *
@@ -108,6 +109,15 @@ class GameView(arcade.View):
         self.level = 0
         self.GAME_SPEED = INITIAL_GAME_SPEED
         self.background = arcade.load_texture(BACKGROUNDS[0])
+
+        # Set Game Levels 1-9
+        self.GAME_LEVEL_FRAMES = [ 0, 300, 600,950,1300,1650,2050,2450,2900,3400,3950]
+
+        # RX & Statistics
+        self.processing_time = 0
+        self.draw_time = 0
+        self.fps_start_timer = None
+        self.fps = None
 
         self.board_sprite_list = arcade.SpriteList()
         for row in range(len(self.board)):
@@ -311,6 +321,55 @@ class GameView(arcade.View):
                 for y in range(2):
                     if next_stone[y][x] is not 0:
                         arcade.draw_rectangle_filled(next_xposn+(x-1)*(WIDTH+MARGIN), next_yposn+(y*-2+1)*(HEIGHT/2+MARGIN), WIDTH, HEIGHT, colors[color])
+        
+    def game_diagnostics(self):
+
+        # Box Outline
+        arcade.draw_rectangle_outline(rx_xposn, rx_yposn, rx_width, rx_yposn, [0,153,153], 2)
+
+        # Header
+        arcade.draw_text("Game Diagnostics", rx_xposn-(rx_width/2)+20, rx_yposn+(rx_height/2)-30, arcade.color.BLACK, float(25), bold = True, align="left")
+
+        # Game Floor Speed
+        h_5a = rx_yposn+(rx_height/2)-75
+        t_5a = f"{GAME_SPEED_FLOOR} frames"
+        arcade.draw_text("   Set Floor: ",     rx_xposn-(rx_width/2)+20,   h_5a, arcade.color.BLACK, float(20), bold = True, align="left")
+        arcade.draw_text("Adjust w PAGE_UP/_DOWN", rx_xposn-(rx_width/2)+350,  h_5a, arcade.color.GRAY, float(15), bold = True, align="left")
+        arcade.draw_text(t_5a, rx_xposn-(rx_width/2)+200,  h_5a, arcade.color.BRIGHT_NAVY_BLUE, float(20), bold = True, align="left")
+
+        h_5b = rx_yposn+(rx_height/2)-100
+        arcade.draw_text("Current Speed: ",     rx_xposn-(rx_width/2)+20,   h_5b, arcade.color.BLACK, float(20), bold = True, align="left")
+        arcade.draw_text("Speed = (# of Levels) - Current Level + GAME_SPEED_FLOOR", rx_xposn-(rx_width/2)+20,  h_5b-25, arcade.color.GRAY, float(15), bold = True, align="left")
+        if self.GAME_SPEED is not None:
+            t_5b = f"{self.GAME_SPEED} frames"
+            arcade.draw_text(t_5b, rx_xposn-(rx_width/2)+200,  h_5b, arcade.color.BRIGHT_NAVY_BLUE, float(20), bold = True, align="left")
+
+        # Frame Counter
+        h_1 = rx_yposn+(rx_height/2)-175
+        arcade.draw_text("Frame Counter: ",     rx_xposn-(rx_width/2)+20,   h_1, arcade.color.BLACK, float(20), bold = True, align="left")
+        arcade.draw_text(str(self.frame_count), rx_xposn-(rx_width/2)+200,  h_1, arcade.color.BRIGHT_NAVY_BLUE, float(20), bold = True, align="left")
+
+        # FPS
+        h_3 = rx_yposn+(rx_height/2)-200
+        arcade.draw_text("FPS: ", rx_xposn-(rx_width/2)+20, h_3, arcade.color.BLACK, float(20), bold = True, align="left")
+        if self.fps is not None:
+            t_4a = f"{self.fps:.2f}"
+            arcade.draw_text(t_4a, rx_xposn-(rx_width/2)+200, h_3, arcade.color.BRIGHT_NAVY_BLUE, float(20), bold = True, align="left")
+
+        h_4 = rx_yposn+(rx_height/2)-225
+        arcade.draw_text("Time To Update: ", rx_xposn-(rx_width/2)+20, h_4, arcade.color.BLACK, float(20), bold = True, align="left")
+        if self.processing_time is not None:
+            t_4b = f"{self.processing_time:.8f} seconds"
+            arcade.draw_text(t_4b, rx_xposn-(rx_width/2)+200, h_4, arcade.color.BRIGHT_NAVY_BLUE, float(20), bold = True, align="left")
+
+        # Levels
+        h_2 = rx_yposn+(rx_height/2)-275
+        t_2a = str(self.GAME_LEVEL_FRAMES[0:5])
+        t_2b = str(self.GAME_LEVEL_FRAMES[6:])
+        arcade.draw_text("Level Advance: ", rx_xposn-(rx_width/2)+20,   h_2, arcade.color.BLACK, float(20), bold = True, align="left")
+        arcade.draw_text(t_2a, rx_xposn-(rx_width/2)+200,  h_2, arcade.color.BRIGHT_NAVY_BLUE, float(20), bold = True, align="left")
+        arcade.draw_text(t_2b, rx_xposn-(rx_width/2)+200,  h_2-30, arcade.color.BRIGHT_NAVY_BLUE, float(20), bold = True, align="left")
+
 
     def draw_grid(self, grid, offset_x, offset_y):
         """ Draw the grid. Used to draw the falling stones. The board is drawn by the sprite list. """
@@ -330,6 +389,18 @@ class GameView(arcade.View):
     def on_draw(self):
         """ Render the screen. """
 
+        # RX & Statistics
+        start_time = timeit.default_timer()
+
+        fps_calc_freq = 60
+        if self.frame_count % fps_calc_freq == 0:
+            if self.fps_start_timer is not None:
+                t_total = timeit.default_timer() - self.fps_start_timer
+                self.fps = fps_calc_freq / t_total
+            self.fps_start_timer = timeit.default_timer()   #restart timer
+
+
+
         # This command has to happen before we start drawing
         arcade.start_render()
 
@@ -337,6 +408,7 @@ class GameView(arcade.View):
         self.build_mscb()
         self.draw_next_stone()
         self.write_name()
+        self.game_diagnostics()
 
         self.board_sprite_list.draw()
         self.draw_grid(self.stone, self.stone_x, self.stone_y)
@@ -400,6 +472,9 @@ class GameView(arcade.View):
     def update(self, dt):
         """ Update, drop stone if warrented. Called by Arcade Class every 1/60 sec"""
 
+        # RX & Statistics (start timer)
+        start_time = timeit.default_timer()
+
 		#------------------------------------ FRAME RATE CONTROL
         self.frame_count += 1
 
@@ -429,11 +504,11 @@ class GameView(arcade.View):
             elif not self.left_pressed and self.right_pressed and self.frame_count - self.right_pressed > 10:
                 self.move(1)
 
+        # RX & Statistics (stop timer)
+        self.processing_time = timeit.default_timer() - start_time
 
     def level_up(self):
         """ increase game speed as game progresses. ie. Get's faster the longer you play"""
-
-        self.GAME_LEVEL_FRAMES = [ 0, 300,600,950,1300,1650,2050,2450,2900,3400,3950]
 
         idx = len(self.GAME_LEVEL_FRAMES) - 1
         while idx >= 0:

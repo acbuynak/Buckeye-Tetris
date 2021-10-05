@@ -71,6 +71,12 @@ next_width = 150
 next_xposn  = 1040
 next_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
 
+############-- GAME DIAGNOSTICS BOX --##################
+rx_width = WINDOW_WIDTH * 0.3
+rx_height = SCREEN_HEIGHT * 0.5
+rx_xposn = WINDOW_WIDTH * 0.22
+rx_yposn = SCREEN_HEIGHT * 0.5
+
 ################################################################################
 # Define Tetris colors
 colors = [
