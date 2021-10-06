@@ -386,6 +386,10 @@ class GameView(arcade.View):
                     # Draw the box
                     arcade.draw_rectangle_filled(x, y, WIDTH, HEIGHT, color)
 
+        # Advertisement Note
+        arcade.draw_rectangle_filled(WINDOW_WIDTH/2, 72, SCREEN_WIDTH, HEIGHT, arcade.color.BLACK)
+        arcade.draw_text("REGISTER TODAY @ HACK.OSU.EDU/2021", WINDOW_WIDTH/2, 78, arcade.color.WHITE, float(9), bold = True, align="center", anchor_x="center", anchor_y="center")
+
     def on_draw(self):
         """ Render the screen. """
 
