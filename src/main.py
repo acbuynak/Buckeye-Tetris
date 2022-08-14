@@ -111,8 +111,9 @@ class GameView(arcade.View):
         self.background = arcade.load_texture(BACKGROUNDS[0])
 
         # Set Game Levels 1-9
-        self.GAME_LEVEL_FRAMES = [ 0, 300, 600,950,1300,1650,2050,2450,2900,3400,3950]
-
+        # self.GAME_LEVEL_FRAMES = [ 0, 300, 600,950,1300,1650,2050,2450,2900]
+        self.GAME_LEVEL_FRAMES = [ 0, 200, 400, 600, 900, 1150, 1600, 1900, 2200 ]
+ 
         # RX & Statistics
         self.processing_time = 0
         self.draw_time = 0
