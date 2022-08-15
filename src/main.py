@@ -108,6 +108,181 @@ class GameView(arcade.View):
                                     anchor_x="center",
                                     anchor_y="center")
 
+        # Current Player Info
+        self.st_player_title = arcade.Text("- CURRENT CHALLENGER -",
+                                           SCREEN_WIDTH / 2 + WINDOW_MARGIN,
+                                           SCREEN_HEIGHT * 0.9,
+                                           width=SCREEN_WIDTH-2,
+                                           color=arcade.color.BLACK,
+                                           font_size=float(SCREEN_HEIGHT * 0.015),
+                                           align="center",
+                                           anchor_x="center",
+                                           anchor_y="center")
+        self.st_player_name = arcade.Text("",
+                                          SCREEN_WIDTH / 2 + WINDOW_MARGIN,
+                                          SCREEN_HEIGHT * 0.87,
+                                          width=SCREEN_WIDTH - 2,
+                                          color=arcade.color.BLACK,
+                                          font_size=float(SCREEN_HEIGHT * 0.02),
+                                          bold=True,
+                                          align="center",
+                                          anchor_x="center",
+                                          anchor_y="center")
+
+        # Setup Diagnostics Panel
+        h_1 = rx_yposn + (rx_height / 2) - 175  # Frame Counter
+        h_2 = rx_yposn + (rx_height / 2) - 275  # Levels
+        h_3 = rx_yposn + (rx_height / 2) - 200  # FPS
+        h_4 = rx_yposn + (rx_height / 2) - 225  # Time to Update
+        h_5a = rx_yposn + (rx_height / 2) - 75  # Floor Speed
+        h_5b = rx_yposn + (rx_height / 2) - 100  # Current Speed
+        self.st_d_header = arcade.Text("Game Diagnostics",
+                                       rx_xposn - (rx_width / 2) + 20,
+                                       rx_yposn + (rx_height / 2) - 30,
+                                       arcade.color.BLACK,
+                                       float(20),
+                                       bold=True,
+                                       align="left")
+        self.st_d_setfloor = arcade.Text("Set Floor: ",
+                                         rx_xposn - (rx_width / 2) + 20,
+                                         h_5a,
+                                         arcade.color.BLACK,
+                                         float(15),
+                                         bold=True,
+                                         align="left")
+        self.st_d_adjustupdown = arcade.Text("Adjust w PAGE_UP/_DOWN",
+                                             rx_xposn - (rx_width / 2) + 350,
+                                             h_5a,
+                                             arcade.color.GRAY,
+                                             float(7),
+                                             bold=True,
+                                             align="left")
+        self.st_d_t5a = arcade.Text("temp_filler_t5a",
+                                         rx_xposn - (rx_width / 2) + 200,
+                                         h_5a,
+                                         arcade.color.BRIGHT_NAVY_BLUE,
+                                         float(15),
+                                         bold=True,
+                                         align="left")
+        self.st_d_currentspeed = arcade.Text("Current Speed: ",
+                                             rx_xposn - (rx_width / 2) + 20,
+                                             h_5b,
+                                             arcade.color.BLACK,
+                                             float(15),
+                                             bold=True,
+                                             align="left")
+        self.st_d_speedcalcnote = arcade.Text("Speed = (# of Levels) - Current Level + GAME_SPEED_FLOOR",
+                                              rx_xposn - (rx_width / 2) + 20,
+                                              h_5b - 25,
+                                              arcade.color.GRAY,
+                                              float(7),
+                                              bold=True,
+                                              align="left")
+        self.st_d_framecounttitle = arcade.Text("Frame Counter: ",
+                                                rx_xposn - (rx_width / 2) + 20,
+                                                h_1,
+                                                arcade.color.BLACK,
+                                                float(15),
+                                                bold=True,
+                                                align="left")
+        self.st_d_framecount = arcade.Text("filler_frame_count",
+                                           rx_xposn - (rx_width / 2) + 200,
+                                           h_1,
+                                           arcade.color.BRIGHT_NAVY_BLUE,
+                                           float(15),
+                                           bold=True,
+                                           align="left")
+        self.st_d_fpstitle = arcade.Text("FPS: ",
+                                         rx_xposn - (rx_width / 2) + 20,
+                                         h_3,
+                                         arcade.color.BLACK,
+                                         float(15),
+                                         bold=True,
+                                         align="left")
+        self.st_d_fps = arcade.Text("filler_t_4a",
+                                    rx_xposn - (rx_width / 2) + 200,
+                                    h_3,
+                                    arcade.color.BRIGHT_NAVY_BLUE,
+                                    float(15),
+                                    bold=True,
+                                    align="left")
+        self.st_d_t4b = arcade.Text("filler_t_4b",
+                                    rx_xposn - (rx_width / 2) + 200,
+                                    h_4,
+                                    arcade.color.BRIGHT_NAVY_BLUE,
+                                    float(15),
+                                    bold=True,
+                                    align="left")
+        self.st_d_time2update = arcade.Text("Time To Update: ",
+                                            rx_xposn - (rx_width / 2) + 20,
+                                            h_4,
+                                            arcade.color.BLACK,
+                                            float(15),
+                                            bold=True,
+                                            align="left")
+        self.st_d_lvladvance = arcade.Text("Level Advance: ",
+                                           rx_xposn - (rx_width / 2) + 20,
+                                           h_2,
+                                           arcade.color.BLACK,
+                                           float(15),
+                                           bold=True,
+                                           align="left")
+        self.st_d_t2a = arcade.Text("filler_t_2a",
+                                    rx_xposn - (rx_width / 2) + 200,
+                                    h_2,
+                                    arcade.color.BRIGHT_NAVY_BLUE,
+                                    float(15),
+                                    bold=True,
+                                    align="left")
+        self.st_d_t2b = arcade.Text("filler_t_2b",
+                                    rx_xposn - (rx_width / 2) + 200,
+                                    h_2 - 30,
+                                    arcade.color.BRIGHT_NAVY_BLUE,
+                                    float(15),
+                                    bold=True,
+                                    align="left")
+        self.st_d_t5b = arcade.Text("filler_t_5b",
+                                    rx_xposn - (rx_width / 2) + 200,
+                                    h_5b,
+                                    arcade.color.BRIGHT_NAVY_BLUE,
+                                    float(15),
+                                    bold=True,
+                                    align="left")
+
+        # Setup Mini-Scoreboard (mscb)
+        self.st_mscb_scoretitle = arcade.Text("SCORE",
+                                              e_mscb_xposn - 65,
+                                              e_mscb_yposn - e_mscb_height * 0,
+                                              arcade.color.BLACK,
+                                              float(SCREEN_HEIGHT * 0.013),
+                                              bold=True,
+                                              align="left",
+                                              anchor_y="center")
+        self.st_mscb_score = arcade.Text("",
+                                         e_mscb_xposn - 50,
+                                         e_mscb_yposn - e_mscb_height * 0.3,
+                                         arcade.color.BLACK,
+                                         float(SCREEN_HEIGHT * 0.030),
+                                         bold=True,
+                                         align="left",
+                                         anchor_y="center")
+        self.st_mscb_leveltitle = arcade.Text("LEVEL",
+                                              e_mscb_xposn - 65,
+                                              e_mscb_yposn + e_mscb_height * 0.4,
+                                              arcade.color.BLACK,
+                                              float(SCREEN_HEIGHT * 0.013),
+                                              bold=True,
+                                              align="left",
+                                              anchor_y="center")
+        self.st_mscb_level = arcade.Text("",
+                                         e_mscb_xposn + 00,
+                                         e_mscb_yposn + e_mscb_height * 0.2,
+                                         arcade.color.BLACK,
+                                         float(SCREEN_HEIGHT * 0.030),
+                                         bold=True,
+                                         align="left",
+                                         anchor_y="center")
+
     def newGame(self, player_name):
         self.resetGame(player_name)
         self.setup()
@@ -130,6 +305,7 @@ class GameView(arcade.View):
 
         # initialize score & player
         self.player_name = player_name
+        self.st_player_name.value = f"{self.player_name}"
         self.score = None
         self.level = None
         self.GAME_SPEED = None
@@ -371,69 +547,49 @@ class GameView(arcade.View):
                                                      HEIGHT,
                                                      colors[color])
 
-    def game_diagnostics(self):
+    def draw_diagnostics(self):
 
         # Box Outline
         arcade.draw_rectangle_outline(rx_xposn, rx_yposn, rx_width, rx_yposn, [0, 153, 153], 2)
 
-        # Header
-        arcade.Text("Game Diagnostics", rx_xposn - (rx_width / 2) + 20, rx_yposn + (rx_height / 2) - 30,
-                         arcade.color.BLACK, float(25), bold=True, align="left")
-
-        # Game Floor Speed
-        h_5a = rx_yposn + (rx_height / 2) - 75
-        t_5a = f"{GAME_SPEED_FLOOR} frames"
-        arcade.Text("   Set Floor: ", rx_xposn - (rx_width / 2) + 20, h_5a, arcade.color.BLACK, float(20),
-                         bold=True, align="left")
-        arcade.Text("Adjust w PAGE_UP/_DOWN", rx_xposn - (rx_width / 2) + 350, h_5a, arcade.color.GRAY, float(15),
-                         bold=True, align="left")
-        arcade.draw_text(t_5a, rx_xposn - (rx_width / 2) + 200, h_5a, arcade.color.BRIGHT_NAVY_BLUE, float(20),
-                         bold=True, align="left")
-
-        h_5b = rx_yposn + (rx_height / 2) - 100
-        arcade.Text("Current Speed: ", rx_xposn - (rx_width / 2) + 20, h_5b, arcade.color.BLACK, float(20),
-                         bold=True, align="left")
-        arcade.Text("Speed = (# of Levels) - Current Level + GAME_SPEED_FLOOR", rx_xposn - (rx_width / 2) + 20,
-                         h_5b - 25, arcade.color.GRAY, float(15), bold=True, align="left")
-        if self.GAME_SPEED is not None:
-            t_5b = f"{self.GAME_SPEED} frames"
-            arcade.draw_text(t_5b, rx_xposn - (rx_width / 2) + 200, h_5b, arcade.color.BRIGHT_NAVY_BLUE, float(20),
-                             bold=True, align="left")
-
-        # Frame Counter
-        h_1 = rx_yposn + (rx_height / 2) - 175
-        arcade.Text("Frame Counter: ", rx_xposn - (rx_width / 2) + 20, h_1, arcade.color.BLACK, float(20),
-                         bold=True, align="left")
-        arcade.draw_text(str(self.frame_count), rx_xposn - (rx_width / 2) + 200, h_1, arcade.color.BRIGHT_NAVY_BLUE,
-                         float(20), bold=True, align="left")
-
-        # FPS
-        h_3 = rx_yposn + (rx_height / 2) - 200
-        arcade.Text("FPS: ", rx_xposn - (rx_width / 2) + 20, h_3, arcade.color.BLACK, float(20), bold=True,
-                         align="left")
-        if self.fps is not None:
-            t_4a = f"{self.fps:.2f}"
-            arcade.draw_text(t_4a, rx_xposn - (rx_width / 2) + 200, h_3, arcade.color.BRIGHT_NAVY_BLUE, float(20),
-                             bold=True, align="left")
-
-        h_4 = rx_yposn + (rx_height / 2) - 225
-        arcade.Text("Time To Update: ", rx_xposn - (rx_width / 2) + 20, h_4, arcade.color.BLACK, float(20),
-                         bold=True, align="left")
-        if self.processing_time is not None:
-            t_4b = f"{self.processing_time:.8f} seconds"
-            arcade.draw_text(t_4b, rx_xposn - (rx_width / 2) + 200, h_4, arcade.color.BRIGHT_NAVY_BLUE, float(20),
-                             bold=True, align="left")
-
-        # Levels
-        h_2 = rx_yposn + (rx_height / 2) - 275
+        # Update Text Values
+        self.st_d_framecount.value = str(self.frame_count)
         t_2a = str(self.GAME_LEVEL_FRAMES[0:5])
         t_2b = str(self.GAME_LEVEL_FRAMES[6:])
-        arcade.Text("Level Advance: ", rx_xposn - (rx_width / 2) + 20, h_2, arcade.color.BLACK, float(20),
-                         bold=True, align="left")
-        arcade.draw_text(t_2a, rx_xposn - (rx_width / 2) + 200, h_2, arcade.color.BRIGHT_NAVY_BLUE, float(20),
-                         bold=True, align="left")
-        arcade.draw_text(t_2b, rx_xposn - (rx_width / 2) + 200, h_2 - 30, arcade.color.BRIGHT_NAVY_BLUE, float(20),
-                         bold=True, align="left")
+        self.st_d_t2a.value = t_2a
+        self.st_d_t2b.value = t_2b
+
+        if self.fps is not None:
+            t_4a = f"{self.fps:.2f}"
+            self.st_d_fps.value = t_4a
+        if self.processing_time is not None:
+            t_4b = f"{self.processing_time:.8f} seconds"
+            self.st_d_t4b.value = t_4b
+
+        t_5a = f"{GAME_SPEED_FLOOR} frames"  # Game Floor Speed
+        self.st_d_t5a.value = t_5a
+
+        if self.GAME_SPEED is not None:
+            t_5b = f"{self.GAME_SPEED} frames"
+            self.st_d_t5b.value = t_5b
+
+        # Draw Text
+        self.st_d_header.draw()
+        self.st_d_setfloor.draw()
+        self.st_d_adjustupdown.draw()
+        self.st_d_t5a.draw()
+        self.st_d_currentspeed.draw()
+        self.st_d_speedcalcnote.draw()
+        self.st_d_framecounttitle.draw()
+        self.st_d_framecount.draw()
+        self.st_d_fpstitle.draw()
+        self.st_d_fps.draw()
+        self.st_d_t4b.draw()
+        self.st_d_time2update.draw()
+        self.st_d_lvladvance.draw()
+        self.st_d_t2a.draw()
+        self.st_d_t2b.draw()
+        self.st_d_t5b.draw()
 
     def draw_grid(self, grid, offset_x, offset_y):
         """ Draw the grid. Used to draw the falling stones. The board is drawn by the sprite list. """
@@ -457,7 +613,6 @@ class GameView(arcade.View):
 
         # RX & Statistics
         start_time = timeit.default_timer()
-
         fps_calc_freq = 60
         if self.frame_count % fps_calc_freq == 0:
             if self.fps_start_timer is not None:
@@ -470,10 +625,10 @@ class GameView(arcade.View):
 
         # Individual Render Functions
         self.draw_background()
-        self.build_mscb()
         self.draw_next_stone()
-        self.write_name()
-        # self.game_diagnostics()
+        self.draw_current_player()
+        self.draw_mscb()
+        self.draw_diagnostics()
 
         self.board_sprite_list.draw()
         self.draw_grid(self.stone, self.stone_x, self.stone_y)
@@ -482,7 +637,8 @@ class GameView(arcade.View):
         arcade.draw_rectangle_filled(WINDOW_WIDTH / 2, 72, SCREEN_WIDTH, HEIGHT, arcade.color.BLACK)
         self.st_adtxt.draw()
 
-        if self.game_over == True and self.addedScore == False:
+        # Game State Control Elements
+        if self.game_over and not self.addedScore:
             ALL_SCORES.append(
                 [self.score, self.player_name, self.level])  # calls to function to add player to leaderboard
             self.addedScore = True
@@ -491,7 +647,7 @@ class GameView(arcade.View):
             print("Added score & Sorted Scoreboard")
             print(ALL_SCORES)
 
-        if self.game_over == True:
+        if self.game_over:
             self.game_over_cover()
 
     def game_over_cover(self):
@@ -563,43 +719,24 @@ class GameView(arcade.View):
         next_view.setup(self.score, self.player_name)
         self.window.show_view(next_view)
 
-    def write_name(self):
-        """ Draw the mini score board when the player start playing. """
-        player_name = f"{self.player_name}"
-        arcade.Text("- CURRENT CHALLENGER -",
-                    SCREEN_WIDTH / 2 + WINDOW_MARGIN,
-                    SCREEN_HEIGHT * 0.9,
-                    width=SCREEN_WIDTH-2,
-                    color=arcade.color.BLACK,
-                    font_size=float(SCREEN_HEIGHT * 0.021),
-                    align="center",
-                    anchor_x="center",
-                    anchor_y="center")
-        arcade.draw_text(player_name,
-                         SCREEN_WIDTH / 2 + WINDOW_MARGIN,
-                         SCREEN_HEIGHT * 0.87,
-                         color=arcade.color.BLACK,
-                         font_size=float(SCREEN_HEIGHT * 0.02),
-                         bold=True,
-                         width=SCREEN_WIDTH-2,
-                         align="center",
-                         anchor_x="center",
-                         anchor_y="center")
+    def draw_current_player(self):
+        """ Draw the current player name over the mini score board. """
+        self.st_player_title.draw()
+        self.st_player_name.draw()
 
-    def build_mscb(self):
+    def draw_mscb(self):
         """ Draw the mini score board when the player start playing. """
-        score_text = f"{self.score}"
-        level_text = f"{self.level}"
+
+        # Update Text Content
+        self.st_mscb_score.value = f"{self.score}"
+        self.st_mscb_level.value = f"{self.level}"
+
+        # Draw
         arcade.draw_rectangle_outline(e_mscb_xposn, e_mscb_yposn, e_mscb_width, e_mscb_height, [0, 153, 153], 2)
-        arcade.Text("SCORE", e_mscb_xposn - 65, e_mscb_yposn - e_mscb_height * 0, arcade.color.BLACK,
-                         float(SCREEN_HEIGHT * 0.013), bold=True, align="left", anchor_y="center")
-        arcade.draw_text(score_text, e_mscb_xposn - 50, e_mscb_yposn - e_mscb_height * 0.3, arcade.color.BLACK,
-                         float(SCREEN_HEIGHT * 0.030), bold=True, align="left", anchor_y="center")
-        arcade.Text("LEVEL", e_mscb_xposn - 65, e_mscb_yposn + e_mscb_height * 0.4, arcade.color.BLACK,
-                         float(SCREEN_HEIGHT * 0.013), bold=True, align="left", anchor_y="center")
-        arcade.draw_text(level_text, e_mscb_xposn + 00, e_mscb_yposn + e_mscb_height * 0.2, arcade.color.BLACK,
-                         float(SCREEN_HEIGHT * 0.030), bold=True, align="left", anchor_y="center")
-
+        self.st_mscb_scoretitle.draw()
+        self.st_mscb_score.draw()
+        self.st_mscb_leveltitle.draw()
+        self.st_mscb_level.draw()
         arcade.draw_rectangle_outline(next_xposn, next_yposn, next_width, next_height, [0, 153, 153], 2)
 
     # -- Game Logic
