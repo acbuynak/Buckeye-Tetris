@@ -94,6 +94,10 @@ class GameView(arcade.View):
     def __init__(self):
         super(GameView, self).__init__()
 
+        # Declare Variables
+        self.time_elapsed = 0
+        self.time_game_start = 0
+
         ## Static Content
         # Advertisement Note
         self.st_adtxt = arcade.Text(text="REGISTER TODAY @ HACK.OSU.EDU/2022",
@@ -139,14 +143,14 @@ class GameView(arcade.View):
         self.st_d_header = arcade.Text("Game Diagnostics",
                                        rx_xposn - (rx_width / 2) + 20,
                                        rx_yposn + (rx_height / 2) - 30,
-                                       arcade.color.BLACK,
+                                       arcade.color.GRAY,
                                        float(20),
                                        bold=True,
                                        align="left")
         self.st_d_setfloor = arcade.Text("Set Floor: ",
                                          rx_xposn - (rx_width / 2) + 20,
                                          h_5a,
-                                         arcade.color.BLACK,
+                                         arcade.color.GRAY,
                                          float(15),
                                          bold=True,
                                          align="left")
@@ -154,7 +158,7 @@ class GameView(arcade.View):
                                              rx_xposn - (rx_width / 2) + 350,
                                              h_5a,
                                              arcade.color.GRAY,
-                                             float(7),
+                                             float(9),
                                              bold=True,
                                              align="left")
         self.st_d_t5a = arcade.Text("temp_filler_t5a",
@@ -167,7 +171,7 @@ class GameView(arcade.View):
         self.st_d_currentspeed = arcade.Text("Current Speed: ",
                                              rx_xposn - (rx_width / 2) + 20,
                                              h_5b,
-                                             arcade.color.BLACK,
+                                             arcade.color.GRAY,
                                              float(15),
                                              bold=True,
                                              align="left")
@@ -175,13 +179,13 @@ class GameView(arcade.View):
                                               rx_xposn - (rx_width / 2) + 20,
                                               h_5b - 25,
                                               arcade.color.GRAY,
-                                              float(7),
+                                              float(9),
                                               bold=True,
                                               align="left")
-        self.st_d_framecounttitle = arcade.Text("Frame Counter: ",
+        self.st_d_framecounttitle = arcade.Text("Game Length: ",
                                                 rx_xposn - (rx_width / 2) + 20,
                                                 h_1,
-                                                arcade.color.BLACK,
+                                                arcade.color.GRAY,
                                                 float(15),
                                                 bold=True,
                                                 align="left")
@@ -192,38 +196,45 @@ class GameView(arcade.View):
                                            float(15),
                                            bold=True,
                                            align="left")
-        self.st_d_fpstitle = arcade.Text("FPS: ",
+        self.st_d_timeelapsed = arcade.Text("filler_frame_count",
+                                            rx_xposn - (rx_width / 2) + 360,
+                                            h_1,
+                                            arcade.color.WHITE,
+                                            float(15),
+                                            bold=True,
+                                            align="left")
+        self.st_d_fpstitle = arcade.Text("Graphics: ",
                                          rx_xposn - (rx_width / 2) + 20,
                                          h_3,
-                                         arcade.color.BLACK,
+                                         arcade.color.GRAY,
                                          float(15),
                                          bold=True,
                                          align="left")
-        self.st_d_fps = arcade.Text("filler_t_4a",
+        self.st_d_fps = arcade.Text("fps",
                                     rx_xposn - (rx_width / 2) + 200,
                                     h_3,
                                     arcade.color.BRIGHT_NAVY_BLUE,
                                     float(15),
                                     bold=True,
                                     align="left")
-        self.st_d_t4b = arcade.Text("filler_t_4b",
-                                    rx_xposn - (rx_width / 2) + 200,
-                                    h_4,
-                                    arcade.color.BRIGHT_NAVY_BLUE,
-                                    float(15),
-                                    bold=True,
-                                    align="left")
-        self.st_d_time2update = arcade.Text("Time To Update: ",
+        self.st_d_time2update = arcade.Text("Logic: ",
                                             rx_xposn - (rx_width / 2) + 20,
                                             h_4,
-                                            arcade.color.BLACK,
+                                            arcade.color.GRAY,
                                             float(15),
                                             bold=True,
                                             align="left")
-        self.st_d_lvladvance = arcade.Text("Level Advance: ",
+        self.st_d_t4b = arcade.Text("ups",
+                                    rx_xposn - (rx_width / 2) + 200,
+                                    h_4,
+                                    arcade.color.WHITE,
+                                    float(15),
+                                    bold=True,
+                                    align="left")
+        self.st_d_lvladvance = arcade.Text("Levels (sec): ",
                                            rx_xposn - (rx_width / 2) + 20,
                                            h_2,
-                                           arcade.color.BLACK,
+                                           arcade.color.GRAY,
                                            float(15),
                                            bold=True,
                                            align="left")
@@ -317,6 +328,10 @@ class GameView(arcade.View):
         self.new_stones = tetris_shapes.copy()
         random.shuffle(self.new_stones)
 
+        # Reset Game Length Timer
+        self.time_elapsed = 0
+        self.time_game_start = 0
+
         # Output Announcement
         print("---- Game Board, Mechanics, Stats == Reset")
 
@@ -331,6 +346,7 @@ class GameView(arcade.View):
         # Set Game Levels 1-9
         # self.GAME_LEVEL_FRAMES = [ 0, 300, 600,950,1300,1650,2050,2450,2900]
         self.GAME_LEVEL_FRAMES = [0, 200, 400, 600, 900, 1150, 1600, 1900, 2200]
+        self.GAME_LEVEL_TIME = [0, 12.5, 25.0, 37.5, 56.0, 72.0, 100, 119.0, 137.5]
 
         # RX & Statistics
         self.processing_time = 0
@@ -360,6 +376,9 @@ class GameView(arcade.View):
             print("----NO JOYSTICK CONTROLLER WAS FOUND.")
             self.joystick = None
 
+        # Start Game Clock
+        self.time_game_start = time.time()
+
         # - Initial Stone
         self.new_stone()
         self.update_board()
@@ -368,7 +387,7 @@ class GameView(arcade.View):
 
     def on_show_view(self):
         print("GameView Opened!")
-        arcade.set_background_color([187, 0, 0])  # Set Background. Required. Do not delete def!
+        arcade.set_background_color([0, 0, 0])  # Set Background. Required. Do not delete def!
         self.window.set_mouse_visible(False)  # Hide mouse cursor
 
     # -- Stone Actions
@@ -553,17 +572,19 @@ class GameView(arcade.View):
         arcade.draw_rectangle_outline(rx_xposn, rx_yposn, rx_width, rx_yposn, [0, 153, 153], 2)
 
         # Update Text Values
-        self.st_d_framecount.value = str(self.frame_count)
-        t_2a = str(self.GAME_LEVEL_FRAMES[0:5])
-        t_2b = str(self.GAME_LEVEL_FRAMES[6:])
+        self.st_d_framecount.value = f"{self.frame_count} frames"
+        self.st_d_timeelapsed.value = f"{self.time_elapsed:.2f} sec"
+        t_2a = str(self.GAME_LEVEL_TIME[0:5])
+        t_2b = str(self.GAME_LEVEL_TIME[6:])
         self.st_d_t2a.value = t_2a
         self.st_d_t2b.value = t_2b
 
         if self.fps is not None:
-            t_4a = f"{self.fps:.2f}"
+            t_4a = f"{self.fps:.2f} FPS"
             self.st_d_fps.value = t_4a
-        if self.processing_time is not None:
-            t_4b = f"{self.processing_time:.8f} seconds"
+        if self.processing_time is not None and self.processing_time > 0.0:
+            update_freq = 1.0 / self.processing_time
+            t_4b = f"{update_freq:.1f} UPS"
             self.st_d_t4b.value = t_4b
 
         t_5a = f"{GAME_SPEED_FLOOR} frames"  # Game Floor Speed
@@ -582,6 +603,7 @@ class GameView(arcade.View):
         self.st_d_speedcalcnote.draw()
         self.st_d_framecounttitle.draw()
         self.st_d_framecount.draw()
+        self.st_d_timeelapsed.draw()
         self.st_d_fpstitle.draw()
         self.st_d_fps.draw()
         self.st_d_t4b.draw()
@@ -741,13 +763,14 @@ class GameView(arcade.View):
 
     # -- Game Logic
 
-    def update(self, dt):
+    def update(self, dt: float):
         """ Update, drop stone if warranted. Called by Arcade Class every 1/60 sec"""
 
-        # RX & Statistics (start timer)
-        start_time = timeit.default_timer()
+        # Timers
+        self.time_elapsed = time.time() - self.time_game_start  #Update Game Clock Time
+        self.processing_time = dt  # Time between updates
 
-        # ------------------------------------ FRAME RATE CONTROL
+        # Frame Rate Control
         self.frame_count += 1
 
         if self.game_over == True:
@@ -776,17 +799,15 @@ class GameView(arcade.View):
             elif not self.left_pressed and self.right_pressed and self.frame_count - self.right_pressed > 10:
                 self.move(1)
 
-        # RX & Statistics (stop timer)
-        self.processing_time = timeit.default_timer() - start_time
 
     def level_up(self):
-        """ increase game speed as game progresses. ie. Get's faster the longer you play"""
+        """ increase game speed as game progresses. Gets faster the longer you play"""
 
-        idx = len(self.GAME_LEVEL_FRAMES) - 1
+        idx = len(self.GAME_LEVEL_TIME) - 1
         while idx >= 0:
-            if self.GAME_LEVEL_FRAMES[idx] < self.frame_count:
+            if self.GAME_LEVEL_TIME[idx] < self.time_elapsed:
                 self.level = idx
-                self.GAME_SPEED = len(self.GAME_LEVEL_FRAMES) - idx + GAME_SPEED_FLOOR
+                self.GAME_SPEED = len(self.GAME_LEVEL_TIME) - idx + GAME_SPEED_FLOOR
                 break
             idx -= 1
 
