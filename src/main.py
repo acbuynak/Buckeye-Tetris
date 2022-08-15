@@ -1042,6 +1042,7 @@ class PNameView(arcade.View):
             if key == 65361 or key == 65362 or key == 65363 or key == 65364 or key==32 or key==65473: #uses any keyboard motion key or F4
                 if len(self.player_name) is 0:
                     print("Name can't be empty")
+                    self.setup()
                     return
 
                 # Create new instance of game and switch to that view
