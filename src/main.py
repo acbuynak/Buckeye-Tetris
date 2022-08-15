@@ -91,6 +91,23 @@ class GameView(arcade.View):
     global ALL_SCORES
     global GAME_SPEED_FLOOR
 
+    def __init__(self):
+        super(GameView, self).__init__()
+
+        ## Static Content
+        # Advertisement Note
+        self.st_adtxt = arcade.Text(text="REGISTER TODAY @ HACK.OSU.EDU/2022",
+                                    start_x=WINDOW_WIDTH / 2,
+                                    start_y=73,
+                                    color=arcade.color.WHITE,
+                                    font_size=float(11),
+                                    width=SCREEN_WIDTH,
+                                    bold=True,
+                                    align="center",
+                                    multiline=False,
+                                    anchor_x="center",
+                                    anchor_y="center")
+
     def newGame(self, player_name):
         self.resetGame(player_name)
         self.setup()
@@ -152,10 +169,8 @@ class GameView(arcade.View):
                 for texture in texture_list:
                     sprite.append_texture(texture)
                 sprite.set_texture(0)
-                sprite.center_x = (
-                                              MARGIN + WIDTH) * column + SCREEN_MARGIN + WIDTH // 2 + WINDOW_MARGIN  # MAY NEED FIXED WITH NEW SCREEN SIZE
-                sprite.center_y = TETRIS_HEIGHT - HIDE_BOTTOM - (
-                            MARGIN + HEIGHT) * row + SCREEN_MARGIN + HEIGHT // 2  # MAY NEED FIXED WITH NEW SCREEN SIZE
+                sprite.center_x = (MARGIN + WIDTH) * column + SCREEN_MARGIN + WIDTH // 2 + WINDOW_MARGIN                # MAY NEED FIXED WITH NEW SCREEN SIZE
+                sprite.center_y = TETRIS_HEIGHT - HIDE_BOTTOM - (MARGIN + HEIGHT) * row + SCREEN_MARGIN + HEIGHT // 2   # MAY NEED FIXED WITH NEW SCREEN SIZE
 
                 self.board_sprite_list.append(sprite)
 
@@ -175,7 +190,7 @@ class GameView(arcade.View):
 
         print("---- Game Board, Mechanics, Stats == SETUP Confirm")
 
-    def on_show(self):
+    def on_show_view(self):
         print("GameView Opened!")
         arcade.set_background_color([187, 0, 0])  # Set Background. Required. Do not delete def!
         self.window.set_mouse_visible(False)  # Hide mouse cursor
@@ -362,23 +377,23 @@ class GameView(arcade.View):
         arcade.draw_rectangle_outline(rx_xposn, rx_yposn, rx_width, rx_yposn, [0, 153, 153], 2)
 
         # Header
-        arcade.draw_text("Game Diagnostics", rx_xposn - (rx_width / 2) + 20, rx_yposn + (rx_height / 2) - 30,
+        arcade.Text("Game Diagnostics", rx_xposn - (rx_width / 2) + 20, rx_yposn + (rx_height / 2) - 30,
                          arcade.color.BLACK, float(25), bold=True, align="left")
 
         # Game Floor Speed
         h_5a = rx_yposn + (rx_height / 2) - 75
         t_5a = f"{GAME_SPEED_FLOOR} frames"
-        arcade.draw_text("   Set Floor: ", rx_xposn - (rx_width / 2) + 20, h_5a, arcade.color.BLACK, float(20),
+        arcade.Text("   Set Floor: ", rx_xposn - (rx_width / 2) + 20, h_5a, arcade.color.BLACK, float(20),
                          bold=True, align="left")
-        arcade.draw_text("Adjust w PAGE_UP/_DOWN", rx_xposn - (rx_width / 2) + 350, h_5a, arcade.color.GRAY, float(15),
+        arcade.Text("Adjust w PAGE_UP/_DOWN", rx_xposn - (rx_width / 2) + 350, h_5a, arcade.color.GRAY, float(15),
                          bold=True, align="left")
         arcade.draw_text(t_5a, rx_xposn - (rx_width / 2) + 200, h_5a, arcade.color.BRIGHT_NAVY_BLUE, float(20),
                          bold=True, align="left")
 
         h_5b = rx_yposn + (rx_height / 2) - 100
-        arcade.draw_text("Current Speed: ", rx_xposn - (rx_width / 2) + 20, h_5b, arcade.color.BLACK, float(20),
+        arcade.Text("Current Speed: ", rx_xposn - (rx_width / 2) + 20, h_5b, arcade.color.BLACK, float(20),
                          bold=True, align="left")
-        arcade.draw_text("Speed = (# of Levels) - Current Level + GAME_SPEED_FLOOR", rx_xposn - (rx_width / 2) + 20,
+        arcade.Text("Speed = (# of Levels) - Current Level + GAME_SPEED_FLOOR", rx_xposn - (rx_width / 2) + 20,
                          h_5b - 25, arcade.color.GRAY, float(15), bold=True, align="left")
         if self.GAME_SPEED is not None:
             t_5b = f"{self.GAME_SPEED} frames"
@@ -387,14 +402,14 @@ class GameView(arcade.View):
 
         # Frame Counter
         h_1 = rx_yposn + (rx_height / 2) - 175
-        arcade.draw_text("Frame Counter: ", rx_xposn - (rx_width / 2) + 20, h_1, arcade.color.BLACK, float(20),
+        arcade.Text("Frame Counter: ", rx_xposn - (rx_width / 2) + 20, h_1, arcade.color.BLACK, float(20),
                          bold=True, align="left")
         arcade.draw_text(str(self.frame_count), rx_xposn - (rx_width / 2) + 200, h_1, arcade.color.BRIGHT_NAVY_BLUE,
                          float(20), bold=True, align="left")
 
         # FPS
         h_3 = rx_yposn + (rx_height / 2) - 200
-        arcade.draw_text("FPS: ", rx_xposn - (rx_width / 2) + 20, h_3, arcade.color.BLACK, float(20), bold=True,
+        arcade.Text("FPS: ", rx_xposn - (rx_width / 2) + 20, h_3, arcade.color.BLACK, float(20), bold=True,
                          align="left")
         if self.fps is not None:
             t_4a = f"{self.fps:.2f}"
@@ -402,7 +417,7 @@ class GameView(arcade.View):
                              bold=True, align="left")
 
         h_4 = rx_yposn + (rx_height / 2) - 225
-        arcade.draw_text("Time To Update: ", rx_xposn - (rx_width / 2) + 20, h_4, arcade.color.BLACK, float(20),
+        arcade.Text("Time To Update: ", rx_xposn - (rx_width / 2) + 20, h_4, arcade.color.BLACK, float(20),
                          bold=True, align="left")
         if self.processing_time is not None:
             t_4b = f"{self.processing_time:.8f} seconds"
@@ -413,7 +428,7 @@ class GameView(arcade.View):
         h_2 = rx_yposn + (rx_height / 2) - 275
         t_2a = str(self.GAME_LEVEL_FRAMES[0:5])
         t_2b = str(self.GAME_LEVEL_FRAMES[6:])
-        arcade.draw_text("Level Advance: ", rx_xposn - (rx_width / 2) + 20, h_2, arcade.color.BLACK, float(20),
+        arcade.Text("Level Advance: ", rx_xposn - (rx_width / 2) + 20, h_2, arcade.color.BLACK, float(20),
                          bold=True, align="left")
         arcade.draw_text(t_2a, rx_xposn - (rx_width / 2) + 200, h_2, arcade.color.BRIGHT_NAVY_BLUE, float(20),
                          bold=True, align="left")
@@ -437,11 +452,6 @@ class GameView(arcade.View):
                     # Draw the box
                     arcade.draw_rectangle_filled(x, y, WIDTH, HEIGHT, color)
 
-        # Advertisement Note
-        arcade.draw_rectangle_filled(WINDOW_WIDTH / 2, 72, SCREEN_WIDTH, HEIGHT, arcade.color.BLACK)
-        arcade.draw_text("REGISTER TODAY @ HACK.OSU.EDU/2021", WINDOW_WIDTH / 2, 78, arcade.color.WHITE, float(9),
-                         bold=True, align="center", anchor_x="center", anchor_y="center")
-
     def on_draw(self):
         """ Render the screen. """
 
@@ -463,10 +473,14 @@ class GameView(arcade.View):
         self.build_mscb()
         self.draw_next_stone()
         self.write_name()
-        self.game_diagnostics()
+        # self.game_diagnostics()
 
         self.board_sprite_list.draw()
         self.draw_grid(self.stone, self.stone_x, self.stone_y)
+
+        # Draw Advert Content
+        arcade.draw_rectangle_filled(WINDOW_WIDTH / 2, 72, SCREEN_WIDTH, HEIGHT, arcade.color.BLACK)
+        self.st_adtxt.draw()
 
         if self.game_over == True and self.addedScore == False:
             ALL_SCORES.append(
@@ -482,23 +496,66 @@ class GameView(arcade.View):
 
     def game_over_cover(self):
         time.sleep(.2)
-        arcade.draw_rectangle_filled(WINDOW_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, (0, 0, 0, 200))
+        arcade.draw_rectangle_filled(WINDOW_WIDTH / 2,
+                                     SCREEN_HEIGHT / 2,
+                                     SCREEN_WIDTH,
+                                     SCREEN_HEIGHT,
+                                     (0, 0, 0, 200))
 
         gameover = arcade.load_texture(GAME_OVER)
-        arcade.draw_texture_rectangle(center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT * 5 / 6,
-                                      width=SCREEN_WIDTH * 0.7, height=SCREEN_WIDTH * 0.4, texture=gameover)
+        arcade.draw_texture_rectangle(center_x=WINDOW_WIDTH // 2,
+                                      center_y=SCREEN_HEIGHT * 5 / 6,
+                                      width=SCREEN_WIDTH * 0.7,
+                                      height=SCREEN_WIDTH * 0.4,
+                                      texture=gameover)
 
         # player and score
         name = self.player_name
         score = str(self.score)
-        arcade.draw_text("CHALLENGER", WINDOW_WIDTH / 2, SCREEN_HEIGHT * 7 / 12, arcade.color.WHITE, 30, bold=True,
-                         align="center", anchor_x="center", anchor_y="center")
-        arcade.draw_text(name, WINDOW_WIDTH / 2, SCREEN_HEIGHT * 7 / 12 - 80, arcade.color.WHITE, 40, bold=True,
-                         align="center", anchor_x="center")
-        arcade.draw_text("SCORE", WINDOW_WIDTH / 2, SCREEN_HEIGHT * 5 / 12, arcade.color.WHITE, 30, bold=True,
-                         align="center", anchor_x="center", anchor_y="center")
-        arcade.draw_text(score, WINDOW_WIDTH / 2, SCREEN_HEIGHT * 5 / 12 - 60, arcade.color.WHITE, 40, bold=True,
-                         align="center", anchor_x="center", anchor_y="center")
+        goc_t1 = arcade.Text("CHALLENGER",
+                    WINDOW_WIDTH / 2,
+                    SCREEN_HEIGHT * 7 / 12,
+                    width=SCREEN_WIDTH,
+                    color=arcade.color.WHITE,
+                    font_size=30,
+                    bold=True,
+                    align="center",
+                    anchor_x="center",
+                    anchor_y="center")
+        goc_t2 = arcade.Text(name,
+                    WINDOW_WIDTH / 2,
+                    SCREEN_HEIGHT * 7 / 12 - 80,
+                    width=SCREEN_WIDTH,
+                    color=arcade.color.WHITE,
+                    font_size=40,
+                    bold=True,
+                    align="center",
+                    anchor_x="center")
+        goc_t3 = arcade.Text("SCORE",
+                    WINDOW_WIDTH / 2,
+                    SCREEN_HEIGHT * 5 / 12,
+                    width=SCREEN_WIDTH,
+                    color=arcade.color.WHITE,
+                    font_size=30,
+                    bold=True,
+                    align="center",
+                    anchor_x="center",
+                    anchor_y="center")
+        goc_t4 = arcade.Text(score,
+                    WINDOW_WIDTH / 2,
+                    SCREEN_HEIGHT * 5 / 12 - 60,
+                    width=SCREEN_WIDTH,
+                    color=arcade.color.WHITE,
+                    font_size=40,
+                    bold=True,
+                    align="center",
+                    anchor_x="center",
+                    anchor_y="center")
+
+        goc_t1.draw()
+        goc_t2.draw()
+        goc_t3.draw()
+        goc_t4.draw()
 
     def switch_to_leaderboard(self):
         time.sleep(3)
@@ -509,11 +566,24 @@ class GameView(arcade.View):
     def write_name(self):
         """ Draw the mini score board when the player start playing. """
         player_name = f"{self.player_name}"
-        arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH / 2 + WINDOW_MARGIN, SCREEN_HEIGHT * 0.9,
-                         arcade.color.BLACK, float(SCREEN_HEIGHT * 0.021), align="center", anchor_x="center",
-                         anchor_y="center")
-        arcade.draw_text(player_name, SCREEN_WIDTH / 2 + WINDOW_MARGIN, SCREEN_HEIGHT * 0.87, arcade.color.BLACK,
-                         float(SCREEN_HEIGHT * 0.02), bold=True, width=340, align="center", anchor_x="center",
+        arcade.Text("- CURRENT CHALLENGER -",
+                    SCREEN_WIDTH / 2 + WINDOW_MARGIN,
+                    SCREEN_HEIGHT * 0.9,
+                    width=SCREEN_WIDTH-2,
+                    color=arcade.color.BLACK,
+                    font_size=float(SCREEN_HEIGHT * 0.021),
+                    align="center",
+                    anchor_x="center",
+                    anchor_y="center")
+        arcade.draw_text(player_name,
+                         SCREEN_WIDTH / 2 + WINDOW_MARGIN,
+                         SCREEN_HEIGHT * 0.87,
+                         color=arcade.color.BLACK,
+                         font_size=float(SCREEN_HEIGHT * 0.02),
+                         bold=True,
+                         width=SCREEN_WIDTH-2,
+                         align="center",
+                         anchor_x="center",
                          anchor_y="center")
 
     def build_mscb(self):
@@ -521,11 +591,11 @@ class GameView(arcade.View):
         score_text = f"{self.score}"
         level_text = f"{self.level}"
         arcade.draw_rectangle_outline(e_mscb_xposn, e_mscb_yposn, e_mscb_width, e_mscb_height, [0, 153, 153], 2)
-        arcade.draw_text("SCORE", e_mscb_xposn - 65, e_mscb_yposn - e_mscb_height * 0, arcade.color.BLACK,
+        arcade.Text("SCORE", e_mscb_xposn - 65, e_mscb_yposn - e_mscb_height * 0, arcade.color.BLACK,
                          float(SCREEN_HEIGHT * 0.013), bold=True, align="left", anchor_y="center")
         arcade.draw_text(score_text, e_mscb_xposn - 50, e_mscb_yposn - e_mscb_height * 0.3, arcade.color.BLACK,
                          float(SCREEN_HEIGHT * 0.030), bold=True, align="left", anchor_y="center")
-        arcade.draw_text("LEVEL", e_mscb_xposn - 65, e_mscb_yposn + e_mscb_height * 0.4, arcade.color.BLACK,
+        arcade.Text("LEVEL", e_mscb_xposn - 65, e_mscb_yposn + e_mscb_height * 0.4, arcade.color.BLACK,
                          float(SCREEN_HEIGHT * 0.013), bold=True, align="left", anchor_y="center")
         arcade.draw_text(level_text, e_mscb_xposn + 00, e_mscb_yposn + e_mscb_height * 0.2, arcade.color.BLACK,
                          float(SCREEN_HEIGHT * 0.030), bold=True, align="left", anchor_y="center")
@@ -535,7 +605,7 @@ class GameView(arcade.View):
     # -- Game Logic
 
     def update(self, dt):
-        """ Update, drop stone if warrented. Called by Arcade Class every 1/60 sec"""
+        """ Update, drop stone if warranted. Called by Arcade Class every 1/60 sec"""
 
         # RX & Statistics (start timer)
         start_time = timeit.default_timer()
@@ -673,7 +743,7 @@ class GameView(arcade.View):
 
 class MenuView(arcade.View):
 
-    def on_show(self):
+    def on_show_view(self):
         arcade.set_background_color([187,0,0])                                  # Set Background. Required. Do not delete def!
 
     def on_draw(self):
@@ -684,6 +754,7 @@ class MenuView(arcade.View):
         arcade.draw_texture_rectangle(  center_x = WINDOW_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
                                         width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
                                         texture  = self.background )
+
         # BUTTON GRAPHICS :D
         # Buttons are not intended to be clickable
         button = arcade.load_texture(BUTTONS[0])
@@ -695,16 +766,6 @@ class MenuView(arcade.View):
         button = arcade.load_texture(BUTTONS[2])
         arcade.draw_texture_rectangle(  center_x=WINDOW_WIDTH // 2, center_y=SCREEN_HEIGHT // 2 - (SCREEN_HEIGHT*0.1) + TOWER_BUFFER,
                                         width= SCREEN_WIDTH*0.58, height= SCREEN_HEIGHT*0.04, texture=button)
-
-
-        # TEXT - using graphic/textures for buttons now
-        #arcade.draw_text("[S] BEGIN GAME", SCREEN_WIDTH/2, SCREEN_HEIGHT/2,
-        #                 arcade.color.CADET_GREY, font_size=15, font_name='arial',
-        #                 align="center", anchor_x="center", anchor_y="center")
-        #arcade.draw_text("[L] LEADER BOARD", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 30,
-        #                 arcade.color.CADET_GREY, font_size=15, font_name='arial',
-        #                 align="center", anchor_x="center", anchor_y="center")
-
 
     def on_mouse_press(self, x, y, button, modifiers):
         print("Clicking doesn't do anything")
@@ -735,26 +796,67 @@ class MenuView(arcade.View):
 
 class PNameView(arcade.View):
 
-    def on_show(self):
-        # Set Background. Required. Do not delete def!
-        arcade.set_background_color([187,0,0])
+    def __init__(self):
+        """
+        Setup variables for view class
+        """
+        super(PNameView, self).__init__()
 
-    def on_draw(self):
-        arcade.start_render()
-
-        # BACKGROUND
+        # Load Texture Content
         self.background = arcade.load_texture(BACKGROUNDS[3])
-        arcade.draw_texture_rectangle(  center_x = WINDOW_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
-                                        width    = SCREEN_WIDTH,    height   = SCREEN_HEIGHT,
-                                        texture  = self.background )
-        if self.READY_TO_PLAY == True:
-            arcade.draw_text("READY TO PLAY", SCREEN_WIDTH/2 + WINDOW_MARGIN, SCREEN_HEIGHT*0.482, arcade.color.BLACK,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
 
-        self.write_name()
-
-    def setup(self):
+        # Default Logic
         self.player_name = ''
         self.READY_TO_PLAY = False
+
+        # Active Content (declaration only)
+        self.txt_name = arcade.Text(self.player_name,
+                                    start_x=WINDOW_WIDTH // 2 - 127,
+                                    start_y=SCREEN_HEIGHT * 0.54,
+                                    color=arcade.color.BLACK,
+                                    font_size=20,
+                                    width=int(SCREEN_WIDTH * 0.731),
+                                    align="center")
+        self.txt_ready = arcade.Text("READY TO PLAY",
+                                     start_x=SCREEN_WIDTH / 2 + WINDOW_MARGIN,
+                                     start_y=SCREEN_HEIGHT * 0.482,
+                                     color=arcade.color.BLACK,
+                                     font_size=float(SCREEN_HEIGHT * 0.02),
+                                     bold=True,
+                                     width=SCREEN_WIDTH - 2,
+                                     align="center",
+                                     anchor_x="center",
+                                     anchor_y="center")
+
+    def setup(self):
+        """Reset logic"""
+        self.player_name = ''
+        self.READY_TO_PLAY = False
+
+    def on_show_view(self):
+        """Called once when first shown. Loads static visuals."""
+        arcade.start_render()  # Clear current window before starting
+
+        # Background
+        arcade.set_background_color([187, 0, 0])  # Set base color. Required.
+
+    def on_draw(self):
+        self.clear()
+
+        # Background
+        arcade.draw_texture_rectangle(center_x=WINDOW_WIDTH // 2,
+                                      center_y=SCREEN_HEIGHT // 2,
+                                      width=SCREEN_WIDTH,
+                                      height=SCREEN_HEIGHT,
+                                      texture=self.background)
+
+        # Update current players name
+        self.txt_name.value = self.player_name
+        self.txt_name.draw()
+
+        # Player ready notice
+        if self.READY_TO_PLAY:
+            self.txt_ready.draw()
 
     def on_mouse_press(self, x, y, button, modifiers):
         print("Clicking doesn't do anything")
@@ -780,12 +882,12 @@ class PNameView(arcade.View):
         if key==65293 or key==65421:   #USES ENTER KEYS OR F4
             self.READY_TO_PLAY = True
 
-        if self.READY_TO_PLAY == False:
+        if not self.READY_TO_PLAY:
             # For name input
             if 96 < key < 123:
                 self.player_name += str(['a', 'b', 'c', 'd', 'e', 'f', 'g',
-                    'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-                    's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97]).upper()
+                                         'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                                         's', 't', 'u', 'v', 'w', 'x', 'y', 'z'][key-97]).upper()
             elif 47 < key < 58:
                 self.player_name += str(key-48)
             elif 65455 < key <65466:
@@ -799,25 +901,17 @@ class PNameView(arcade.View):
             elif key == 45 or key == 65453:
                 self.player_name += '-'
 
-
-        elif self.READY_TO_PLAY == True:
+        elif self.READY_TO_PLAY:
             if key == 65361 or key == 65362 or key == 65363 or key == 65364 or key==32 or key==65473: #uses any keyboard motion key or F4
                 if len(self.player_name) is 0:
                     print("Name can't be empty")
                     return
+
+                # Create new instance of game and switch to that view
                 print("---- LAUNCH GAME")
                 next_view = GameView()
                 next_view.newGame(self.player_name)
                 self.window.show_view(next_view)
-
-    def write_name(self):
-        """ Draw and update the current players name as entered. """
-        player_name = f"{self.player_name}"
-        arcade.draw_text(player_name, WINDOW_WIDTH//2-127, SCREEN_HEIGHT*0.54, arcade.color.BLACK, 20, width=int(SCREEN_WIDTH*0.731), align="center")
-
-        # ADAM REVIEW
-        #arcade.draw_text("- CURRENT CHALLENGER -", SCREEN_WIDTH/2, SCREEN_HEIGHT*0.94, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.021), align="center", anchor_x="center", anchor_y="center")
-        #arcade.draw_text(player_name, SCREEN_WIDTH/2, SCREEN_HEIGHT*0.90, arcade.color.CADET_GREY,  float(SCREEN_HEIGHT*0.02), bold=True, width=340, align="center", anchor_x="center", anchor_y="center")
 
 
 
@@ -827,38 +921,60 @@ class PNameView(arcade.View):
 
 class LBView(arcade.View):
 
-    def on_show(self):
+    def __init__(self):
+        super(LBView, self).__init__()
+
+        # Background Texture
+        self.background = arcade.load_texture(BACKGROUNDS[2])
+
+    def on_show_view(self):
+        """Called once when view switched to this class. Writes all static elements"""
+
         # Set Background. Required. Do not delete def!
         arcade.set_background_color([187,0,0])
 
-    def on_draw(self):
-        arcade.start_render()
+        # Clear pixels from current window
+        self.clear()
 
-        # BACKGROUND
-        self.background = arcade.load_texture(BACKGROUNDS[2])
-        arcade.draw_texture_rectangle(  center_x = WINDOW_WIDTH // 2,  center_y = SCREEN_HEIGHT // 2,
-                                        width    = SCREEN_WIDTH,       height   = SCREEN_HEIGHT,
-                                        texture  = self.background )
+        # Draw Background Texture
+        arcade.draw_texture_rectangle(center_x=WINDOW_WIDTH // 2,
+                                      center_y=SCREEN_HEIGHT // 2,
+                                      width=SCREEN_WIDTH,
+                                      height=SCREEN_HEIGHT,
+                                      texture=self.background)
 
         # Populate Leaderboard
-        currentRowHeight = SCREEN_HEIGHT * 0.813
+        currentRowHeight = SCREEN_HEIGHT * 0.813 + 1
         for row in ALL_SCORES[0:34]:
             if row[0] is self.score and str(row[1]) is self.name:
-                arcade.draw_rectangle_filled(WINDOW_WIDTH//2 - 48, currentRowHeight+1, 84, 15, [49,142,203])
-                arcade.draw_rectangle_filled(WINDOW_WIDTH//2 + 70, currentRowHeight+1, 150, 15, [49,142,203])
-            arcade.draw_text( str(row[0]), start_x= WINDOW_WIDTH//2 - 50, start_y= currentRowHeight,
-                              anchor_x = "center", anchor_y = "center",
-                              color= arcade.color.WHITE,
-                              font_size=float(SCREEN_HEIGHT*0.013),
-                              font_name='arial',
-                              align= "center", bold = True)
-            arcade.draw_text( str(row[1]), start_x= WINDOW_WIDTH//2 + 70, start_y= currentRowHeight,
-                              anchor_x = "center", anchor_y = "center",
-                              color= arcade.color.WHITE,
-                              font_size=float(SCREEN_HEIGHT*0.013),
-                              font_name='arial-bold',
-                              align= "center", bold = True)
+                arcade.draw_rectangle_filled(WINDOW_WIDTH//2 - 48, currentRowHeight-1, 84, 15, [49,142,203])
+                arcade.draw_rectangle_filled(WINDOW_WIDTH//2 + 70, currentRowHeight-1, 150, 15, [49,142,203])
+            arcade.draw_text( str(row[0]),
+                         start_x=WINDOW_WIDTH//2 - 50,
+                         start_y=currentRowHeight,
+                         anchor_x="center",
+                         anchor_y="center",
+                         width=SCREEN_WIDTH,
+                         color=arcade.color.WHITE,
+                         font_size=float(SCREEN_HEIGHT*0.010),
+                         font_name='arial',
+                         align="center",
+                         bold=False)
+            arcade.draw_text( str(row[1]),
+                         start_x=WINDOW_WIDTH//2 + 70,
+                         start_y=currentRowHeight,
+                         anchor_x="center",
+                         anchor_y="center",
+                         width=SCREEN_WIDTH,
+                         color=arcade.color.WHITE,
+                         font_size=float(SCREEN_HEIGHT*0.010),
+                         font_name='arial',
+                         align="center",
+                         bold=True)
             currentRowHeight -= SCREEN_HEIGHT * 0.01685
+
+    def on_draw(self):
+        pass
 
     def setup(self, score = None, name = None):
         print("Setup Leaderboard")
