@@ -344,7 +344,6 @@ class GameView(arcade.View):
         self.background = arcade.load_texture(BACKGROUNDS[0])
 
         # Set Game Levels 1-9
-        # self.GAME_LEVEL_FRAMES = [ 0, 300, 600,950,1300,1650,2050,2450,2900]
         self.GAME_LEVEL_FRAMES = [0, 200, 400, 600, 900, 1150, 1600, 1900, 2200]
         self.GAME_LEVEL_TIME = [0, 12.5, 25.0, 37.5, 56.0, 72.0, 100, 119.0, 137.5]
 
@@ -777,13 +776,12 @@ class GameView(arcade.View):
 
         # - KEYBOARD
         if self.frame_count % 3 == 0:
-            if self.down_pressed and self.frame_count - self.down_pressed > 10:
+            if self.down_pressed and self.time_elapsed - self.down_pressed > 0.2:
                 self.drop()
-            if not self.right_pressed and self.left_pressed and self.frame_count - self.left_pressed > 10:
+            if not self.right_pressed and self.left_pressed and self.time_elapsed - self.left_pressed > 0.3:
                 self.move(-1)
-            elif not self.left_pressed and self.right_pressed and self.frame_count - self.right_pressed > 10:
+            elif not self.left_pressed and self.right_pressed and self.time_elapsed - self.right_pressed > 0.3:
                 self.move(1)
-
 
     def level_up(self):
         """ increase game speed as game progresses. Gets faster the longer you play"""
@@ -822,17 +820,17 @@ class GameView(arcade.View):
 
         # GAME Play Commands
         if key == arcade.key.LEFT:
-            self.left_pressed = self.frame_count
+            self.left_pressed = self.time_elapsed
             self.move(-1)
         elif key == arcade.key.RIGHT:
-            self.right_pressed = self.frame_count
+            self.right_pressed = self.time_elapsed
             self.move(1)
         elif key == arcade.key.UP:
             self.rotate_stone()
-        elif key == arcade.key.DOWN or key == 101:
-            self.down_pressed = self.frame_count
+        elif key == arcade.key.DOWN:
+            self.down_pressed = self.time_elapsed
             self.drop()
-        elif key == arcade.key.SPACE or key == 113:
+        elif key == arcade.key.SPACE:
             self.hard_drop()
 
         # GAME Central Commands
