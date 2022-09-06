@@ -9,7 +9,7 @@ The original game utilized a (custom) physical arcade console that allowed playe
 **AntiMicro**  
 Gamepad Input Converted to Keystrokes for Teamviewer.  
 Required only when using the physical arcade console.
-https://github.com/AntiMicro/antimicro/releases  
+https://github.com/AntiMicroX/antimicrox
 
 **KeyMap Overview**  
 Arcade buttons are tied to appropriate keyboard key's.  

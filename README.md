@@ -2,12 +2,12 @@
 Tetrominoes @ The Ohio State University
 
 
-| Dependency | Version |
-| ---------- | ------- |
-| [Python](https://www.python.org/)               | v3.7+   |
-| [Arcade](https://api.arcade.academy/en/2.6.15/) | v2.6.15 |
-| [AntiMicro](https://github.com/AntiMicro/antimicro/releases) | v2.23 |
-| OpenGL     | v3.3+   |
+| Dependency                                                    | Version |
+|---------------------------------------------------------------|---------|
+| [Python](https://www.python.org/)                             | v3.7+   |
+| [Arcade](https://api.arcade.academy/en/2.6.15/)               | v2.6.15 |
+| [AntiMicroX](https://github.com/AntiMicroX/antimicrox/releases/tag/3.2.5) | v3.2.5  |
+| OpenGL                                                        | v3.3+   |
 
 Complete [requirements.txt](./requirements.txt) included.
 
