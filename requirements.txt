@@ -1,12 +1,3 @@
 # BlockOhio
-Pillow==6.1.0
-arcade==2.1.3
-attrs==19.1.0
-future==0.18.2
-numpy==1.17.2
-pyglet==1.4.4
-pyglet-ffmpeg2==0.1.12
-pytiled-parser==0.9.0
-setuptools==48.0.0
-typing-extensions==3.10.0.2
-wheel==0.36.2
+# v0.2.0
+arcade==2.6.15
