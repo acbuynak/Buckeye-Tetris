@@ -505,21 +505,6 @@ class GameView(arcade.View):
                 self.stone_y = new_y
                 self.pos = new_pos
 
-    def update(self, dt):
-        """ Update, drop stone if warrented. Called by Arcade Class every 1/60 sec
-        ------------------------------------ FRAME RATE CONTROLLING """
-        self.frame_count += 1
-        if self.frame_count % self.GAME_SPEED == 0:
-            self.drop()
-
-        if self.frame_count % 3 == 0:
-            if self.down_pressed and self.frame_count - self.down_pressed > 10:
-                self.drop()
-            if not self.right_pressed and self.left_pressed and self.frame_count - self.left_pressed > 10:
-                self.move(-1)
-            elif not self.left_pressed and self.right_pressed and self.frame_count - self.right_pressed > 10:
-                self.move(1)
-
     def move(self, delta_x):
         """ Move the stone back and forth based on delta x. """
         if not self.game_over and not self.paused:
