@@ -366,15 +366,15 @@ class GameView(arcade.View):
 
                 self.board_sprite_list.append(sprite)
 
-        # - JOYSTICK
-        # Check for System Installed Joysticks. Make instance of it.
-        joysticks = arcade.get_joysticks()
-        if joysticks:
-            self.joystick = joysticks[0]
-            self.joystick.open()
-        else:
-            print("----NO JOYSTICK CONTROLLER WAS FOUND.")
-            self.joystick = None
+        # # - JOYSTICK
+        # # Check for System Installed Joysticks. Make instance of it.
+        # joysticks = arcade.get_joysticks()
+        # if joysticks:
+        #     self.joystick = joysticks[0]
+        #     self.joystick.open()
+        # else:
+        #     print("----NO JOYSTICK CONTROLLER WAS FOUND.")
+        #     self.joystick = None
 
         # Start Game Clock
         self.time_game_start = time.time()
@@ -777,17 +777,17 @@ class GameView(arcade.View):
             self.switch_to_leaderboard()
 
         if self.frame_count % self.GAME_SPEED == 0:
-            if self.joystick and (self.joystick.y > 0.6):   self.drop()  # DOWN (vertical is flipped on input)
+            # if self.joystick and (self.joystick.y > 0.6):   self.drop()  # DOWN (vertical is flipped on input)
             self.drop()
 
             # - Update Game Speed
             self.level_up()
 
-        # - JOYSTICK
+        # # - JOYSTICK
         # if self.joystick and (self.frame_count % 3 == 0):
         #     """JoyStick Control Input"""
         #     if self.joystick.x < -0.6:   self.move(-1)        # LEFT
-        #     if self.joystick.x > 0.6:   self.move(1)          # RIGHT
+        #     if self.joystick.x > 0.6:    self.move(1)         # RIGHT
         #     if self.joystick.y < -0.6:   self.hard_drop()     # UP
 
         # - KEYBOARD
