@@ -6,7 +6,7 @@ import os
 import arcade
 
 # Image of the base background
-BACKGROUNDS = ["assets" + os.sep + "bg_greyleaf.png","assets" + os.sep + "bg_mainmenu.png", "assets" + os.sep + "bg_leaderboard.png", "assets" + os.sep + "bg_askname.png"]
+BACKGROUNDS = ["assets" + os.sep + "bg_gamescreen.png","assets" + os.sep + "bg_mainmenu.png", "assets" + os.sep + "bg_leaderboard.png", "assets" + os.sep + "bg_askname.png"]
 LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
 #LOGO_HACKOHIO =
 
@@ -63,13 +63,13 @@ TETRIS_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 e_mscb_height = 120
 e_mscb_width = 150
 e_mscb_xposn  = 877
-e_mscb_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
+e_mscb_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2 + 15
 
 ############-- NEXT STONE BOX --##################
 next_height = 120
-next_width = 150
+next_width = 158
 next_xposn  = 1040
-next_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2
+next_yposn  = TETRIS_HEIGHT + TOWER_BUFFER + (0.02*SCREEN_HEIGHT) + e_mscb_height/2 + 15
 
 ############-- GAME DIAGNOSTICS BOX --##################
 rx_width = WINDOW_WIDTH * 0.3
