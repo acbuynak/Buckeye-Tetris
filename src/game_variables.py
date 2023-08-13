@@ -3,21 +3,44 @@ This module contains very useful variables for the game.
 """
 
 import os
-import arcade
+import pathlib
+
+
+# Config
+asset_dir = os.path.join(pathlib.Path(__file__).parent.resolve(), "assets")
+
+# Asset Lookup Helper
+def asset_lookup(file_name: str) -> str:
+    """
+    Returns fully qualified path to passed directory.
+    """
+
+    abs_asset_path = os.path.join(asset_dir, file_name)
+    
+    if os.path.isfile(abs_asset_path):
+        return abs_asset_path
+    else:
+        raise ValueError("Unable to validate that asset filepath exists.") 
+
 
 # Image of the base background
-BACKGROUNDS = ["assets" + os.sep + "bg_gamescreen.png","assets" + os.sep + "bg_mainmenu.png", "assets" + os.sep + "bg_leaderboard.png", "assets" + os.sep + "bg_askname.png"]
-LOGO_TITLE = "assets" + os.sep +  "title_buckeyetetris.png"
+BACKGROUNDS = [asset_lookup("bg_gamescreen.png"),
+               asset_lookup("bg_mainmenu.png"),
+               asset_lookup("bg_leaderboard.png"),
+               asset_lookup("bg_askname.png"),
+               ]
+# LOGO_TITLE = asset_lookup("title_buckeyetetris.png")
 #LOGO_HACKOHIO =
 
 # Button Textures
-BUTTONS = [ "assets" + os.sep + "button_play.png",
-            "assets" + os.sep + "button_leaderboard.png",
-            "assets" + os.sep + "button_exit.png",
-            "assets" + os.sep + "button_menu.png" ]
+BUTTONS = [ asset_lookup("button_play.png"),
+            asset_lookup("button_leaderboard.png"),
+            asset_lookup("button_exit.png"),
+            asset_lookup("button_menu.png"),
+            ]
 
 # Game over text
-GAME_OVER = "assets" + os.sep +  "game_over.png"
+GAME_OVER = asset_lookup("game_over.png")
 
 #pixel multiplier
 #pm = 0.0178571429

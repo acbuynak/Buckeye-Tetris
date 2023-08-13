@@ -8,11 +8,14 @@ SCORE NAME LEVEL
 """
 
 import csv
+import os
+import pathlib
 
 
 def importScores():
     ALL_SCORES = []
-    with open('tetris_scores.csv', newline='') as csvfile:
+    full_path = os.path.join(pathlib.Path(__file__).parent.resolve(), 'tetris_scores.csv')
+    with open(full_path, newline='') as csvfile:
         currentLine = csv.reader(csvfile, delimiter=' ')
         i=0
         for row in currentLine:
