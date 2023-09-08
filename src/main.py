@@ -1117,7 +1117,7 @@ class LBView(arcade.View):
             currentRowHeight -= SCREEN_HEIGHT * 0.01685
 
     def on_draw(self):
-        pass
+        self.on_show_view()
 
     def setup(self, score = None, name = None):
         print("Setup Leaderboard")
