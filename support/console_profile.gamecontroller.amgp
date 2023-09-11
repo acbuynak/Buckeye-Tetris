@@ -1,80 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gamecontroller configversion="19" appversion="3.2.5">
+<joystick configversion="19" appversion="3.3.4">
     <!--The SDL name for a joystick is included for informational purposes only.-->
-    <sdlname>G-Shark GS-GP702</sdlname>
+    <sdlname>Generic USB Joystick</sdlname>
     <!--The Unique ID for a joystick is included for informational purposes only.-->
-    <uniqueID>030000007900000006000000000000001216</uniqueID>
-    <stickAxisAssociation index="1" xAxis="1" yAxis="2"/>
-    <stickAxisAssociation index="2" xAxis="3" yAxis="4"/>
-    <vdpadButtonAssociations index="1">
-        <vdpadButtonAssociation axis="0" button="12" direction="1"/>
-        <vdpadButtonAssociation axis="0" button="13" direction="4"/>
-        <vdpadButtonAssociation axis="0" button="14" direction="8"/>
-        <vdpadButtonAssociation axis="0" button="15" direction="2"/>
-    </vdpadButtonAssociations>
+    <uniqueID>0300f0207900000006000000000000001216</uniqueID>
     <names>
-        <controlstickname index="1">Stick 1</controlstickname>
-        <controlstickname index="2">Stick 2</controlstickname>
+        <axisname index="2">VERTICAL AXIS</axisname>
     </names>
     <sets>
         <set index="1">
-            <stick index="1">
-                <deadZone>14745</deadZone>
-                <maxZone>32237</maxZone>
-                <mode>four-way</mode>
-                <stickbutton index="5">
-                    <slots>
-                        <slot>
-                            <code>0x1000013</code>
-                            <mode>keyboard</mode>
-                        </slot>
-                    </slots>
-                </stickbutton>
-                <stickbutton index="7">
-                    <slots>
-                        <slot>
-                            <code>0x1000014</code>
-                            <mode>keyboard</mode>
-                        </slot>
-                    </slots>
-                </stickbutton>
-                <stickbutton index="1">
+            <axis index="4">
+                <throttle>normal</throttle>
+            </axis>
+            <axis index="3">
+                <throttle>normal</throttle>
+            </axis>
+            <axis index="2">
+                <throttle>normal</throttle>
+                <axisbutton index="1">
                     <slots>
                         <slot>
                             <code>0x1000015</code>
                             <mode>keyboard</mode>
                         </slot>
                     </slots>
-                </stickbutton>
-                <stickbutton index="3">
+                </axisbutton>
+                <axisbutton index="2">
+                    <slots>
+                        <slot>
+                            <code>0x1000013</code>
+                            <mode>keyboard</mode>
+                        </slot>
+                    </slots>
+                </axisbutton>
+            </axis>
+            <axis index="1">
+                <throttle>normal</throttle>
+                <axisbutton index="1">
+                    <slots>
+                        <slot>
+                            <code>0x1000014</code>
+                            <mode>keyboard</mode>
+                        </slot>
+                    </slots>
+                </axisbutton>
+                <axisbutton index="2">
                     <slots>
                         <slot>
                             <code>0x1000012</code>
                             <mode>keyboard</mode>
                         </slot>
                     </slots>
-                </stickbutton>
-            </stick>
-            <dpad index="1">
-                <dpadbutton index="2">
-                    <toggle>true</toggle>
-                </dpadbutton>
-            </dpad>
-            <trigger index="5">
-                <throttle>positivehalf</throttle>
-            </trigger>
-            <trigger index="6">
-                <throttle>positivehalf</throttle>
-            </trigger>
-            <button index="5">
-                <slots>
-                    <slot>
-                        <code>0x1000032</code>
-                        <mode>keyboard</mode>
-                    </slot>
-                </slots>
-            </button>
-            <button index="8">
+                </axisbutton>
+            </axis>
+            <axis index="5">
+                <throttle>normal</throttle>
+            </axis>
+            <button index="11">
                 <slots>
                     <slot>
                         <code>0x1000031</code>
@@ -82,7 +64,15 @@
                     </slot>
                 </slots>
             </button>
-            <button index="1">
+            <button index="9">
+                <slots>
+                    <slot>
+                        <code>0x1000032</code>
+                        <mode>keyboard</mode>
+                    </slot>
+                </slots>
+            </button>
+            <button index="3">
                 <slots>
                     <slot>
                         <code>0x1000013</code>
@@ -98,7 +88,7 @@
                     </slot>
                 </slots>
             </button>
-            <button index="10">
+            <button index="5">
                 <slots>
                     <slot>
                         <code>0x1000030</code>
@@ -108,4 +98,4 @@
             </button>
         </set>
     </sets>
-</gamecontroller>
+</joystick>
