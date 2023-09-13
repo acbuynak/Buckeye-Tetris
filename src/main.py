@@ -398,7 +398,7 @@ class GameView(arcade.View):
         If we immediately collide, then game-over.        self.new_stone()
         """
         self.stone = self.new_stones.pop()
-        if len(self.new_stones) is 0:
+        if len(self.new_stones) == 0:
             self.new_stones = tetris_shapes.copy()
             random.shuffle(self.new_stones)
         self.stone_x = int(COLUMN_COUNT / 2 - len(self.stone[0]) / 2)
@@ -427,7 +427,7 @@ class GameView(arcade.View):
                     if 0 not in row:
                         self.board = remove_row(self.board, i)
                         rows_cleared += 1
-                    if i is 21:
+                    if i == 21:
                         self.score += [0, 40, 100, 300, 1200][rows_cleared] * (
                                     self.level + 1)  # self.score + 1   ##------------ADD GAME SCORE COUNTER LINE HERE
                 print("Score:  " + str(self.score))
@@ -452,7 +452,7 @@ class GameView(arcade.View):
                     if 0 not in row:
                         self.board = remove_row(self.board, i)
                         rows_cleared += 1
-                    if i is 21:
+                    if i == 21:
                         self.score += [0, 40, 100, 300, 1200][rows_cleared] * (
                                     self.level + 1)  # self.score + 1   ##------------ADD GAME SCORE COUNTER LINE HERE
                 else:
@@ -471,27 +471,27 @@ class GameView(arcade.View):
             new_y = self.stone_y
 
             d = abs(len(self.stone) - len(self.stone[0]))
-            if d is 3:
+            if d == 3:
                 x = 0
-                if new_pos is 1:
+                if new_pos == 1:
                     new_x += 2
                     new_y -= 1
-                elif new_pos is 2:
+                elif new_pos == 2:
                     new_x -= 2
                     new_y += 2
-                elif new_pos is 3:
+                elif new_pos == 3:
                     new_x += 1
                     new_y -= 2
                 else:
                     new_x -= 1
                     new_y += 1
             else:
-                if new_pos is 1:
+                if new_pos == 1:
                     new_x += d
-                elif new_pos is 2:
+                elif new_pos == 2:
                     new_x -= d
                     new_y += d
-                elif new_pos is 3:
+                elif new_pos == 3:
                     new_y -= d
 
             # if rotates off board move back
@@ -528,12 +528,12 @@ class GameView(arcade.View):
         next_stone = self.new_stones[-1]
         color = max(next_stone[0])
 
-        if color is 6:
+        if color == 6:
             arcade.draw_rectangle_filled(next_xposn + WIDTH / 2 + MARGIN, next_yposn, WIDTH, HEIGHT, colors[6])
             arcade.draw_rectangle_filled(next_xposn - WIDTH / 2, next_yposn, WIDTH, HEIGHT, colors[6])
             arcade.draw_rectangle_filled(next_xposn + 1.5 * WIDTH + 2 * MARGIN, next_yposn, WIDTH, HEIGHT, colors[6])
             arcade.draw_rectangle_filled(next_xposn - 1.5 * WIDTH - MARGIN, next_yposn, WIDTH, HEIGHT, colors[6])
-        elif color is 7:
+        elif color == 7:
             arcade.draw_rectangle_filled(next_xposn + WIDTH / 2 + MARGIN, next_yposn - HEIGHT / 2, WIDTH, HEIGHT,
                                          colors[7])
             arcade.draw_rectangle_filled(next_xposn - WIDTH / 2, next_yposn - HEIGHT / 2, WIDTH, HEIGHT, colors[7])
@@ -544,7 +544,7 @@ class GameView(arcade.View):
         else:
             for x in range(3):
                 for y in range(2):
-                    if next_stone[y][x] is not 0:
+                    if next_stone[y][x] != 0:
                         arcade.draw_rectangle_filled(next_xposn + (x - 1) * (WIDTH + MARGIN),
                                                      next_yposn + (y * -2 + 1) * (HEIGHT / 2 + MARGIN),
                                                      WIDTH,
@@ -564,10 +564,10 @@ class GameView(arcade.View):
         self.st_d_t2a.value = t_2a
         self.st_d_t2b.value = t_2b
 
-        if self.fps is not None:
+        if self.fps != None:
             t_4a = f"{self.fps:.2f} FPS"
             self.st_d_fps.value = t_4a
-        if self.processing_time is not None and self.processing_time > 0.0:
+        if self.processing_time != None and self.processing_time > 0.0:
             update_freq = 1.0 / self.processing_time
             t_4b = f"{update_freq:.1f} UPS"
             self.st_d_t4b.value = t_4b
@@ -575,7 +575,7 @@ class GameView(arcade.View):
         t_5a = f"{GAME_SPEED_FLOOR} frames"  # Game Floor Speed
         self.st_d_t5a.value = t_5a
 
-        if self.GAME_SPEED is not None:
+        if self.GAME_SPEED != None:
             t_5b = f"{self.GAME_SPEED} frames"
             self.st_d_t5b.value = t_5b
 
@@ -622,7 +622,7 @@ class GameView(arcade.View):
         start_time = timeit.default_timer()
         fps_calc_freq = 60
         if self.frame_count % fps_calc_freq == 0:
-            if self.fps_start_timer is not None:
+            if self.fps_start_timer != None:
                 t_total = timeit.default_timer() - self.fps_start_timer
                 self.fps = fps_calc_freq / t_total
             self.fps_start_timer = timeit.default_timer()  # restart timer
@@ -1045,7 +1045,7 @@ class PNameView(arcade.View):
 
         elif self.READY_TO_PLAY:
             if key == 65361 or key == 65362 or key == 65363 or key == 65364 or key==32 or key==65473: #uses any keyboard motion key or F4
-                if len(self.player_name) is 0:
+                if len(self.player_name) == 0:
                     print("Name can't be empty")
                     self.setup()
                     return
@@ -1089,7 +1089,7 @@ class LBView(arcade.View):
         # Populate Leaderboard
         currentRowHeight = SCREEN_HEIGHT * 0.813 + 1
         for row in ALL_SCORES[0:34]:
-            if row[0] is self.score and str(row[1]) is self.name:
+            if row[0] == self.score and str(row[1]) == self.name:
                 arcade.draw_rectangle_filled(WINDOW_WIDTH//2 - 48, currentRowHeight-1, 84, 15, [49,142,203])
                 arcade.draw_rectangle_filled(WINDOW_WIDTH//2 + 70, currentRowHeight-1, 150, 15, [49,142,203])
             arcade.draw_text( str(row[0]),
@@ -1117,7 +1117,7 @@ class LBView(arcade.View):
             currentRowHeight -= SCREEN_HEIGHT * 0.01685
 
     def on_draw(self):
-        pass
+        self.on_show_view()
 
     def setup(self, score = None, name = None):
         print("Setup Leaderboard")
