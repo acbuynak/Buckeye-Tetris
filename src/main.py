@@ -100,7 +100,7 @@ class GameView(arcade.View):
 
         ## Static Content
         # Advertisement Note
-        self.st_adtxt = arcade.Text(text="REGISTER TODAY @ HACK.OSU.EDU/2023",
+        self.st_adtxt = arcade.Text(text="REGISTER TODAY @ HACK.OSU.EDU/2024",
                                     start_x=WINDOW_WIDTH / 2,
                                     start_y=80,
                                     color=arcade.color.WHITE,
