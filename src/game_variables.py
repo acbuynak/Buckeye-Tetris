@@ -42,6 +42,9 @@ BUTTONS = [ asset_lookup("button_play.png"),
 # Game over text
 GAME_OVER = asset_lookup("game_over.png")
 
+# Secret Level Graphic
+SECRET_LEVEL_TEXTURE = asset_lookup("secret_level.png")
+
 #pixel multiplier
 #pm = 0.0178571429
 

@@ -15,6 +15,7 @@ import PIL
 import random
 import time
 import timeit
+from bisect import bisect
 
 # Import Support Files
 from game_variables import *
@@ -36,6 +37,7 @@ def create_textures():
 
 
 texture_list = create_textures()
+texture_secret_level = arcade.load_texture(SECRET_LEVEL_TEXTURE)
 
 
 
@@ -136,11 +138,14 @@ class GameView(arcade.View):
 
         # Setup Diagnostics Panel
         h_1 = rx_yposn + (rx_height / 2) - 175  # Frame Counter
-        h_2 = rx_yposn + (rx_height / 2) - 275  # Levels
+        h_2a = rx_yposn + (rx_height / 2) - 275  # Levels
+        h_2b = rx_yposn + (rx_height / 2) - 305  # Levels
         h_3 = rx_yposn + (rx_height / 2) - 200  # FPS
         h_4 = rx_yposn + (rx_height / 2) - 225  # Time to Update
         h_5a = rx_yposn + (rx_height / 2) - 75  # Floor Speed
         h_5b = rx_yposn + (rx_height / 2) - 100  # Current Speed
+        h_6a =  rx_yposn + (rx_height / 2) - 330  # Secret Levels
+        h_6b =  rx_yposn + (rx_height / 2) - 360  # Secret Levels
         self.st_d_header = arcade.Text("Game Diagnostics",
                                        rx_xposn - (rx_width / 2) + 20,
                                        rx_yposn + (rx_height / 2) - 30,
@@ -234,25 +239,48 @@ class GameView(arcade.View):
                                     align="left")
         self.st_d_lvladvance = arcade.Text("Levels (sec): ",
                                            rx_xposn - (rx_width / 2) + 20,
-                                           h_2,
+                                           h_2a,
                                            arcade.color.GRAY,
                                            float(15),
                                            bold=True,
                                            align="left")
         self.st_d_t2a = arcade.Text("filler_t_2a",
                                     rx_xposn - (rx_width / 2) + 200,
-                                    h_2,
+                                    h_2a,
                                     arcade.color.BRIGHT_NAVY_BLUE,
                                     float(15),
                                     bold=True,
                                     align="left")
         self.st_d_t2b = arcade.Text("filler_t_2b",
                                     rx_xposn - (rx_width / 2) + 200,
-                                    h_2 - 30,
+                                    h_2b,
                                     arcade.color.BRIGHT_NAVY_BLUE,
                                     float(15),
                                     bold=True,
                                     align="left")
+        
+        self.st_d_lvladvance_secret = arcade.Text("Secret Levels: ",
+                                    rx_xposn - (rx_width / 2) + 20,
+                                    h_6a,
+                                    arcade.color.GRAY,
+                                    float(15),
+                                    bold=True,
+                                    align="left")
+        self.st_d_t6a = arcade.Text("filler_t_6a",
+                                    rx_xposn - (rx_width / 2) + 200,
+                                    h_6a,
+                                    arcade.color.BRIGHT_NAVY_BLUE,
+                                    float(15),
+                                    bold=True,
+                                    align="left")
+        self.st_d_t6b = arcade.Text("filler_t_6b",
+                                    rx_xposn - (rx_width / 2) + 200,
+                                    h_6b,
+                                    arcade.color.BRIGHT_NAVY_BLUE,
+                                    float(15),
+                                    bold=True,
+                                    align="left")
+        
         self.st_d_t5b = arcade.Text("filler_t_5b",
                                     rx_xposn - (rx_width / 2) + 200,
                                     h_5b,
@@ -341,13 +369,18 @@ class GameView(arcade.View):
         self.board = new_board()
         self.score = 0
         self.level = 0
+        self.level_secret_active = False
         self.GAME_SPEED = INITIAL_GAME_SPEED
         self.background = arcade.load_texture(BACKGROUNDS[0])
 
         # Set Game Levels 1-9
-        self.GAME_LEVEL_FRAMES = [0, 200, 400, 600, 900, 1150, 1600, 1900, 2200]
         self.GAME_LEVEL_TIME = [0, 12.5, 25.0, 37.5, 56.0, 72.0, 100, 119.0, 137.5]
+        self.GAME_LEVEL_SECRET_TIME = [180.0, 210.0, 230.0, 250.0, 270.0, 290.0]
 
+        # Assemble All Time Levels
+        self.GAME_LEVELS_ALL_TIME = self.GAME_LEVEL_TIME + self.GAME_LEVEL_SECRET_TIME
+        self.GAME_LEVELS_ALL_TIME.sort()
+        
         # RX & Statistics
         self.processing_time = 0
         self.draw_time = 0
@@ -559,10 +592,10 @@ class GameView(arcade.View):
         # Update Text Values
         self.st_d_framecount.value = f"{self.frame_count} frames"
         self.st_d_timeelapsed.value = f"{self.time_elapsed:.2f} sec"
-        t_2a = str(self.GAME_LEVEL_TIME[0:5])
-        t_2b = str(self.GAME_LEVEL_TIME[6:])
-        self.st_d_t2a.value = t_2a
-        self.st_d_t2b.value = t_2b
+        self.st_d_t2a.value = str(self.GAME_LEVEL_TIME[0:5])
+        self.st_d_t2b.value = str(self.GAME_LEVEL_TIME[6:])
+        self.st_d_t6a.value = str(self.GAME_LEVEL_SECRET_TIME[0:4])
+        self.st_d_t6b.value = str(self.GAME_LEVEL_SECRET_TIME[5:])
 
         if self.fps != None:
             t_4a = f"{self.fps:.2f} FPS"
@@ -596,6 +629,9 @@ class GameView(arcade.View):
         self.st_d_lvladvance.draw()
         self.st_d_t2a.draw()
         self.st_d_t2b.draw()
+        self.st_d_lvladvance_secret.draw()
+        self.st_d_t6a.draw()
+        self.st_d_t6b.draw()
         self.st_d_t5b.draw()
 
     def draw_grid(self, grid, offset_x, offset_y):
@@ -746,6 +782,14 @@ class GameView(arcade.View):
         self.st_mscb_level.draw()
         arcade.draw_rectangle_outline(next_xposn, next_yposn, next_width, next_height, [0, 153, 153], 2)
 
+        # Draw Secret Level Banner
+        if self.level_secret_active:
+            arcade.draw_texture_rectangle(center_x=WINDOW_WIDTH // 2,
+                                        center_y=(SCREEN_HEIGHT * 5 / 6) - 20,
+                                        width=120,
+                                        height=100,
+                                        texture=texture_secret_level)
+
     # -- Game Logic
 
     def update(self, dt: float):
@@ -784,16 +828,35 @@ class GameView(arcade.View):
             elif not self.left_pressed and self.right_pressed and self.time_elapsed - self.right_pressed > 0.3:
                 self.move(1)
 
-    def level_up(self):
+    def level_up(self, force_recalulate_level=False):
         """ increase game speed as game progresses. Gets faster the longer you play"""
 
-        idx = len(self.GAME_LEVEL_TIME) - 1
-        while idx >= 0:
-            if self.GAME_LEVEL_TIME[idx] < self.time_elapsed:
-                self.level = idx
-                self.GAME_SPEED = len(self.GAME_LEVEL_TIME) - idx + GAME_SPEED_FLOOR
-                break
-            idx -= 1
+        # Get Index in List (skip below if already at level)
+        new_level = bisect(self.GAME_LEVELS_ALL_TIME, self.time_elapsed)
+        if (new_level <= self.level) and not force_recalulate_level:
+            return
+        else:
+            self.level = new_level
+
+        # Check if in Secret Levels
+        if self.GAME_LEVEL_SECRET_TIME[0] < self.time_elapsed:
+            self.level_secret_active = True
+
+        # Set Speed for Levels
+        if not self.level_secret_active:
+            self.GAME_SPEED = len(self.GAME_LEVEL_TIME) \
+                              - self.level \
+                              + GAME_SPEED_FLOOR
+        else:
+            self.GAME_SPEED = len(self.GAME_LEVEL_TIME) \
+                              - self.level \
+                              - bisect(self.GAME_LEVEL_SECRET_TIME, self.time_elapsed) \
+                              + GAME_SPEED_FLOOR
+
+        # Enforce Minimum Game Speed
+        if self.GAME_SPEED <=0:
+            self.GAME_SPEED = 1
+            print("Enforce minimum Game Speed")
 
     def update_board(self):
         """
@@ -853,9 +916,11 @@ class GameView(arcade.View):
         elif key == 65365:
             GAME_SPEED_FLOOR += 1
             print("---- GAME_SPEED_FLOOR = " + str(GAME_SPEED_FLOOR))
+            self.level_up(force_recalulate_level=True)
         elif key == 65366:
             if GAME_SPEED_FLOOR > 0: GAME_SPEED_FLOOR -= 1
             print("---- GAME_SPEED_FLOOR = " + str(GAME_SPEED_FLOOR))
+            self.level_up(force_recalulate_level=True)
 
     def on_key_release(self, key, modifiers):
         """
