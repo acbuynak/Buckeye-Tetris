@@ -41,7 +41,7 @@ A view represents a page in which the user sees on-screen. This game has four pr
 
 | Menu | Leaderboard | New Player | Game |
 | -- | -- | -- | -- |
-| <img src="./src/assets/bg_mainmenu.png" style="width:100px;"/> | <img src="./src/assets/bg_leaderboard.png" style="width:100px;"/> | <img src="./src/assets/bg_askname.png" style="width:100px;"/> | <img src="./src/assets/bg_greyleaf.png" style="width:100px;"/> |
+| <img src="./src/assets/bg_mainmenu.png" style="width:100px;"/> | <img src="./src/assets/bg_leaderboard.png" style="width:100px;"/> | <img src="./src/assets/bg_askname.png" style="width:100px;"/> | <img src="./src/assets/bg_gamescreen.png" style="width:100px;"/> |
 
 #### Leaderboard/Score Saving Design    
 1. Game should pull from external txt/dat file for current leaderboard.  
