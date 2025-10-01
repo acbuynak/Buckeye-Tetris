@@ -1225,7 +1225,7 @@ def main():
 
     ALL_SCORES = [   [0,"Brutus",   0],
                      [1,"TomWDavis",0]  ]
-    GAME_SPEED_FLOOR = 5
+    GAME_SPEED_FLOOR = 12
     FULL_SCREEN = False
 
     # Setup Questions
